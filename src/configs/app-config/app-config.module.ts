@@ -17,5 +17,6 @@ import appConfiguration from './app.configuration';
       }),
     }),
   ],
+  exports: [NestConfigModule],
 })
-export class ConfigModule {}
+export class AppConfigModule {}
