@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppConfigModule } from './configs/app-config/app-config.module';
+import { AppConfigModule } from './configs/config.module';
+import { DatabaseModule } from './configs/database/database.module';
 
 @Module({
-  imports: [AppConfigModule],
-  controllers: [AppController],
+  imports: [AppConfigModule, DatabaseModule],
+  controllers: [],
   providers: [],
+  exports: [],
 })
 export class AppModule {}
