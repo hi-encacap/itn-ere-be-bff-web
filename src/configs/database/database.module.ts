@@ -1,5 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { RoleEntity } from 'src/modules/user/entities/role.entity';
+import { UserRoleMappingEntity } from 'src/modules/user/entities/user-role-mapping.entity';
+import { UserEntity } from 'src/modules/user/entities/user.entity';
+import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import { AppConfigModule } from '../config.module';
 import AppConfigService from '../config.service';
@@ -20,7 +24,12 @@ import AppConfigService from '../config.service';
           username: databaseConfig.username,
           password: databaseConfig.password,
           database: databaseConfig.database,
-          entities: [],
+          entities: [
+            UserEntity,
+            UserRoleMappingEntity,
+            RoleEntity,
+            WebsiteEntity,
+          ],
           synchronize: true,
         };
       },
