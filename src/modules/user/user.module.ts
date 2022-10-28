@@ -10,9 +10,7 @@ import { UserRoleMappingService } from './services/user-role-mapping.service';
 import { UserService } from './services/user.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([UserEntity, UserRoleMappingEntity, RoleEntity]),
-  ],
+  imports: [TypeOrmModule.forFeature([UserEntity, UserRoleMappingEntity, RoleEntity])],
   controllers: [UserController, RoleController],
   providers: [UserService, UserRoleMappingService, RoleService],
 })

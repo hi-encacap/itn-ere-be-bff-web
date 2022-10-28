@@ -13,9 +13,7 @@ import AppConfigService from '../config.service';
     TypeOrmModule.forRootAsync({
       imports: [AppConfigModule],
       inject: [AppConfigService],
-      useFactory: (
-        configService: AppConfigService,
-      ): PostgresConnectionOptions => {
+      useFactory: (configService: AppConfigService): PostgresConnectionOptions => {
         const databaseConfig = configService.database;
         return {
           type: databaseConfig.type,
@@ -24,12 +22,7 @@ import AppConfigService from '../config.service';
           username: databaseConfig.username,
           password: databaseConfig.password,
           database: databaseConfig.database,
-          entities: [
-            UserEntity,
-            UserRoleMappingEntity,
-            RoleEntity,
-            WebsiteEntity,
-          ],
+          entities: [UserEntity, UserRoleMappingEntity, RoleEntity, WebsiteEntity],
           synchronize: true,
         };
       },
