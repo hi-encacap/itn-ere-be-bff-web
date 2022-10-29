@@ -1,7 +1,10 @@
+import { hash } from 'bcrypt';
 import { IWebsite } from 'src/modules/website/constants/website.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import {
   BaseEntity,
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   Entity,
   JoinColumn,
@@ -29,7 +32,9 @@ export class UserEntity extends BaseEntity implements IUser {
   @Column({ name: 'last_name' })
   lastName!: string;
 
-  @OneToMany(() => UserRoleMappingEntity, (userRoleMapping) => userRoleMapping.userId)
+  @OneToMany(() => UserRoleMappingEntity, (userRoleMapping) => userRoleMapping.userId, {
+    cascade: ['remove', 'update'],
+  })
   roles!: IRole[];
 
   @ManyToOne(() => WebsiteEntity, (website) => website.users)
@@ -37,4 +42,12 @@ export class UserEntity extends BaseEntity implements IUser {
   website!: IWebsite;
 
   roleIds!: number[];
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async hashPassword() {
+    const SALT_ROUNDS = 10;
+
+    this.password = await hash(this.password, SALT_ROUNDS);
+  }
 }

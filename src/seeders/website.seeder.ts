@@ -5,12 +5,12 @@ import { IWebsite } from 'src/modules/website/constants/website.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Repository } from 'typeorm';
 
-const websiteItems: IWebsite[] = [
+export const websiteItems: IWebsite[] = [
   {
     id: 1,
-    name: 'Encacap',
-    url: 'https://www.encacap.com',
-    description: 'This is a description',
+    name: 'Encacap RE',
+    url: 'https://www.re.encacap.com',
+    description: 'This is the supper root website. It can be used to manage all the websites.',
   },
 ];
 
