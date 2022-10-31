@@ -1,4 +1,4 @@
-import { hash } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
 import { IWebsite } from 'src/modules/website/constants/website.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import {
@@ -41,7 +41,12 @@ export class UserEntity extends BaseEntity implements IUser {
 
   roleIds!: number[];
 
-  static hashPassword(password: string) {
+  static async hashPassword(password: string) {
     return hash(password, 10);
+  }
+
+  public async comparePassword(password: string) {
+    const hashedPassword = this.password;
+    return compare(password, hashedPassword);
   }
 }

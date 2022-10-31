@@ -25,6 +25,18 @@ export class UserService {
     return users;
   }
 
+  async findOneByEmail(id: string) {
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.website', 'website')
+      .leftJoin(UserRoleMappingEntity, 'user_role', 'user_role.user_id = user.id')
+      .leftJoinAndMapMany('user.roles', RoleEntity, 'role', 'role.id = user_role.role_id')
+      .where('user.email = :email', { email: id })
+      .getOne();
+
+    return user;
+  }
+
   async create(body: UserEntity) {
     const user = await this.userRepository.save(body);
     await this.userRoleMappingService.create(user.id, body.roleIds);
