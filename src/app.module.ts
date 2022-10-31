@@ -17,7 +17,7 @@ import { WebsiteModule } from './modules/website/website.module';
 
     JwtModule.registerAsync({
       imports: [JwtConfigModule],
-      useFactory: async (jwtConfigService: JwtConfigService) => ({
+      useFactory: (jwtConfigService: JwtConfigService) => ({
         secret: jwtConfigService.secret,
       }),
       inject: [JwtConfigService],

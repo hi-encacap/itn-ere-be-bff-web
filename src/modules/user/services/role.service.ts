@@ -11,7 +11,7 @@ export class RoleService {
     private readonly roleRepository: Repository<RoleEntity>,
   ) {}
 
-  async create(role: IRole) {
+  create(role: IRole) {
     return this.roleRepository.save(role);
   }
 }

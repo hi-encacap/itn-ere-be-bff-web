@@ -41,11 +41,11 @@ export class UserEntity extends BaseEntity implements IUser {
 
   roleIds!: number[];
 
-  static async hashPassword(password: string) {
+  static hashPassword(password: string) {
     return hash(password, 10);
   }
 
-  public async comparePassword(password: string) {
+  public comparePassword(password: string) {
     const hashedPassword = this.password;
     return compare(password, hashedPassword);
   }
