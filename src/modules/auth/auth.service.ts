@@ -50,7 +50,7 @@ export class AuthService {
     };
   }
 
-  private async generateToken(payload: IJwtPayload, options: JwtSignOptions) {
+  private generateToken(payload: IJwtPayload, options: JwtSignOptions) {
     return this.jwtService.sign(payload, options);
   }
 }

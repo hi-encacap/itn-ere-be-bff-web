@@ -8,7 +8,7 @@ export class UserRoleMappingService {
     private readonly userRoleMappingRepository: Repository<UserRoleMappingEntity>,
   ) {}
 
-  async create(userId: number, roleIds: number[]) {
+  create(userId: number, roleIds: number[]) {
     const userRoleMappings = roleIds.map((roleId) => ({
       userId,
       roleId,

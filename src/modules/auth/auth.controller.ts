@@ -10,7 +10,7 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() { user }) {
+  login(@Request() { user }) {
     return this.authService.generateAuthToken(user);
   }
 
