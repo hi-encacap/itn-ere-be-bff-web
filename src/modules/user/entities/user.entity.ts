@@ -3,8 +3,6 @@ import { IWebsite } from 'src/modules/website/constants/website.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import {
   BaseEntity,
-  BeforeInsert,
-  BeforeUpdate,
   Column,
   Entity,
   JoinColumn,
@@ -43,11 +41,7 @@ export class UserEntity extends BaseEntity implements IUser {
 
   roleIds!: number[];
 
-  @BeforeInsert()
-  @BeforeUpdate()
-  async hashPassword() {
-    const SALT_ROUNDS = 10;
-
-    this.password = await hash(this.password, SALT_ROUNDS);
+  static hashPassword(password: string) {
+    return hash(password, 10);
   }
 }

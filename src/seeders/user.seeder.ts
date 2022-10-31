@@ -34,22 +34,21 @@ export class UserSeeder implements Seeder {
       .where('user.email = :email', { email: item.email })
       .getOne();
 
+    const hashedPassword = await UserEntity.hashPassword(item.password);
+
     const newItem = {
-      ...item,
-      websiteId: item.website.id,
+      email: item.email,
+      password: hashedPassword,
+      firstName: item.firstName,
+      lastName: item.lastName,
+      website: item.website,
     };
 
     if (record) {
       await this.userRepository
         .createQueryBuilder()
         .update()
-        .set({
-          email: newItem.email,
-          password: newItem.password,
-          firstName: newItem.firstName,
-          lastName: newItem.lastName,
-          website: newItem.website,
-        })
+        .set(newItem)
         .where('id = :id', { id: record.id })
         .execute();
     } else {
