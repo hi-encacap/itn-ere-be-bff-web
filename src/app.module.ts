@@ -1,14 +1,34 @@
 import { Module } from '@nestjs/common';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { AppConfigModule } from './configs/config.module';
 import { DatabaseModule } from './configs/database/database.module';
-import { WebsiteModule } from './modules/website/website.module';
-import { UserModule } from './modules/user/user.module';
+import { JwtConfigModule } from './configs/jwt/jwt-config.module';
+import { JwtConfigService } from './configs/jwt/jwt-config.service';
 import { AuthModule } from './modules/auth/auth.module';
+import { JwtStrategy } from './modules/auth/strategies/jwt.strategy';
+import { UserModule } from './modules/user/user.module';
+import { WebsiteModule } from './modules/website/website.module';
 
 @Module({
-  imports: [AppConfigModule, DatabaseModule, WebsiteModule, UserModule, AuthModule],
+  imports: [
+    AppConfigModule,
+    JwtConfigModule,
+    DatabaseModule,
+
+    JwtModule.registerAsync({
+      imports: [JwtConfigModule],
+      useFactory: async (jwtConfigService: JwtConfigService) => ({
+        secret: jwtConfigService.secret,
+      }),
+      inject: [JwtConfigService],
+    }),
+
+    WebsiteModule,
+    UserModule,
+    AuthModule,
+  ],
   controllers: [],
-  providers: [],
-  exports: [],
+  providers: [JwtStrategy, JwtService],
+  exports: [JwtStrategy, JwtService],
 })
 export class AppModule {}
