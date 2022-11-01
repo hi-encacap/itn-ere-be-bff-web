@@ -3,6 +3,7 @@ import { UserService } from '../user/services/user.service';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { RoleGuard } from './guards/role.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -14,7 +15,7 @@ export class AuthController {
     return this.authService.generateAuthToken(user);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Get('me')
   async me(@Request() { user }) {
     return await this.userService.findOneById(user.id);
