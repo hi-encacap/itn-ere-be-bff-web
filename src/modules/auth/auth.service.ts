@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { omit } from 'lodash';
 import { JwtConfigService } from 'src/configs/jwt/jwt-config.service';
-import { IUser } from '../user/constants/user.interface';
+import { IUser } from '../user/interfaces/user.interface';
 import { UserService } from '../user/services/user.service';
-import { IJwtPayload } from './constants/auth.interface';
+import { IJwtPayload } from './interfaces/auth.interface';
 
 @Injectable()
 export class AuthService {

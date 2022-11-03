@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Seeder } from 'nestjs-seeder';
-import { IUser } from 'src/modules/user/constants/user.interface';
 import { UserRoleMappingEntity } from 'src/modules/user/entities/user-role-mapping.entity';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
+import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { Repository } from 'typeorm';
 import { roleItems } from './role.seeder';
 import { websiteItems } from './website.seeder';

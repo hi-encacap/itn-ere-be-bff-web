@@ -1,5 +1,5 @@
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
-import { IRole, IUser } from 'src/modules/user/constants/user.interface';
+import { IRole, IUser } from 'src/modules/user/interfaces/user.interface';
 
 @Injectable()
 export class RootGuard implements CanActivate {

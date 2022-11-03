@@ -10,7 +10,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { IRole, IUser } from '../constants/user.interface';
+import { IRole, IUser } from '../interfaces/user.interface';
 import { UserRoleMappingEntity } from './user-role-mapping.entity';
 
 @Entity({ name: 'users' })

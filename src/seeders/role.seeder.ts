@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Seeder } from 'nestjs-seeder';
-import { IRole } from 'src/modules/user/constants/user.interface';
 import { RoleEntity } from 'src/modules/user/entities/role.entity';
+import { IRole } from 'src/modules/user/interfaces/user.interface';
 import { Repository } from 'typeorm';
 
 export const roleItems: IRole[] = [
