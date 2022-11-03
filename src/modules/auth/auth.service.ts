@@ -30,7 +30,7 @@ export class AuthService {
     return omit(user, ['password']);
   }
 
-  async generateAuthToken(user: IUser) {
+  generateAuthToken(user: IUser) {
     const payload: IJwtPayload = {
       id: user.id,
       email: user.email,
