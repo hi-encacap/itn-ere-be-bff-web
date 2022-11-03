@@ -38,8 +38,9 @@ export class AuthService {
       website: user.website,
     };
 
-    const token = await this.generateToken(payload, {
+    const token = this.generateToken(payload, {
       expiresIn: `${this.jwtConfigService.authExpirationMinutes}m`,
+      secret: this.jwtConfigService.secret,
     });
 
     return {
