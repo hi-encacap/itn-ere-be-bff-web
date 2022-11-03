@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { omit } from 'lodash';
 import { JwtConfigService } from 'src/configs/jwt/jwt-config.service';
-import { IUser } from '../user/constants/user.interface';
+import { IUser } from '../user/interfaces/user.interface';
 import { UserService } from '../user/services/user.service';
-import { IJwtPayload } from './constants/auth.interface';
+import { IJwtPayload } from './interfaces/auth.interface';
 
 @Injectable()
 export class AuthService {
@@ -30,7 +30,7 @@ export class AuthService {
     return omit(user, ['password']);
   }
 
-  async generateAuthToken(user: IUser) {
+  generateAuthToken(user: IUser) {
     const payload: IJwtPayload = {
       id: user.id,
       email: user.email,
@@ -38,8 +38,9 @@ export class AuthService {
       website: user.website,
     };
 
-    const token = await this.generateToken(payload, {
+    const token = this.generateToken(payload, {
       expiresIn: `${this.jwtConfigService.authExpirationMinutes}m`,
+      secret: this.jwtConfigService.secret,
     });
 
     return {
