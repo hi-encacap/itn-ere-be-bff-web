@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { omit } from 'lodash';
 import { Repository } from 'typeorm';
+import { CreateUserDto } from '../dto/create-user.dto';
 import { RoleEntity } from '../entities/role.entity';
 import { UserRoleMappingEntity } from '../entities/user-role-mapping.entity';
 import { UserEntity } from '../entities/user.entity';
@@ -50,7 +51,7 @@ export class UserService {
     return omit(user, ['password']);
   }
 
-  async create(body: UserEntity) {
+  async create(body: CreateUserDto) {
     const user = await this.userRepository.save(body);
     await this.userRoleMappingService.create(user.id, body.roleIds);
     return user;
