@@ -9,7 +9,7 @@ export class WebsiteService {
     @InjectRepository(WebsiteEntity) private readonly websiteRepository: Repository<WebsiteEntity>,
   ) {}
 
-  async findOne(query: FindOptionsWhere<WebsiteEntity>) {
+  findOne(query: FindOptionsWhere<WebsiteEntity>) {
     return this.websiteRepository.findOneBy(query);
   }
 }

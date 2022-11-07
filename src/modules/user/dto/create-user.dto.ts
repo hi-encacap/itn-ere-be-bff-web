@@ -1,3 +1,5 @@
+/* eslint max-classes-per-file: ["error", 2] */
+
 import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsArray, IsEmail, IsNotEmpty, IsNumber, IsString, Min, MinLength, Validate } from 'class-validator';

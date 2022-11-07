@@ -8,7 +8,7 @@ export class WebsiteNotExistsValidator implements ValidatorConstraintInterface {
   async validate(id: number) {
     const website = await this.websiteService.findOne({ id });
 
-    return !!website;
+    return Boolean(website);
   }
 
   defaultMessage(args: ValidationArguments) {
