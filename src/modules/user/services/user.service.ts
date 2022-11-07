@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { omit } from 'lodash';
-import { Repository } from 'typeorm';
-import { CreateUserDto } from '../dto/create-user.dto';
+import _, { omit, pick } from 'lodash';
+import { FindOptionsWhere, Repository } from 'typeorm';
+import { RootCreateUserDto } from '../dto/create-user.dto';
+import { RootUpdateUserDto } from '../dto/update-user.dto';
 import { RoleEntity } from '../entities/role.entity';
 import { UserRoleMappingEntity } from '../entities/user-role-mapping.entity';
 import { UserEntity } from '../entities/user.entity';
@@ -27,33 +28,61 @@ export class UserService {
     return users;
   }
 
-  async findOneByEmail(id: string) {
-    const user = await this.userRepository
+  async findOne(query: FindOptionsWhere<UserEntity>) {
+    return this.userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.website', 'website')
       .leftJoin(UserRoleMappingEntity, 'user_role', 'user_role.user_id = user.id')
       .leftJoinAndMapMany('user.roles', RoleEntity, 'role', 'role.id = user_role.role_id')
-      .where('user.email = :email', { email: id })
+      .where(query)
       .getOne();
-
-    return user;
   }
 
-  async findOneById(id: string) {
-    const user = await this.userRepository
-      .createQueryBuilder('user')
-      .leftJoinAndSelect('user.website', 'website')
-      .leftJoin(UserRoleMappingEntity, 'user_role', 'user_role.user_id = user.id')
-      .leftJoinAndMapMany('user.roles', RoleEntity, 'role', 'role.id = user_role.role_id')
-      .where('user.id = :id', { id })
-      .getOne();
+  async findOneByEmail(email: string) {
+    return this.findOne({ email });
+  }
+
+  async findOneById(id: number) {
+    const user = await this.findOne({ id });
+
+    if (!user) {
+      throw new NotFoundException('USER_NOT_FOUND');
+    }
 
     return omit(user, ['password']);
   }
 
-  async create(body: CreateUserDto) {
-    const user = await this.userRepository.save(body);
+  async create(body: RootCreateUserDto) {
+    const user = await this.userRepository.save({
+      ...body,
+      password: await UserEntity.hashPassword(body.password),
+    });
     await this.userRoleMappingService.create(user.id, body.roleIds);
-    return user;
+    return _.omit(user, ['password']);
+  }
+
+  async update(id: number, body: RootUpdateUserDto) {
+    const record = await this.findOneById(id);
+
+    await this.userRepository
+      .createQueryBuilder('user')
+      .update(UserEntity)
+      .set(pick({ ...record, ...body }, ['email', 'password', 'firstName', 'lastName', 'websiteId']))
+      .where('id = :id', { id })
+      .execute();
+
+    if (body.roleIds) {
+      await this.userRoleMappingService.deleteByUserId(id);
+      await this.userRoleMappingService.create(id, body.roleIds);
+    }
+
+    return this.findOneById(id);
+  }
+
+  async deleteById(id: number) {
+    const record = await this.findOneById(id);
+
+    await this.userRoleMappingService.deleteByUserId(record.id);
+    await this.userRepository.delete({ id: record.id });
   }
 }

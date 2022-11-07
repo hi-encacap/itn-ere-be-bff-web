@@ -1,23 +1,13 @@
 import { compare, hash } from 'bcrypt';
+import { BaseEntityWithGeneratedId } from 'src/Base/base.entity';
 import { IWebsite } from 'src/modules/website/constants/website.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { IRole, IUser } from '../interfaces/user.interface';
 import { UserRoleMappingEntity } from './user-role-mapping.entity';
 
 @Entity({ name: 'users' })
-export class UserEntity extends BaseEntity implements IUser {
-  @PrimaryGeneratedColumn()
-  id!: number;
-
+export class UserEntity extends BaseEntityWithGeneratedId implements IUser {
   @Column()
   email!: string;
 
@@ -34,6 +24,9 @@ export class UserEntity extends BaseEntity implements IUser {
     cascade: ['remove', 'update'],
   })
   roles!: IRole[];
+
+  @Column({ name: 'website_id' })
+  websiteId!: number;
 
   @ManyToOne(() => WebsiteEntity, (website) => website.users)
   @JoinColumn({ name: 'website_id', referencedColumnName: 'id' })

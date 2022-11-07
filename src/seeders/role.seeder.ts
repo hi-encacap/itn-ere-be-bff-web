@@ -16,6 +16,11 @@ export const roleItems: IRole[] = [
     name: 'Manager',
     slug: 'manager',
   },
+  {
+    id: 3,
+    name: 'User',
+    slug: 'user',
+  },
 ];
 
 @Injectable()

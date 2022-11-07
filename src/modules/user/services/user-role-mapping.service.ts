@@ -15,4 +15,8 @@ export class UserRoleMappingService {
     }));
     return this.userRoleMappingRepository.save(userRoleMappings);
   }
+
+  deleteByUserId(userId: number) {
+    return this.userRoleMappingRepository.delete({ userId });
+  }
 }
