@@ -28,7 +28,7 @@ export class UserService {
     return users;
   }
 
-  async findOne(query: FindOptionsWhere<UserEntity>) {
+  findOne(query: FindOptionsWhere<UserEntity>) {
     return this.userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.website', 'website')
@@ -38,7 +38,7 @@ export class UserService {
       .getOne();
   }
 
-  async findOneByEmail(email: string) {
+  findOneByEmail(email: string) {
     return this.findOne({ email });
   }
 
