@@ -9,6 +9,6 @@ import { WebsiteService } from './website.service';
   imports: [TypeOrmModule.forFeature([WebsiteEntity])],
   controllers: [WebsiteController],
   providers: [WebsiteService, WebsiteNotExistsValidator],
-  exports: [WebsiteService, WebsiteNotExistsValidator],
+  exports: [WebsiteService],
 })
 export class WebsiteModule {}
