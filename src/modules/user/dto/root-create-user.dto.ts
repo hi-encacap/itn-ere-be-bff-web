@@ -1,6 +1,6 @@
 /* eslint max-classes-per-file: ["error", 2] */
 
-import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsArray, IsEmail, IsNotEmpty, IsNumber, IsString, Min, MinLength, Validate } from 'class-validator';
 import { RoleEnum } from 'src/common/constants/role.constant';
@@ -52,15 +52,4 @@ export class RootCreateUserDto implements IUser {
   @ApiPropertyOptional()
   @Validate(WebsiteNotExistsValidator)
   websiteId: number;
-}
-
-export class AdminCreateUserDto extends OmitType(RootCreateUserDto, ['roleIds']) {
-  @IsArray({
-    groups: ['admin'],
-  })
-  @IsNotEmpty()
-  @Type(() => Number)
-  @IsNumber({}, { each: true })
-  @ApiPropertyOptional()
-  roleIds: number[];
 }

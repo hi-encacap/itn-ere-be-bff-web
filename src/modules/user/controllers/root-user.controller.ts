@@ -12,8 +12,8 @@ import {
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { RootGuard } from 'src/common/guards/root.guard';
-import { RootCreateUserDto } from '../dto/create-user.dto';
-import { RootUpdateUserDto } from '../dto/update-user.dto';
+import { RootCreateUserDto } from '../dto/root-create-user.dto';
+import { RootUpdateUserDto } from '../dto/root-update-user.dto';
 import { UserService } from '../services/user.service';
 
 @UseGuards(JwtAuthGuard, RootGuard)
