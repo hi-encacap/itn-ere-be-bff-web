@@ -1,5 +1,5 @@
 import { compare, hash } from 'bcrypt';
-import { BaseEntityWithGeneratedId } from 'src/base/base.entity';
+import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
 import { IWebsite } from 'src/modules/website/constants/website.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
@@ -7,7 +7,7 @@ import { IRole, IUser } from '../interfaces/user.interface';
 import { UserRoleMappingEntity } from './user-role-mapping.entity';
 
 @Entity({ name: 'users' })
-export class UserEntity extends BaseEntityWithGeneratedId implements IUser {
+export class UserEntity extends BaseEntityWithPrimaryGeneratedColumn implements IUser {
   @Column({
     unique: true,
   })
