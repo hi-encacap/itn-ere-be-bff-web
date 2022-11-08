@@ -17,6 +17,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('me')
   async me(@Request() { user }) {
+    console.log(user.id.id.id);
     return await this.userService.findOneById(user.id);
   }
 }

@@ -1,16 +1,17 @@
 import { UnprocessableEntityException, ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
-import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { AllExceptionFilter } from './common/filters/all-exception.filter';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const httpAdapter = app.get(HttpAdapterHost);
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
-  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalFilters(new AllExceptionFilter(httpAdapter));
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
