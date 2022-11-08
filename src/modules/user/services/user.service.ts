@@ -28,18 +28,22 @@ export class UserService {
     return users;
   }
 
-  findOne(query: FindOptionsWhere<UserEntity>) {
-    return this.userRepository
+  findOne(query: FindOptionsWhere<UserEntity>, orQuery?: FindOptionsWhere<UserEntity>) {
+    const queryBuilder = this.userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.website', 'website')
       .leftJoin(UserRoleMappingEntity, 'user_role', 'user_role.user_id = user.id')
-      .leftJoinAndMapMany('user.roles', RoleEntity, 'role', 'role.id = user_role.role_id')
-      .where(query)
-      .getOne();
-  }
+      .leftJoinAndMapMany('user.roles', RoleEntity, 'role', 'role.id = user_role.role_id');
 
-  findOneByEmail(email: string) {
-    return this.findOne({ email });
+    if (query) {
+      queryBuilder.where(query);
+    }
+
+    if (orQuery) {
+      queryBuilder.orWhere(orQuery);
+    }
+
+    return queryBuilder.getOne();
   }
 
   async findOneById(id: number) {
@@ -50,6 +54,10 @@ export class UserService {
     }
 
     return omit(user, ['password']);
+  }
+
+  findOneByUsernameOrEmail(usernameOrEmail: string) {
+    return this.findOne({}, { email: usernameOrEmail, username: usernameOrEmail });
   }
 
   async create(body: RootCreateUserDto) {

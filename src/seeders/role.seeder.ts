@@ -29,7 +29,7 @@ export class RoleSeeder implements Seeder {
   constructor(@InjectRepository(RoleEntity) private readonly roleRepository: Repository<RoleEntity>) {}
 
   async upsertItem(item: IRole) {
-    const record = await this.roleRepository.findOneBy({ id: item.id });
+    const record = await this.roleRepository.findOneBy({ slug: item.slug });
 
     if (record) {
       return this.roleRepository.update(record.id, item);
