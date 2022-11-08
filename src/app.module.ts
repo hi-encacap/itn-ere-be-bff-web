@@ -1,19 +1,19 @@
 import { Module } from '@nestjs/common';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { AppConfigModule } from './configs/config.module';
-import { DatabaseModule } from './configs/database/database.module';
 import { JwtConfigModule } from './configs/jwt/jwt-config.module';
 import { JwtConfigService } from './configs/jwt/jwt-config.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { JwtStrategy } from './modules/auth/strategies/jwt.strategy';
 import { UserModule } from './modules/user/user.module';
 import { WebsiteModule } from './modules/website/website.module';
+import { PostgresDatabaseProviderModule } from './providers/postgres/postgres.module';
 
 @Module({
   imports: [
     AppConfigModule,
     JwtConfigModule,
-    DatabaseModule,
+    PostgresDatabaseProviderModule,
 
     JwtModule.registerAsync({
       imports: [JwtConfigModule],
