@@ -16,4 +16,8 @@ export default class AppConfigService {
       database: this.configService.get<string>('database.database'),
     };
   }
+
+  get rootPassword() {
+    return this.configService.get<string>('secret.rootPassword');
+  }
 }

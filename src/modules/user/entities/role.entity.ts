@@ -1,12 +1,10 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntityWithGeneratedId } from 'src/base/base.entity';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { IRole } from '../interfaces/user.interface';
 import { UserRoleMappingEntity } from './user-role-mapping.entity';
 
 @Entity({ name: 'roles' })
-export class RoleEntity implements IRole {
-  @PrimaryGeneratedColumn()
-  id!: number;
-
+export class RoleEntity extends BaseEntityWithGeneratedId implements IRole {
   @Column()
   name!: string;
 

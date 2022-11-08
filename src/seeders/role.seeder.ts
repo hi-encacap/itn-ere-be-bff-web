@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Seeder } from 'nestjs-seeder';
+import { ROLE_ENUM } from 'src/common/constants/role.constant';
 import { RoleEntity } from 'src/modules/user/entities/role.entity';
 import { IRole } from 'src/modules/user/interfaces/user.interface';
 import { Repository } from 'typeorm';
@@ -9,12 +10,17 @@ export const roleItems: IRole[] = [
   {
     id: 1,
     name: 'Root',
-    slug: 'root',
+    slug: ROLE_ENUM.ROOT,
   },
   {
     id: 2,
+    name: 'Admin',
+    slug: ROLE_ENUM.ADMIN,
+  },
+  {
+    id: 3,
     name: 'Manager',
-    slug: 'manager',
+    slug: ROLE_ENUM.MANAGER,
   },
 ];
 
@@ -23,7 +29,7 @@ export class RoleSeeder implements Seeder {
   constructor(@InjectRepository(RoleEntity) private readonly roleRepository: Repository<RoleEntity>) {}
 
   async upsertItem(item: IRole) {
-    const record = await this.roleRepository.findOneBy({ id: item.id });
+    const record = await this.roleRepository.findOneBy({ slug: item.slug });
 
     if (record) {
       return this.roleRepository.update(record.id, item);

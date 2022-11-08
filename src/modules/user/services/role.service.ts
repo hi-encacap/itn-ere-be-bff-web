@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { RoleEntity } from '../entities/role.entity';
 import { IRole } from '../interfaces/user.interface';
 
@@ -13,5 +13,15 @@ export class RoleService {
 
   create(role: IRole) {
     return this.roleRepository.save(role);
+  }
+
+  async findOne(query: FindOptionsWhere<RoleEntity>) {
+    const role = await this.roleRepository.findOneBy(query);
+
+    if (!role) {
+      throw new NotFoundException('ROLE_NOT_FOUND');
+    }
+
+    return role;
   }
 }

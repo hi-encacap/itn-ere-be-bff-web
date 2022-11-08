@@ -15,7 +15,9 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, password: string): Promise<Omit<IUser, 'password'> | null> {
-    const user = await this.userService.findOneByEmail(email);
+    const user = await this.userService.findOne({
+      email,
+    });
 
     if (!user) {
       return null;

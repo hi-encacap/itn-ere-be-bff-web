@@ -18,6 +18,7 @@ import appConfiguration from './configuration';
         DB_USERNAME: Joi.string().required().default('postgres'),
         DB_PASSWORD: Joi.string().required().default('postgres'),
         DB_NAME: Joi.string().required().default('postgres'),
+        SECRET_ROOT_PASSWORD: Joi.string().required(),
       }),
     }),
   ],
