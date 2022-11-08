@@ -1,4 +1,4 @@
-import { BaseEntityWithGeneratedId } from 'src/Base/base.entity';
+import { BaseEntityWithGeneratedId } from 'src/base/base.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { IRole } from '../interfaces/user.interface';
 import { UserRoleMappingEntity } from './user-role-mapping.entity';

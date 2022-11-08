@@ -1,5 +1,6 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { seeder } from 'nestjs-seeder';
+import { AppConfigModule } from 'src/configs/config.module';
 import { DatabaseModule } from 'src/configs/database/database.module';
 import { RoleEntity } from 'src/modules/user/entities/role.entity';
 import { UserRoleMappingEntity } from 'src/modules/user/entities/user-role-mapping.entity';
@@ -11,6 +12,7 @@ import { WebsiteSeeder } from './website.seeder';
 
 seeder({
   imports: [
+    AppConfigModule,
     DatabaseModule,
     TypeOrmModule.forFeature([WebsiteEntity, RoleEntity, UserEntity, UserRoleMappingEntity]),
   ],

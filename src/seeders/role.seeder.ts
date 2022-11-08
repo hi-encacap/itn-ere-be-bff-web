@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Seeder } from 'nestjs-seeder';
+import { ROLE_ENUM } from 'src/common/constants/role.constant';
 import { RoleEntity } from 'src/modules/user/entities/role.entity';
 import { IRole } from 'src/modules/user/interfaces/user.interface';
 import { Repository } from 'typeorm';
@@ -9,17 +10,17 @@ export const roleItems: IRole[] = [
   {
     id: 1,
     name: 'Root',
-    slug: 'root',
+    slug: ROLE_ENUM.ROOT,
   },
   {
     id: 2,
-    name: 'Manager',
-    slug: 'manager',
+    name: 'Admin',
+    slug: ROLE_ENUM.ADMIN,
   },
   {
     id: 3,
-    name: 'User',
-    slug: 'user',
+    name: 'Manager',
+    slug: ROLE_ENUM.MANAGER,
   },
 ];
 

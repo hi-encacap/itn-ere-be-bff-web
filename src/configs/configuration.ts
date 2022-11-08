@@ -7,4 +7,7 @@ export default () => ({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
   },
+  secret: {
+    rootPassword: process.env.SECRET_ROOT_PASSWORD,
+  },
 });
