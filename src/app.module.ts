@@ -1,5 +1,6 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtModule, JwtService } from '@nestjs/jwt';
+import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { LoggerModule } from './common/modules/logger/logger.module';
 import { AppConfigModule } from './configs/config.module';
 import { JwtConfigModule } from './configs/jwt/jwt-config.module';
@@ -33,4 +34,8 @@ import { PostgresDatabaseProviderModule } from './providers/postgres/postgres.mo
   providers: [JwtStrategy, JwtService],
   exports: [JwtStrategy, JwtService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}

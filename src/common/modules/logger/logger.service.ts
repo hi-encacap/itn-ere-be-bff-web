@@ -1,7 +1,26 @@
 import { ConsoleLogger as NestConsoleLoggerService } from '@nestjs/common';
 import dayjs from 'dayjs';
+import winston, { Logger } from 'winston';
 
 export class LoggerService extends NestConsoleLoggerService {
+  private readonly logger: Logger;
+
+  constructor(readonly context: string) {
+    super();
+
+    this.logger = winston.createLogger({
+      level: 'error',
+      format: winston.format.combine(
+        winston.format.splat(),
+        winston.format.printf(({ level, message }) => {
+          return `${dayjs().format('DD/MM/YYYY, HH:mm:ss')} - ${level.toUpperCase()} [${context}] ${message}`;
+        }),
+      ),
+      defaultMeta: { service: 'user-service' },
+      transports: [new winston.transports.File({ filename: './logs/development.log' })],
+    });
+  }
+
   error(message: any, stack?: string, context?: string): string;
   error(message: any, ...optionalParams: any[]): string;
   error(message: unknown, stack?: unknown, ...rest: unknown[]): string {
@@ -12,6 +31,9 @@ export class LoggerService extends NestConsoleLoggerService {
     } else {
       super.error(`[${logTrackingCode}] ${message}`, ...rest);
     }
+
+    // Write to file
+    this.logger.error(`[${logTrackingCode}] ${message}`, stack, ...rest);
 
     return logTrackingCode;
   }
