@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { JwtModule, JwtService } from '@nestjs/jwt';
+import { LoggerModule } from './common/modules/logger/logger.module';
 import { AppConfigModule } from './configs/config.module';
 import { JwtConfigModule } from './configs/jwt/jwt-config.module';
 import { JwtConfigService } from './configs/jwt/jwt-config.service';
@@ -14,6 +15,7 @@ import { PostgresDatabaseProviderModule } from './providers/postgres/postgres.mo
     AppConfigModule,
     JwtConfigModule,
     PostgresDatabaseProviderModule,
+    LoggerModule,
 
     JwtModule.registerAsync({
       imports: [JwtConfigModule],

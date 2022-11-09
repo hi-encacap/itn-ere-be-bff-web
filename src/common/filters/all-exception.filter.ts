@@ -1,18 +1,48 @@
 import { ArgumentsHost, Catch, HttpException, HttpStatus } from '@nestjs/common';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces';
 import { HttpAdapterHost } from '@nestjs/core';
+import { LoggerService } from '../modules/logger/logger.service';
 
 @Catch()
 export class AllExceptionFilter {
+  private readonly logger = new LoggerService(AllExceptionFilter.name);
+
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
   catch(exception: unknown, host: ArgumentsHost) {
     const { httpAdapter } = this.httpAdapterHost;
     const ctx = host.switchToHttp();
 
+    let errorTrackingCode = '0';
+
     const responseBody = this.getResponseBody(exception, ctx);
 
-    httpAdapter.reply(ctx.getResponse(), responseBody, responseBody.error.code);
+    if (exception instanceof HttpException) {
+      const request = ctx.getRequest();
+
+      const logMessage = {
+        request: {
+          method: request.method,
+          url: request.url,
+          headers: request.headers,
+          body: request.body,
+          query: request.query,
+          params: request.params,
+        },
+        response: responseBody,
+      };
+
+      errorTrackingCode = this.logger.error(JSON.stringify(logMessage));
+    }
+
+    httpAdapter.reply(
+      ctx.getResponse(),
+      {
+        ...responseBody,
+        code: errorTrackingCode,
+      },
+      responseBody.error.code,
+    );
   }
 
   private readonly getHttpExceptionResponseBody = (exception: HttpException, ctx: HttpArgumentsHost) => {

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { omit } from 'lodash';
 import { JwtConfigService } from 'src/configs/jwt/jwt-config.service';
@@ -8,6 +8,8 @@ import { IJwtPayload } from './interfaces/auth.interface';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,

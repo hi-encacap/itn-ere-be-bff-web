@@ -4,12 +4,15 @@ import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
 import { AllExceptionFilter } from './common/filters/all-exception.filter';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
+import { LoggerService } from './common/modules/logger/logger.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const httpAdapter = app.get(HttpAdapterHost);
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
+
+  app.useLogger(app.get(LoggerService));
 
   app.useGlobalFilters(new AllExceptionFilter(httpAdapter));
   app.useGlobalPipes(
