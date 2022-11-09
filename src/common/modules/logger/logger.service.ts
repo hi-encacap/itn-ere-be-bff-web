@@ -21,19 +21,19 @@ export class LoggerService extends NestConsoleLoggerService {
     });
   }
 
-  error(message: any, stack?: string, context?: string): string;
-  error(message: any, ...optionalParams: any[]): string;
+  error(message: unknown, stack?: string, context?: string): string;
+  error(message: unknown, ...optionalParams: unknown[]): string;
   error(message: unknown, stack?: unknown, ...rest: unknown[]): string {
     const logTrackingCode = this.getLogTrackingCode();
 
     if (stack) {
-      super.error(`[${logTrackingCode}] ${message}`, stack, ...rest);
+      super.error(`[${logTrackingCode}] ${message || ''}`, stack, ...rest);
     } else {
-      super.error(`[${logTrackingCode}] ${message}`, ...rest);
+      super.error(`[${logTrackingCode}] ${message || ''}`, ...rest);
     }
 
     // Write to file
-    this.logger.error(`[${logTrackingCode}] ${message}`, stack, ...rest);
+    this.logger.error(`[${logTrackingCode}] ${message || ''}`, stack, ...rest);
 
     return logTrackingCode;
   }
