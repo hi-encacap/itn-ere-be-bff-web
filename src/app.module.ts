@@ -7,6 +7,7 @@ import { JwtConfigModule } from './configs/jwt/jwt-config.module';
 import { JwtConfigService } from './configs/jwt/jwt-config.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { JwtStrategy } from './modules/auth/strategies/jwt.strategy';
+import { ContactModule } from './modules/contact/contact.module';
 import { UserModule } from './modules/user/user.module';
 import { WebsiteModule } from './modules/website/website.module';
 import { PostgresDatabaseProviderModule } from './providers/postgres/postgres.module';
@@ -29,6 +30,7 @@ import { PostgresDatabaseProviderModule } from './providers/postgres/postgres.mo
     WebsiteModule,
     UserModule,
     AuthModule,
+    ContactModule,
   ],
   controllers: [],
   providers: [JwtStrategy, JwtService],

@@ -1,3 +1,4 @@
+import { ContactEntity } from 'src/modules/contact/entities/contact.entity';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { IWebsite } from '../constants/website.interface';
@@ -18,4 +19,7 @@ export class WebsiteEntity implements IWebsite {
 
   @OneToMany(() => UserEntity, (user) => user.website)
   users: UserEntity[];
+
+  @OneToMany(() => ContactEntity, (contact) => contact.website)
+  contacts: ContactEntity[];
 }

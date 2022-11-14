@@ -1,8 +1,9 @@
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
 import { IRole, IUser } from 'src/modules/user/interfaces/user.interface';
+import { ROLE_ENUM } from '../constants/role.constant';
 
 @Injectable()
-export class ManagerGuard implements CanActivate {
+export class AdminGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();
     const user: IUser = request.user;
@@ -17,7 +18,7 @@ export class ManagerGuard implements CanActivate {
   }
 
   private matchRoles(userRoles: IRole[]): boolean {
-    const rootRoleSlug = 'manager';
+    const rootRoleSlug = ROLE_ENUM.ADMIN;
 
     return userRoles.some((role) => role.slug === rootRoleSlug);
   }
