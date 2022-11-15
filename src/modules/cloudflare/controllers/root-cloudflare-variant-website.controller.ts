@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { RootGuard } from 'src/common/guards/root.guard';
 import { RootCreateCloudflareVariantWebsiteDto } from '../dto/root-create-cloudflare-variant-website.dto';
+import { RootQueryCloudflareVariantWebsiteDto } from '../dto/root-query-cloudflare-variant-website.dto';
 import { CloudflareVariantWebsiteService } from '../services/cloudflare-variant-website.service';
 
 @Controller('root/cloudflare/website-variants')
@@ -15,7 +16,7 @@ export class RootCloudflareVariantWebsiteController {
   }
 
   @Get()
-  getWebsiteVariants() {
-    return this.cloudflareVariantWebsiteService.getAll({});
+  getWebsiteVariants(@Query() query: RootQueryCloudflareVariantWebsiteDto) {
+    return this.cloudflareVariantWebsiteService.getAll(query);
   }
 }

@@ -23,6 +23,7 @@
     "seed:dev:refresh": "ts-node -r tsconfig-paths/register ./src/seeders/seeder.seeder.ts --refresh"
   },
   "dependencies": {
+    "@nestjs/axios": "^1.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
@@ -38,7 +39,6 @@
     "dayjs": "^1.11.6",
     "joi": "^17.6.4",
     "lodash": "^4.17.21",
-    "nanoid": "^4.0.0",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",

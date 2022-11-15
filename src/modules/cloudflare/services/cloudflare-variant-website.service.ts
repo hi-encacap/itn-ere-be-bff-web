@@ -16,11 +16,16 @@ export class CloudflareVariantWebsiteService {
   }
 
   getAll(query: FindOptionsWhere<CloudflareVariantWebsiteEntity>) {
-    return this.cloudflareVariantWebsiteRepository
+    const queryBuilder = this.cloudflareVariantWebsiteRepository
       .createQueryBuilder('variant_website')
       .where(query)
       .leftJoinAndSelect('variant_website.website', 'website')
-      .leftJoinAndSelect('variant_website.variant', 'variant')
-      .getMany();
+      .leftJoinAndSelect('variant_website.variant', 'variant');
+
+    if (query.websiteId) {
+      queryBuilder.andWhere('website.id = :websiteId', { websiteId: query.websiteId });
+    }
+
+    return queryBuilder.getMany();
   }
 }

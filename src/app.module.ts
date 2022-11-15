@@ -2,22 +2,26 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { LoggerModule } from './common/modules/logger/logger.module';
+import { CloudflareConfigModule } from './configs/cloudflare/cloudflare-config.module';
 import { AppConfigModule } from './configs/config.module';
 import { JwtConfigModule } from './configs/jwt/jwt-config.module';
 import { JwtConfigService } from './configs/jwt/jwt-config.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { JwtStrategy } from './modules/auth/strategies/jwt.strategy';
+import { CloudflareModule } from './modules/cloudflare/cloudflare.module';
 import { ContactModule } from './modules/contact/contact.module';
 import { UserModule } from './modules/user/user.module';
 import { WebsiteModule } from './modules/website/website.module';
 import { PostgresDatabaseProviderModule } from './providers/postgres/postgres.module';
-import { CloudflareModule } from './modules/cloudflare/cloudflare.module';
 
 @Module({
   imports: [
     AppConfigModule,
     JwtConfigModule,
+    CloudflareConfigModule,
+
     PostgresDatabaseProviderModule,
+
     LoggerModule,
 
     JwtModule.registerAsync({

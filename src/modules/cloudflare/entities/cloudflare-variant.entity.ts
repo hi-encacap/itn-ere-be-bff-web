@@ -7,7 +7,6 @@ import { CloudflareVariantFitEnum } from '../constants/cloudflare-variant-fit.co
 export class CloudflareVariantEntity extends BaseEntityWithPrimaryStringColumn {
   @Column({
     enum: CloudflareVariantFitEnum,
-    unique: true,
   })
   fit: CloudflareVariantFitEnum;
 
@@ -16,6 +15,9 @@ export class CloudflareVariantEntity extends BaseEntityWithPrimaryStringColumn {
 
   @Column({ nullable: true })
   height: number;
+
+  @Column({ default: false })
+  isDefault: boolean;
 
   websites: WebsiteEntity[];
 }
