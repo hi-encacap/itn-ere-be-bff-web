@@ -8,7 +8,7 @@ export class CloudflareVariantNotExistsValidator implements ValidatorConstraintI
   async validate(name: string) {
     const user = await this.cloudflareVariantService.getOne({ id: name });
 
-    return !!user;
+    return Boolean(user);
   }
 
   defaultMessage(args: ValidationArguments) {
