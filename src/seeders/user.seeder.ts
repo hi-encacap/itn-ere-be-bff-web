@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Seeder } from 'nestjs-seeder';
 import AppConfigService from 'src/configs/config.service';
+import { RoleEntity } from 'src/modules/user/entities/role.entity';
 import { UserRoleMappingEntity } from 'src/modules/user/entities/user-role-mapping.entity';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { IUser } from 'src/modules/user/interfaces/user.interface';
@@ -24,10 +25,15 @@ const userItems: IUser[] = [
 
 @Injectable()
 export class UserSeeder implements Seeder {
+  private roleItems: RoleEntity[] = [];
+
   constructor(
-    @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(UserRoleMappingEntity)
     private readonly userRoleMappingRepository: Repository<UserRoleMappingEntity>,
+    @InjectRepository(RoleEntity)
+    private readonly roleRepository: Repository<RoleEntity>,
     private readonly configService: AppConfigService,
   ) {}
 
@@ -59,17 +65,26 @@ export class UserSeeder implements Seeder {
       record = await this.userRepository.save(newItem);
     }
 
-    const userRoleMappingItems = item.roles.map((role) => ({
-      userId: record.id,
-      roleId: role.id,
-    }));
+    const userRoleMappingItems = [];
+    const userRoleSlugs = item.roles.map((role) => role.slug);
+
+    this.roleItems.forEach((role) => {
+      if (!userRoleSlugs.includes(role.slug)) {
+        return;
+      }
+      userRoleMappingItems.push({
+        userId: record.id,
+        roleId: role.id,
+      });
+    });
 
     await this.userRoleMappingRepository.delete({ userId: record.id });
 
     return this.userRoleMappingRepository.save(userRoleMappingItems);
   }
 
-  seed() {
+  async seed() {
+    this.roleItems = await this.roleRepository.find();
     const seedTasks = userItems.map((item) => this.upsertUserItem(item));
     return Promise.all(seedTasks);
   }
