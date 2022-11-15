@@ -50,7 +50,7 @@ export class RoleSeeder implements Seeder {
     return Promise.all(seedTasks);
   }
 
-  async drop() {
+  drop() {
     return this.roleRepository.delete({});
   }
 }
