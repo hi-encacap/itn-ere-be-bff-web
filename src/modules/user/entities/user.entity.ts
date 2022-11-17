@@ -1,5 +1,6 @@
 import { compare, hash } from 'bcrypt';
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
+import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
 import { IWebsite } from 'src/modules/website/constants/website.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
@@ -27,13 +28,16 @@ export class UserEntity extends BaseEntityWithPrimaryGeneratedColumn implements 
   @Column({ name: 'last_name' })
   lastName!: string;
 
+  @Column({ name: 'website_id' })
+  websiteId!: number;
+
   @OneToMany(() => UserRoleMappingEntity, (userRoleMapping) => userRoleMapping.userId, {
     cascade: ['remove', 'update'],
   })
   roles!: IRole[];
 
-  @Column({ name: 'website_id' })
-  websiteId!: number;
+  @OneToMany(() => CloudflareImageEntity, (cloudflareImage) => cloudflareImage.user)
+  cloudflareImages!: CloudflareImageEntity[];
 
   @ManyToOne(() => WebsiteEntity, (website) => website.users)
   @JoinColumn({ name: 'website_id', referencedColumnName: 'id' })

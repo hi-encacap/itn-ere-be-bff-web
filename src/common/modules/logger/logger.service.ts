@@ -23,14 +23,14 @@ export class LoggerService extends NestConsoleLoggerService {
 
   error(message: unknown, stack?: string, context?: string): string;
   error(message: unknown, ...optionalParams: unknown[]): string;
-  error(message: unknown, stack?: unknown, ...rest: unknown[]): string {
+  error(message: unknown, stack?: unknown): string {
     const logTrackingCode = this.getLogTrackingCode();
     const errorMessage = this.getErrorMessage(message, stack);
 
-    super.error(`[${logTrackingCode}] ${errorMessage}`, ...rest);
+    super.error(`[${logTrackingCode}] ${errorMessage}`);
 
     // Write to file
-    this.logger.error(`[${logTrackingCode}] ${errorMessage}`, ...rest);
+    this.logger.error(`[${logTrackingCode}] ${errorMessage}`);
 
     return logTrackingCode;
   }

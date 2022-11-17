@@ -35,12 +35,7 @@ export class AuthService {
   }
 
   generateAuthToken(user: IUser) {
-    const payload: IJwtPayload = {
-      id: user.id,
-      email: user.email,
-      roles: user.roles,
-      website: user.website,
-    };
+    const payload: IJwtPayload = user;
 
     const token = this.generateToken(payload, {
       expiresIn: `${this.jwtConfigService.authExpirationMinutes}m`,
