@@ -16,7 +16,7 @@ export class CloudflareImageService {
     private readonly httpService: HttpService,
   ) {}
 
-  async uploadImage(file: Express.Multer.File, user: UserEntity) {
+  async upload(file: Express.Multer.File, user: UserEntity) {
     const imageId = randomStringPrefix();
 
     const formData = new FormData();
@@ -44,6 +44,17 @@ export class CloudflareImageService {
     });
 
     return record;
+  }
+
+  async uploadMultiple(files: Express.Multer.File[], user: UserEntity) {
+    const records = [];
+
+    for (const file of files) {
+      const record = await this.upload(file, user);
+      records.push(record);
+    }
+
+    return records;
   }
 
   private getFileName(id: string, mimetype: string) {

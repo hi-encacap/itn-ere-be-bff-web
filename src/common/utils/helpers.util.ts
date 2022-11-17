@@ -1,11 +1,9 @@
 import dayjs from 'dayjs';
-import { v5 as uuidv5 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
-const randomStringPrefix = (length = 27) => {
+const randomStringPrefix = () => {
   const dayPrefix = dayjs().format('YYYYMMDD');
-  const uuidPrefix = uuidv5(dayPrefix, uuidv5.URL)
-    .slice(0, length - dayPrefix.length)
-    .replace(/-/g, '');
+  const uuidPrefix = uuidv4().replace(/-/g, '');
 
   return `${dayPrefix}${uuidPrefix}`;
 };
