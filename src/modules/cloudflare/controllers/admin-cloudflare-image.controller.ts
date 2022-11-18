@@ -24,7 +24,7 @@ export class AdminCloudflareImageController {
   @UseInterceptors(FileInterceptor('file'))
   @UsePipes(CloudflareImageValidationPipe)
   async uploadImage(@UploadedFile() file: Express.Multer.File, @Req() { user }) {
-    return this.cloudflareImageService.upload(file, user);
+    return this.cloudflareImageService.uploadSingle(file, user);
   }
 
   @Post('multiple')

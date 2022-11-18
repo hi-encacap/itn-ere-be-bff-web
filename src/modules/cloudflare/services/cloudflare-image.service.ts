@@ -1,7 +1,10 @@
 import { HttpService } from '@nestjs/axios';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectQueue } from '@nestjs/bull';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Queue } from 'bull';
 import FormData from 'form-data';
+import { LoggerService } from 'src/common/modules/logger/logger.service';
 import { randomStringPrefix } from 'src/common/utils/helpers.util';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -10,37 +13,30 @@ import { CloudflareImageEntity } from '../entities/cloudflare-image.entity';
 
 @Injectable()
 export class CloudflareImageService {
+  private logger = new LoggerService('CloudflareImageService');
+
   constructor(
     @InjectRepository(CloudflareImageEntity)
-    private readonly cloudflareImageEntity: Repository<CloudflareImageEntity>,
+    private readonly cloudflareImageRepository: Repository<CloudflareImageEntity>,
     private readonly httpService: HttpService,
+    @InjectQueue('cloudflare-image')
+    private readonly cloudflareImageQueue: Queue,
   ) {}
 
-  async upload(file: Express.Multer.File, user: UserEntity) {
+  async uploadSingle(file: Express.Multer.File, user: UserEntity) {
     const imageId = randomStringPrefix();
 
-    const formData = new FormData();
-
-    formData.append('file', file.buffer, {
-      filename: this.getFileName(imageId, file.mimetype),
-      contentType: file.mimetype,
-    });
-    formData.append('id', imageId);
-
-    try {
-      await this.httpService.axiosRef.post('', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-    } catch (error) {
-      throw new BadRequestException(error.response.data);
-    }
-
-    const record = await this.cloudflareImageEntity.save({
+    const record = await this.cloudflareImageRepository.save({
       id: imageId,
       status: CloudflareImageStatusEnum.PROCESSING,
       size: file.size,
       extension: file.mimetype,
       userId: user.id,
+    });
+
+    await this.cloudflareImageQueue.add('upload', {
+      imageId,
+      file,
     });
 
     return record;
@@ -50,11 +46,40 @@ export class CloudflareImageService {
     const records = [];
 
     for (const file of files) {
-      const record = await this.upload(file, user);
+      const record = await this.uploadSingle(file, user);
       records.push(record);
     }
 
     return records;
+  }
+
+  async uploadToCloudflare(imageId: string, mimetype: string, buffer: Buffer) {
+    const formData = new FormData();
+
+    formData.append('file', Buffer.from(buffer), {
+      filename: this.getFileName(imageId, mimetype),
+      contentType: mimetype,
+    });
+
+    formData.append('id', imageId);
+
+    this.logger.log(`Uploading image ${imageId} to Cloudflare`);
+
+    try {
+      await this.httpService.axiosRef.post('', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      await this.cloudflareImageRepository.save({
+        id: imageId,
+        status: CloudflareImageStatusEnum.READY,
+      });
+    } catch (error) {
+      this.logger.error(error);
+      await this.cloudflareImageRepository.save({
+        id: imageId,
+        status: CloudflareImageStatusEnum.PROCESSING_ERROR,
+      });
+    }
   }
 
   private getFileName(id: string, mimetype: string) {

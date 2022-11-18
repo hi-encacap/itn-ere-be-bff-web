@@ -1,10 +1,12 @@
 import { HttpModule } from '@nestjs/axios';
+import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CloudflareConfigModule } from 'src/configs/cloudflare/cloudflare-config.module';
 import { CloudflareConfigService } from 'src/configs/cloudflare/cloudflare-config.service';
 import { WebsiteNotExistsValidator } from '../website/validators/website-not-exists.validator';
 import { WebsiteModule } from '../website/website.module';
+import { CloudflareImageConsumer } from './consumers/cloudflare-image.consumer';
 import { AdminCloudflareImageController } from './controllers/admin-cloudflare-image.controller';
 import { RootCloudflareVariantWebsiteController } from './controllers/root-cloudflare-variant-website.controller';
 import { RootCloudflareVariantController } from './controllers/root-cloudflare-variant.controller';
@@ -25,6 +27,9 @@ import { CloudflareVariantNotExistsValidator } from './validators/cloudflare-var
       CloudflareVariantWebsiteEntity,
       CloudflareImageEntity,
     ]),
+    BullModule.registerQueue({
+      name: 'cloudflare-image',
+    }),
     HttpModule.registerAsync({
       imports: [CloudflareConfigModule],
       useFactory: (cloudflareConfigService: CloudflareConfigService) => ({
@@ -46,6 +51,8 @@ import { CloudflareVariantNotExistsValidator } from './validators/cloudflare-var
     CloudflareVariantService,
     CloudflareVariantWebsiteService,
     CloudflareImageService,
+
+    CloudflareImageConsumer,
 
     CloudflareVariantExistsValidator,
     CloudflareVariantNotExistsValidator,
