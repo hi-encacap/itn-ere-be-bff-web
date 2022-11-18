@@ -1,9 +1,11 @@
 import { OnQueueActive, OnQueueCompleted, Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
+import { LoggerService } from 'src/common/modules/logger/logger.service';
 import { CloudflareImageService } from '../services/cloudflare-image.service';
 
 @Processor('cloudflare-image')
 export class CloudflareImageConsumer {
+  private readonly logger = new LoggerService('CloudflareImageConsumer');
   constructor(private readonly cloudflareImageService: CloudflareImageService) {}
 
   @Process('upload')
@@ -18,11 +20,11 @@ export class CloudflareImageConsumer {
 
   @OnQueueActive()
   onActive(job: Job) {
-    console.log(`Processing job ${job.id} of type ${job.name} with data ${job.data}...`);
+    this.logger.debug(`Processing image ${job.data.imageId}...`);
   }
 
   @OnQueueCompleted()
-  onComplete(job: Job, result: any) {
-    console.log(`Completed job ${job.id} of type ${job.name} with result ${result}`);
+  onComplete(job: Job, result: unknown) {
+    this.logger.debug(`Processed image ${job.data.imageId} successfully with result: ${result}`);
   }
 }

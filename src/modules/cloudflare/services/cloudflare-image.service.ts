@@ -63,8 +63,6 @@ export class CloudflareImageService {
 
     formData.append('id', imageId);
 
-    this.logger.log(`Uploading image ${imageId} to Cloudflare`);
-
     try {
       await this.httpService.axiosRef.post('', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
