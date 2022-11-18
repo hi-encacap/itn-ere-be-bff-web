@@ -23,14 +23,14 @@ export class AdminCloudflareImageController {
   @Post('single')
   @UseInterceptors(FileInterceptor('file'))
   @UsePipes(CloudflareImageValidationPipe)
-  async uploadImage(@UploadedFile() file: Express.Multer.File, @Req() { user }) {
+  uploadImage(@UploadedFile() file: Express.Multer.File, @Req() { user }) {
     return this.cloudflareImageService.uploadSingle(file, user);
   }
 
   @Post('multiple')
   @UseInterceptors(FilesInterceptor('files'))
   @UsePipes(CloudflareImagesValidationPipe)
-  async uploadMultipleImages(@UploadedFiles() files: Express.Multer.File[], @Req() { user }) {
+  uploadMultipleImages(@UploadedFiles() files: Express.Multer.File[], @Req() { user }) {
     return this.cloudflareImageService.uploadMultiple(files, user);
   }
 }

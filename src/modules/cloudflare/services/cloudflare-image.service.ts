@@ -43,14 +43,13 @@ export class CloudflareImageService {
   }
 
   async uploadMultiple(files: Express.Multer.File[], user: UserEntity) {
-    const records = [];
+    const task = [];
 
     for (const file of files) {
-      const record = await this.uploadSingle(file, user);
-      records.push(record);
+      task.push(this.uploadSingle(file, user));
     }
 
-    return records;
+    return Promise.all(task);
   }
 
   async uploadToCloudflare(imageId: string, mimetype: string, buffer: Buffer) {
