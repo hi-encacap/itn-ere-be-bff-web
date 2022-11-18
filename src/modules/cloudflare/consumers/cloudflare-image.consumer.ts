@@ -25,6 +25,8 @@ export class CloudflareImageConsumer {
 
   @OnQueueCompleted()
   onComplete(job: Job, result: unknown) {
-    this.logger.debug(`Processed image ${job.data.imageId} successfully with result: ${result ?? 'null'}`);
+    const resultMessage = typeof result === 'string' ? result : JSON.stringify(result);
+
+    this.logger.debug(`Processed image ${job.data.imageId} successfully with result: ${resultMessage}`);
   }
 }

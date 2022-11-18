@@ -42,7 +42,7 @@ export class CloudflareImageService {
     return record;
   }
 
-  async uploadMultiple(files: Express.Multer.File[], user: UserEntity) {
+  uploadMultiple(files: Express.Multer.File[], user: UserEntity) {
     const task = [];
 
     for (const file of files) {
