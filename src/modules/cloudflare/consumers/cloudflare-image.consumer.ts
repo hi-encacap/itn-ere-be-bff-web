@@ -9,7 +9,7 @@ export class CloudflareImageConsumer {
   constructor(private readonly cloudflareImageService: CloudflareImageService) {}
 
   @Process('upload')
-  async upload(job: Job) {
+  upload(job: Job) {
     this.cloudflareImageService.uploadToCloudflare(
       job.data.imageId,
       job.data.file.mimetype,
