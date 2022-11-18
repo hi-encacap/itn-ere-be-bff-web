@@ -33,9 +33,7 @@ export class AllExceptionFilter {
       };
 
       errorTrackingCode = this.logger.error(JSON.stringify(logMessage));
-    }
-
-    if (exception instanceof Error) {
+    } else if (exception instanceof Error) {
       errorTrackingCode = this.logger.error(exception.stack);
     }
 

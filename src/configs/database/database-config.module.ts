@@ -17,6 +17,8 @@ import databaseConfiguration from './database-configuration';
         DB_USERNAME: Joi.string().required().default('postgres'),
         DB_PASSWORD: Joi.string().required().default('postgres'),
         DB_NAME: Joi.string().required().default('postgres'),
+        REDIS_HOST: Joi.string().required().default('localhost'),
+        REDIS_PORT: Joi.number().required().default(6379),
       }),
     }),
   ],

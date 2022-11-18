@@ -8,12 +8,19 @@ export default class DatabaseConfigService {
 
   get postgres(): PostgresConnectionOptions {
     return {
-      type: this.configService.get('type'),
-      host: this.configService.get<string>('host'),
-      port: this.configService.get<number>('port'),
-      username: this.configService.get<string>('username'),
-      password: this.configService.get<string>('password'),
-      database: this.configService.get<string>('database'),
+      type: this.configService.get('postgres.type'),
+      host: this.configService.get<string>('postgres.host'),
+      port: this.configService.get<number>('postgres.port'),
+      username: this.configService.get<string>('postgres.username'),
+      password: this.configService.get<string>('postgres.password'),
+      database: this.configService.get<string>('postgres.database'),
+    };
+  }
+
+  get redis() {
+    return {
+      host: this.configService.get<string>('redis.host'),
+      port: this.configService.get<number>('redis.port'),
     };
   }
 }
