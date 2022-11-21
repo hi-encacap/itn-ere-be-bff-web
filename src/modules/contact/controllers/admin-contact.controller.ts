@@ -11,7 +11,7 @@ export class AdminContactController {
 
   @Get()
   findAll(@Req() { user }) {
-    return this.contactService.findAll({ website: user.website });
+    return this.contactService.findAll({ websiteId: user.website.id });
   }
 
   @Post()

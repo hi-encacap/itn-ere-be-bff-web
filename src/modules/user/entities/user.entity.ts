@@ -1,6 +1,7 @@
 import { compare, hash } from 'bcrypt';
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
 import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
+import { ContactEntity } from 'src/modules/contact/entities/contact.entity';
 import { IWebsite } from 'src/modules/website/constants/website.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
@@ -38,6 +39,10 @@ export class UserEntity extends BaseEntityWithPrimaryGeneratedColumn implements 
 
   @OneToMany(() => CloudflareImageEntity, (cloudflareImage) => cloudflareImage.user)
   cloudflareImages!: CloudflareImageEntity[];
+
+  @OneToMany(() => ContactEntity, (contact) => contact.user)
+  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
+  contacts!: ContactEntity[];
 
   @ManyToOne(() => WebsiteEntity, (website) => website.users)
   @JoinColumn({ name: 'website_id', referencedColumnName: 'id' })

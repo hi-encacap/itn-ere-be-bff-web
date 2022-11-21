@@ -1,4 +1,5 @@
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
+import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { IContact } from '../interfaces/contact.interface';
@@ -21,7 +22,12 @@ export class ContactEntity extends BaseEntityWithPrimaryGeneratedColumn implemen
   })
   zalo: string;
 
-  @ManyToOne(() => WebsiteEntity, (website) => website.contacts)
-  @JoinColumn({ name: 'website_id', referencedColumnName: 'id' })
+  @Column({ name: 'user_id' })
+  userId!: number;
+
+  @ManyToOne(() => UserEntity, (user) => user.contacts)
+  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
+  user: UserEntity;
+
   website!: WebsiteEntity;
 }
