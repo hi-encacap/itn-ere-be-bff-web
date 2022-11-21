@@ -55,7 +55,7 @@ export class CategoryGroupSeeder implements Seeder {
       .getOne();
 
     if (!rootUser) {
-      return;
+      return undefined;
     }
 
     this.rootUser = rootUser;

@@ -9,7 +9,7 @@ export class RootCategoryGroupController {
   constructor(private readonly categoryGroupService: CategoryGroupService) {}
 
   @Get()
-  async getGroups() {
+  getGroups() {
     return this.categoryGroupService.getGroups();
   }
 }
