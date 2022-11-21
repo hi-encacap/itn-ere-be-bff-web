@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { IUser } from 'src/modules/user/interfaces/user.interface';
+import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { CreateContactDto } from '../dto/create-contact.dto';
+import { QueryContactListDto } from '../dto/query-contact-list.dto';
 import { ContactEntity } from '../entities/contact.entity';
 
 @Injectable()
@@ -14,12 +17,16 @@ export class ContactService {
   create(createContactDto: CreateContactDto, user?: IUser) {
     return this.contactRepository.save({
       ...createContactDto,
-      website: user.website,
+      userId: user?.id,
     });
   }
 
-  findAll(query: FindOptionsWhere<ContactEntity>) {
-    const queryBuilder = this.getQueryBuilder().where(query);
+  findAll(query: FindOptionsWhere<QueryContactListDto>) {
+    const queryBuilder = this.getQueryBuilder();
+
+    if (query.websiteId) {
+      queryBuilder.andWhere('website.id = :websiteId', { websiteId: query.websiteId });
+    }
 
     return queryBuilder.getMany();
   }
@@ -31,7 +38,8 @@ export class ContactService {
   private getQueryBuilder() {
     return this.contactRepository
       .createQueryBuilder('contact')
-      .leftJoinAndSelect('contact.website', 'website')
+      .leftJoin(UserEntity, 'user', 'user.id = contact.user_id')
+      .leftJoinAndMapOne('contact.website', WebsiteEntity, 'website', 'website.id = user.website_id')
       .orderBy('contact.id', 'DESC');
   }
 }
