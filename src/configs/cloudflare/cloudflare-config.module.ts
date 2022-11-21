@@ -14,6 +14,8 @@ import cloudflareConfiguration from './cloudflare-configuration';
         CLOUDFLARE_API_TOKEN: Joi.string().required(),
         CLOUDFLARE_ACCOUNT_ID: Joi.string().required(),
         CLOUDFLARE_IMAGE_URL: Joi.string().required(),
+        CLOUDFLARE_ACCOUNT_HASH: Joi.string().required(),
+        CLOUDFLARE_DELIVERY_IMAGE_URL: Joi.string().required(),
       }),
       expandVariables: true,
     }),

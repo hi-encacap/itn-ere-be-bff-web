@@ -9,6 +9,7 @@ export class CloudflareConfigService {
     return {
       token: this.configService.get<string>('token.images'),
       url: this.configService.get<string>('url.images'),
+      delivery: this.configService.get<string>('url.deliveryImages'),
     };
   }
 }

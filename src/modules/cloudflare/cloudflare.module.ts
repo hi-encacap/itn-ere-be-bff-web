@@ -41,6 +41,7 @@ import { CloudflareVariantNotExistsValidator } from './validators/cloudflare-var
       inject: [CloudflareConfigService],
     }),
     WebsiteModule,
+    CloudflareConfigModule,
   ],
   controllers: [
     RootCloudflareVariantController,
@@ -59,5 +60,6 @@ import { CloudflareVariantNotExistsValidator } from './validators/cloudflare-var
     CloudflareVariantCannotDeleteValidator,
     WebsiteNotExistsValidator,
   ],
+  exports: [CloudflareVariantService, CloudflareVariantWebsiteService, CloudflareImageService],
 })
 export class CloudflareModule {}
