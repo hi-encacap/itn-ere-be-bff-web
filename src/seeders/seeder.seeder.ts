@@ -1,6 +1,8 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { seeder } from 'nestjs-seeder';
 import { AppConfigModule } from 'src/configs/config.module';
+import { CategoryGroupEntity } from 'src/modules/category/entities/category-group.entity';
+import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
 import { CloudflareVariantWebsiteEntity } from 'src/modules/cloudflare/entities/cloudflare-variant-website.entity';
 import { CloudflareVariantEntity } from 'src/modules/cloudflare/entities/cloudflare-variant.entity';
 import { ContactEntity } from 'src/modules/contact/entities/contact.entity';
@@ -9,6 +11,7 @@ import { UserRoleMappingEntity } from 'src/modules/user/entities/user-role-mappi
 import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { PostgresDatabaseProviderModule } from 'src/providers/postgres/postgres.module';
+import { CategoryGroupSeeder } from './category-group.seeder';
 import { CloudflareVariantSeeder } from './cloudflare-variant.seeder';
 import { RoleSeeder } from './role.seeder';
 import { UserSeeder } from './user.seeder';
@@ -25,7 +28,9 @@ seeder({
       UserRoleMappingEntity,
       CloudflareVariantEntity,
       CloudflareVariantWebsiteEntity,
+      CloudflareImageEntity,
       ContactEntity,
+      CategoryGroupEntity,
     ]),
   ],
-}).run([WebsiteSeeder, RoleSeeder, UserSeeder, CloudflareVariantSeeder]);
+}).run([WebsiteSeeder, RoleSeeder, UserSeeder, CloudflareVariantSeeder, CategoryGroupSeeder]);

@@ -1,4 +1,4 @@
-/* eslint max-classes-per-file: ["error", 2] */
+/* eslint max-classes-per-file: ["error", 5] */
 
 import {
   BaseEntity,
@@ -26,6 +26,20 @@ export class BaseEntityWithPrimaryGeneratedColumn extends BaseEntity {
 export class BaseEntityWithPrimaryStringColumn extends BaseEntity {
   @PrimaryColumn()
   id!: string;
+
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt!: Date;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt!: Date;
+
+  @DeleteDateColumn({ name: 'deleted_at' })
+  deletedAt?: Date;
+}
+
+export class BaseEntityWithPrimaryCodeColumn extends BaseEntity {
+  @PrimaryColumn()
+  code!: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;

@@ -16,6 +16,7 @@ import { ContactModule } from './modules/contact/contact.module';
 import { UserModule } from './modules/user/user.module';
 import { WebsiteModule } from './modules/website/website.module';
 import { PostgresDatabaseProviderModule } from './providers/postgres/postgres.module';
+import { CategoryModule } from './modules/category/category.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { PostgresDatabaseProviderModule } from './providers/postgres/postgres.mo
     AuthModule,
     ContactModule,
     CloudflareModule,
+    CategoryModule,
   ],
   controllers: [],
   providers: [JwtStrategy, JwtService],
