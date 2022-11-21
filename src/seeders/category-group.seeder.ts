@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { omit } from 'lodash';
+import { capitalize, omit, values } from 'lodash';
 import { Seeder } from 'nestjs-seeder';
 import { ROLE_ENUM } from 'src/common/constants/role.constant';
+import { CATEGORY_GROUP_ENUM } from 'src/modules/category/constants/category-group.constant';
 import { CategoryGroupEntity } from 'src/modules/category/entities/category-group.entity';
 import { ICategoryGroup } from 'src/modules/category/interfaces/category-group.interface';
 import { RoleEntity } from 'src/modules/user/entities/role.entity';
@@ -11,18 +12,11 @@ import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { Repository } from 'typeorm';
 
-export const categoryGroupItems: Array<ICategoryGroup> = [
-  {
-    code: 'estate',
-    name: 'Estate',
-    userId: 0,
-  },
-  {
-    code: 'news',
-    name: 'News',
-    userId: 0,
-  },
-];
+export const categoryGroupItems: Array<ICategoryGroup> = values(CATEGORY_GROUP_ENUM).map((categoryGroup) => ({
+  name: capitalize(categoryGroup),
+  code: categoryGroup,
+  userId: 0,
+}));
 
 @Injectable()
 export class CategoryGroupSeeder implements Seeder {
