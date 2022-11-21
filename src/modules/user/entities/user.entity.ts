@@ -1,5 +1,6 @@
 import { compare, hash } from 'bcrypt';
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
+import { CategoryGroupEntity } from 'src/modules/category/entities/category-group.entity';
 import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
 import { ContactEntity } from 'src/modules/contact/entities/contact.entity';
 import { IWebsite } from 'src/modules/website/constants/website.interface';
@@ -43,6 +44,10 @@ export class UserEntity extends BaseEntityWithPrimaryGeneratedColumn implements 
   @OneToMany(() => ContactEntity, (contact) => contact.user)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   contacts!: ContactEntity[];
+
+  @OneToMany(() => CategoryGroupEntity, (categoryGroup) => categoryGroup.user)
+  @JoinColumn({ name: 'category_group_code', referencedColumnName: 'code' })
+  categoryGroups!: CategoryGroupEntity[];
 
   @ManyToOne(() => WebsiteEntity, (website) => website.users)
   @JoinColumn({ name: 'website_id', referencedColumnName: 'id' })
