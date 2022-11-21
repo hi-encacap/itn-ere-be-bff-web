@@ -1,6 +1,5 @@
 import { ConsoleLogger as NestConsoleLoggerService } from '@nestjs/common';
 import dayjs from 'dayjs';
-import { randomStringPrefix } from 'src/common/utils/helpers.util';
 import winston, { Logger } from 'winston';
 
 export class LoggerService extends NestConsoleLoggerService {
@@ -22,18 +21,14 @@ export class LoggerService extends NestConsoleLoggerService {
     });
   }
 
-  error(message: unknown, stack?: string, context?: string): string;
-  error(message: unknown, ...optionalParams: unknown[]): string;
-  error(message: unknown, stack?: unknown): string {
-    const logTrackingCode = randomStringPrefix();
+  error(message: unknown, stack?: unknown): void;
+  error(message: unknown, ...optionalParams: unknown[]): void;
+  error(message: unknown, stack?: string, context?: string): void {
     const errorMessage = this.getErrorMessage(message, stack);
+    const logMessage = `[${context ?? this.context}] ${errorMessage}`;
 
-    super.error(`[${logTrackingCode}] ${errorMessage}`);
-
-    // Write to file
-    this.logger.error(`[${logTrackingCode}] ${errorMessage}`);
-
-    return logTrackingCode;
+    this.logger.error(logMessage);
+    super.error(logMessage);
   }
 
   private readonly getErrorMessage = (message: unknown, stack?: unknown): string => {
@@ -47,6 +42,10 @@ export class LoggerService extends NestConsoleLoggerService {
 
     if (stack) {
       return stack.toString();
+    }
+
+    if (typeof message === 'object') {
+      return JSON.stringify(message);
     }
 
     return '';

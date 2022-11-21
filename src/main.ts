@@ -1,5 +1,6 @@
 import { UnprocessableEntityException, ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
 import { AllExceptionFilter } from './common/filters/all-exception.filter';
@@ -7,7 +8,7 @@ import { ResponseInterceptor } from './common/interceptors/response.interceptor'
 import { LoggerService } from './common/modules/logger/logger.service';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const httpAdapter = app.get(HttpAdapterHost);
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });

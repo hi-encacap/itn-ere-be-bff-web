@@ -12,8 +12,9 @@ export class AllExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
     const { httpAdapter } = this.httpAdapterHost;
     const ctx = host.switchToHttp();
+    const response = ctx.getResponse();
 
-    let errorTrackingCode = '0';
+    const errorTrackingCode = response.getHeader('x-request-id');
 
     const responseBody = this.getResponseBody(exception, ctx);
 
@@ -32,9 +33,9 @@ export class AllExceptionFilter {
         response: responseBody,
       };
 
-      errorTrackingCode = this.logger.error(JSON.stringify(logMessage));
+      this.logger.error(logMessage, null, errorTrackingCode);
     } else if (exception instanceof Error) {
-      errorTrackingCode = this.logger.error(exception.stack);
+      this.logger.error(exception.stack);
     }
 
     httpAdapter.reply(
