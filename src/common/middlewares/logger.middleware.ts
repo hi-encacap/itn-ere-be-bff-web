@@ -1,20 +1,30 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { NextFunction, Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { LoggerService } from '../modules/logger/logger.service';
+import { randomStringPrefix } from '../utils/helpers.util';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
-  private logger = new LoggerService('HTTP');
+  private passUrl: string[] = ['/health', '/graphql'];
+  // GraphQL logging uses the apollo plugins.
+  // https://docs.nestjs.com/graphql/plugins
+  // https://www.apollographql.com/docs/apollo-server/integrations/plugins/
+  // https://github.com/nestjs/graphql/issues/923
 
-  use(request: Request, response: Response, next: NextFunction): void {
-    const { ip, method, originalUrl: url } = request;
+  private loggerService: LoggerService = new LoggerService('LoggerMiddleware');
 
-    response.on('close', () => {
-      const { statusCode } = response;
+  public use(req: Request, res: Response, next: () => void): void {
+    if (this.passUrl.includes(req.originalUrl)) {
+      return next();
+    }
 
-      this.logger.log(`${method} ${url} ${ip} - ${statusCode}`);
-    });
+    const requestId = req.headers['x-request-id'] || randomStringPrefix('HTTP');
+    res.setHeader('x-request-id', requestId);
 
-    next();
+    this.loggerService.log(
+      `[${requestId}] ${req.method} ${req.originalUrl} - ${req.ip.replace('::ffff:', '')}`,
+    );
+
+    return next();
   }
 }
