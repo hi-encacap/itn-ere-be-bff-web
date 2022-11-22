@@ -1,7 +1,9 @@
 import { BaseEntityWithPrimaryStringColumn } from 'src/base/base.entity';
+import { CategoryEntity } from 'src/modules/category/entities/category.entity';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { CloudflareImageStatusEnum } from '../constants/cloudflare-image-status.constant';
+import { CloudflareVariantEntity } from './cloudflare-variant.entity';
 
 @Entity({ name: 'cloudflare_images' })
 export class CloudflareImageEntity extends BaseEntityWithPrimaryStringColumn {
@@ -20,4 +22,10 @@ export class CloudflareImageEntity extends BaseEntityWithPrimaryStringColumn {
   @ManyToOne(() => UserEntity, (user) => user.cloudflareImages)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   user: UserEntity;
+
+  @OneToMany(() => CategoryEntity, (category) => category.thumbnail)
+  categories: CategoryEntity[];
+
+  variants: CloudflareVariantEntity[];
+  urls: string[];
 }

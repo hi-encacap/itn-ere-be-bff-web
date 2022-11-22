@@ -16,6 +16,7 @@ import { CloudflareVariantEntity } from './entities/cloudflare-variant.entity';
 import { CloudflareImageService } from './services/cloudflare-image.service';
 import { CloudflareVariantWebsiteService } from './services/cloudflare-variant-website.service';
 import { CloudflareVariantService } from './services/cloudflare-variant.service';
+import { CloudflareImageNotExistsValidator } from './validators/cloudflare-image-not-exists.validator';
 import { CloudflareVariantCannotDeleteValidator } from './validators/cloudflare-variant-cannot-delete.validator';
 import { CloudflareVariantExistsValidator } from './validators/cloudflare-variant-exists.validator';
 import { CloudflareVariantNotExistsValidator } from './validators/cloudflare-variant-not-exists.validator';
@@ -41,6 +42,7 @@ import { CloudflareVariantNotExistsValidator } from './validators/cloudflare-var
       inject: [CloudflareConfigService],
     }),
     WebsiteModule,
+    CloudflareConfigModule,
   ],
   controllers: [
     RootCloudflareVariantController,
@@ -57,7 +59,15 @@ import { CloudflareVariantNotExistsValidator } from './validators/cloudflare-var
     CloudflareVariantExistsValidator,
     CloudflareVariantNotExistsValidator,
     CloudflareVariantCannotDeleteValidator,
+    CloudflareImageNotExistsValidator,
+
     WebsiteNotExistsValidator,
+  ],
+  exports: [
+    CloudflareVariantService,
+    CloudflareVariantWebsiteService,
+    CloudflareImageService,
+    CloudflareImageNotExistsValidator,
   ],
 })
 export class CloudflareModule {}

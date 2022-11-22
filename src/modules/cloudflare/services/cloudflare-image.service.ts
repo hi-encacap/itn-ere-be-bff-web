@@ -6,14 +6,17 @@ import { Queue } from 'bull';
 import FormData from 'form-data';
 import { LoggerService } from 'src/common/modules/logger/logger.service';
 import { randomStringPrefix } from 'src/common/utils/helpers.util';
+import { CloudflareConfigService } from 'src/configs/cloudflare/cloudflare-config.service';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CloudflareImageStatusEnum } from '../constants/cloudflare-image-status.constant';
 import { CloudflareImageEntity } from '../entities/cloudflare-image.entity';
+import { CloudflareVariantEntity } from '../entities/cloudflare-variant.entity';
 
 @Injectable()
 export class CloudflareImageService {
   private logger = new LoggerService('CloudflareImageService');
+  private imageURL: string;
 
   constructor(
     @InjectRepository(CloudflareImageEntity)
@@ -21,7 +24,10 @@ export class CloudflareImageService {
     private readonly httpService: HttpService,
     @InjectQueue('cloudflare-image')
     private readonly cloudflareImageQueue: Queue,
-  ) {}
+    private readonly cloudflareConfigService: CloudflareConfigService,
+  ) {
+    this.imageURL = this.cloudflareConfigService.images.delivery;
+  }
 
   async uploadSingle(file: Express.Multer.File, user: UserEntity) {
     const imageId = randomStringPrefix();
@@ -77,6 +83,16 @@ export class CloudflareImageService {
         status: CloudflareImageStatusEnum.PROCESSING_ERROR,
       });
     }
+  }
+
+  getOne(imageId: string) {
+    return this.cloudflareImageRepository.findOne({
+      where: { id: imageId },
+    });
+  }
+
+  getURLsFromVariants(imageId: string, variants: CloudflareVariantEntity[]) {
+    return variants.map((variant) => `${this.imageURL}/${imageId}/${variant.id}`);
   }
 
   private getFileName(id: string, mimetype: string) {
