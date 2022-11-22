@@ -1,7 +1,8 @@
 import { Transform } from 'class-transformer';
-import { IsEnum, IsString } from 'class-validator';
+import { IsEnum, IsString, Validate } from 'class-validator';
 import { slugify } from 'src/common/utils/helpers.util';
 import { CATEGORY_GROUP_ENUM } from '../constants/category-group.constant';
+import { CategoryExistsValidator } from '../validators/category-exists.validator';
 
 export class CreateCategoryDto {
   @IsString()
@@ -9,6 +10,7 @@ export class CreateCategoryDto {
 
   @IsString()
   @Transform(({ value }) => slugify(value))
+  @Validate(CategoryExistsValidator)
   code: string;
 
   @IsString()

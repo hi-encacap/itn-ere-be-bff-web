@@ -7,10 +7,11 @@ import { CategoryGroupEntity } from './entities/category-group.entity';
 import { CategoryEntity } from './entities/category.entity';
 import { CategoryGroupService } from './services/category-group.service';
 import { CategoryService } from './services/category-service.service';
+import { CategoryExistsValidator } from './validators/category-exists.validator';
 
 @Module({
   imports: [TypeOrmModule.forFeature([CategoryGroupEntity, CategoryEntity]), CloudflareModule],
   controllers: [RootCategoryGroupController, AdminCategoryController],
-  providers: [CategoryGroupService, CategoryService],
+  providers: [CategoryGroupService, CategoryService, CategoryExistsValidator],
 })
 export class CategoryModule {}

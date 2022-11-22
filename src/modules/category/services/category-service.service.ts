@@ -18,6 +18,10 @@ export class CategoryService {
     private readonly cloudflareImageService: CloudflareImageService,
   ) {}
 
+  getOne(query: FindOptionsWhere<CategoryEntity>) {
+    return this.getQueryBuilder().where(query).getOne();
+  }
+
   async getAll(query: FindOptionsWhere<CategoryEntity>): Promise<CategoryEntity[]> {
     const categories = await this.getQueryBuilder().where(query).getMany();
 
