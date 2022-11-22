@@ -30,4 +30,6 @@ export class CategoryEntity extends BaseEntityWithPrimaryCodeColumn {
   @ManyToOne(() => UserEntity, (user) => user.categories)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   user: UserEntity;
+
+  websiteId?: number;
 }

@@ -1,8 +1,13 @@
 import { Type } from 'class-transformer';
-import { IsNumber } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 
-export class BaseGetOneQueryParamsDto {
+export class BaseQueryParamsDto {
   @IsNumber()
   @Type(() => Number)
   id: number;
+}
+
+export class BaseQueryCodeParamsDto {
+  @IsString()
+  code: string;
 }

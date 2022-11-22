@@ -13,6 +13,7 @@ export interface IUser {
   password: string;
   firstName: string;
   lastName: string;
+  websiteId?: number;
   website: IWebsite;
   roles: IRole[];
 }

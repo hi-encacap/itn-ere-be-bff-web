@@ -85,6 +85,12 @@ export class CloudflareImageService {
     }
   }
 
+  getOne(imageId: string) {
+    return this.cloudflareImageRepository.findOne({
+      where: { id: imageId },
+    });
+  }
+
   getURLsFromVariants(imageId: string, variants: CloudflareVariantEntity[]) {
     return variants.map((variant) => `${this.imageURL}/${imageId}/${variant.id}`);
   }
