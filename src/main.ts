@@ -12,6 +12,10 @@ async function bootstrap() {
   const httpAdapter = app.get(HttpAdapterHost);
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
+  app.enableCors({
+    origin: ['https://dashboard.baolocre.encacap.dev:4002'],
+    credentials: true,
+  });
 
   app.useLogger(app.get(LoggerService));
 
