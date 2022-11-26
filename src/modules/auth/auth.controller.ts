@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { UserService } from '../user/services/user.service';
 import { AuthService } from './auth.service';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 
 @Controller('auth')
@@ -14,9 +15,14 @@ export class AuthController {
     return this.authService.generateAuthToken(user);
   }
 
+  @Post('refresh')
+  refreshToken(@Body() { token }: RefreshTokenDto) {
+    return this.authService.refreshToken(token);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  async me(@Request() { user }) {
-    return await this.userService.findOneById(user.id);
+  me(@Request() { user }) {
+    return this.userService.findOneById(user.id);
   }
 }
