@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Queue } from 'bull';
 import FormData from 'form-data';
+import { get, set } from 'lodash';
 import { LoggerService } from 'src/common/modules/logger/logger.service';
 import { randomStringPrefix } from 'src/common/utils/helpers.util';
 import { CloudflareConfigService } from 'src/configs/cloudflare/cloudflare-config.service';
@@ -93,6 +94,29 @@ export class CloudflareImageService {
 
   getURLsFromVariants(imageId: string, variants: CloudflareVariantEntity[]) {
     return variants.map((variant) => `${this.imageURL}/${imageId}/${variant.id}`);
+  }
+
+  mapVariantToImage<T>(object: T, imageKey: string) {
+    if (Array.isArray(object)) {
+      object.forEach((item) => this.mapVariantToImage(item, imageKey));
+    }
+
+    const variantKey = `${imageKey}.variants`;
+
+    const variants = get(object, variantKey);
+    const image = get(object, imageKey);
+
+    if (!variants || !image || typeof object !== 'object') {
+      return object;
+    }
+
+    const { id } = image;
+    const imageVariantObject = variants.reduce((acc, variant: CloudflareVariantEntity) => {
+      acc[variant.id] = `${this.imageURL}/${id}/${variant.id}`;
+      return acc;
+    }, {});
+
+    return set(object, variantKey, imageVariantObject);
   }
 
   private getFileName(id: string, mimetype: string) {

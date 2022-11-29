@@ -1,9 +1,9 @@
-import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsArray, IsNotEmpty, IsNumber } from 'class-validator';
-import { RootCreateUserDto } from './root-create-user.dto';
+import { CreateUserDto } from './create-user.dto';
 
-export class AdminCreateUserDto extends OmitType(RootCreateUserDto, ['roleIds']) {
+export class AdminCreateUserDto extends CreateUserDto {
   @IsArray({
     groups: ['admin'],
   })

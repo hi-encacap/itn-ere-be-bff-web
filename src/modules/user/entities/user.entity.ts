@@ -34,6 +34,13 @@ export class UserEntity extends BaseEntityWithPrimaryGeneratedColumn implements 
   @Column({ name: 'website_id' })
   websiteId!: number;
 
+  @Column({ name: 'avatar_id', nullable: true })
+  avatarId!: string;
+
+  @ManyToOne(() => CloudflareImageEntity, (image) => image.users)
+  @JoinColumn({ name: 'avatar_id', referencedColumnName: 'id' })
+  avatar?: CloudflareImageEntity;
+
   @OneToMany(() => UserRoleMappingEntity, (userRoleMapping) => userRoleMapping.userId, {
     cascade: ['remove', 'update'],
   })
