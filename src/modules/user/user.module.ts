@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CloudflareModule } from '../cloudflare/cloudflare.module';
 import { WebsiteModule } from '../website/website.module';
 import { RootRoleController } from './controllers/root-role.controller';
 import { RootUserController } from './controllers/root-user.controller';
@@ -14,7 +15,11 @@ import { RoleArrayNotExistsValidator } from './validators/role-array-not-exists.
 import { UsernameExistsValidator } from './validators/username-exists.validator';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity, UserRoleMappingEntity, RoleEntity]), WebsiteModule],
+  imports: [
+    CloudflareModule,
+    TypeOrmModule.forFeature([UserEntity, UserRoleMappingEntity, RoleEntity]),
+    WebsiteModule,
+  ],
   controllers: [RootUserController, RootRoleController],
   providers: [
     UserService,

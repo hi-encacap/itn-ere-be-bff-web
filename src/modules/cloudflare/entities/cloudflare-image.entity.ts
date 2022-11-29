@@ -26,6 +26,9 @@ export class CloudflareImageEntity extends BaseEntityWithPrimaryStringColumn {
   @OneToMany(() => CategoryEntity, (category) => category.thumbnail)
   categories: CategoryEntity[];
 
+  @OneToMany(() => UserEntity, (user) => user.avatar)
+  users: UserEntity[];
+
   variants: CloudflareVariantEntity[];
   urls: string[];
 }

@@ -17,7 +17,7 @@ export class CloudflareVariantEntity extends BaseEntityWithPrimaryStringColumn i
   @Column({ nullable: true })
   height: number;
 
-  @Column({ default: false })
+  @Column({ default: false, name: 'is_default' })
   isDefault: boolean;
 
   websites: WebsiteEntity[];
