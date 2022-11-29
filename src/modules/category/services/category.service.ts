@@ -53,16 +53,7 @@ export class CategoryService {
 
     const categories = await queryBuilder.getMany();
 
-    return categories.map((category: CategoryEntity) => {
-      const { thumbnail } = category;
-      const { id: thumbnailId } = thumbnail;
-
-      thumbnail.urls = this.cloudflareImageService.getURLsFromVariants(thumbnailId, thumbnail.variants);
-
-      return {
-        ...category,
-      } as CategoryEntity;
-    });
+    return this.cloudflareImageService.mapVariantToImage(categories, 'thumbnail');
   }
 
   create(body: CreateCategoryDto, user: IUser) {
