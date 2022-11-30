@@ -54,9 +54,9 @@ export class CategoryService extends BaseService {
       queryBuilder.andWhere('user.id = :userId', { userId: query.userId });
     }
 
-    if (query.categoryGroupCode) {
-      queryBuilder.andWhere('category_group.code = :categoryGroup', {
-        categoryGroup: query.categoryGroupCode,
+    if (query.categoryGroupCodes) {
+      queryBuilder.andWhere('category_group.code IN (:...categoryGroup)', {
+        categoryGroup: query.categoryGroupCodes,
       });
     }
 

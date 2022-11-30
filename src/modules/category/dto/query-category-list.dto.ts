@@ -19,6 +19,6 @@ export class QueryCategoryListDto extends BaseQueryListParamsDto {
   websiteId?: number;
 
   @IsOptional()
-  @IsEnum(CATEGORY_GROUP_ENUM)
-  categoryGroupCode?: CATEGORY_GROUP_ENUM;
+  @IsEnum(CATEGORY_GROUP_ENUM, { each: true })
+  categoryGroupCodes?: CATEGORY_GROUP_ENUM[];
 }

@@ -25,7 +25,7 @@ export class BaseService {
     return {
       items,
       meta: {
-        total: totalItems,
+        totalRows: totalItems,
         page: Number(page),
         limit: Number(limit),
         totalPages,
