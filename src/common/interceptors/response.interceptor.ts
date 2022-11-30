@@ -9,12 +9,25 @@ export interface IResponse<T> {
 export class ResponseInterceptor<T> implements NestInterceptor<T, IResponse<T>> {
   intercept(context: ExecutionContext, next: CallHandler): Observable<IResponse<T>> {
     return next.handle().pipe(
-      map((data) => ({
-        message: 'Success',
-        code: 0,
-        data,
-        error: null,
-      })),
+      map((data) => {
+        const { meta, items = [] } = data;
+        const baseResponseBody = {
+          message: 'Success',
+          code: 0,
+          data,
+          error: null,
+        };
+
+        if (!meta) {
+          return baseResponseBody;
+        }
+
+        return {
+          ...baseResponseBody,
+          data: items,
+          meta,
+        };
+      }),
     );
   }
 }
