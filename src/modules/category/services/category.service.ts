@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { BaseService } from 'src/base/base.service';
 import { slugify } from 'src/common/utils/helpers.util';
 import { CloudflareVariantWebsiteEntity } from 'src/modules/cloudflare/entities/cloudflare-variant-website.entity';
 import { CloudflareVariantEntity } from 'src/modules/cloudflare/entities/cloudflare-variant.entity';
@@ -14,11 +15,13 @@ import { UpdateCategoryBodyDto } from '../dto/update-category-body.dto';
 import { CategoryEntity } from '../entities/category.entity';
 
 @Injectable()
-export class CategoryService {
+export class CategoryService extends BaseService {
   constructor(
     @InjectRepository(CategoryEntity) private categoryRepository: Repository<CategoryEntity>,
     private readonly cloudflareImageService: CloudflareImageService,
-  ) {}
+  ) {
+    super();
+  }
 
   async getOne(query: FindOptionsWhere<CategoryEntity>) {
     const queryBuilder = this.getQueryBuilder();
@@ -40,8 +43,8 @@ export class CategoryService {
     return record;
   }
 
-  async getAll(query: FindOptionsWhere<QueryCategoryListDto>): Promise<CategoryEntity[]> {
-    const queryBuilder = this.getQueryBuilder();
+  async getAll(query: FindOptionsWhere<QueryCategoryListDto>) {
+    let queryBuilder = this.getQueryBuilder();
 
     if (query.websiteId) {
       queryBuilder.andWhere('user.website_id = :websiteId', { websiteId: query.websiteId });
@@ -51,9 +54,29 @@ export class CategoryService {
       queryBuilder.andWhere('user.id = :userId', { userId: query.userId });
     }
 
-    const categories = await queryBuilder.getMany();
+    if (query.categoryGroupCode) {
+      queryBuilder.andWhere('category_group.code = :categoryGroup', {
+        categoryGroup: query.categoryGroupCode,
+      });
+    }
 
-    return this.cloudflareImageService.mapVariantToImage(categories, 'thumbnail');
+    const { orderDirection } = query;
+    let { orderBy } = query;
+
+    if (orderBy === 'categoryGroupName') {
+      orderBy = 'category_group.name';
+    } else {
+      orderBy = 'category.' + orderBy;
+    }
+
+    queryBuilder = this.setOrder(queryBuilder, orderBy, orderDirection);
+    queryBuilder = this.setPagination(queryBuilder, query);
+
+    const [categories, items] = await queryBuilder.getManyAndCount();
+
+    this.cloudflareImageService.mapVariantToImage(categories, 'thumbnail');
+
+    return this.generateGetAllResponse(categories, items, query);
   }
 
   create(body: CreateCategoryDto, user: IUser) {
@@ -87,11 +110,11 @@ export class CategoryService {
       .createQueryBuilder('category')
       .leftJoinAndSelect('category.user', 'user')
       .leftJoinAndSelect('category.thumbnail', 'thumbnail')
-      .leftJoin(UserEntity, 'thumbnail_user', 'thumbnail_user.id = thumbnail.user_id')
+      .leftJoin(UserEntity, 'thumbnail_user', 'thumbnail_user.id = thumbnail.userId')
       .leftJoin(
         WebsiteEntity,
         'thumbnail_user_website',
-        'thumbnail_user_website.id = thumbnail_user.website_id',
+        'thumbnail_user_website.id = thumbnail_user.websiteId',
       )
       .leftJoin(
         CloudflareVariantWebsiteEntity,
@@ -102,8 +125,8 @@ export class CategoryService {
         'thumbnail.variants',
         CloudflareVariantEntity,
         'thumbnail_variant',
-        'thumbnail_variant.id = thumbnail_variant_website.variant_id',
+        'thumbnail_variant.id = thumbnail_variant_website.variantId',
       )
-      .leftJoinAndSelect('category.categoryGroup', 'categoryGroup');
+      .leftJoinAndSelect('category.categoryGroup', 'category_group');
   }
 }

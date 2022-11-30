@@ -1,7 +1,9 @@
 import { Type } from 'class-transformer';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
+import { BaseQueryListParamsDto } from 'src/base/base.dto';
+import { CATEGORY_GROUP_ENUM } from '../constants/category-group.constant';
 
-export class QueryCategoryListDto {
+export class QueryCategoryListDto extends BaseQueryListParamsDto {
   @IsOptional()
   @IsString()
   name?: string;
@@ -15,4 +17,8 @@ export class QueryCategoryListDto {
   @Type(() => Number)
   @IsNumber()
   websiteId?: number;
+
+  @IsOptional()
+  @IsEnum(CATEGORY_GROUP_ENUM)
+  categoryGroupCode?: CATEGORY_GROUP_ENUM;
 }
