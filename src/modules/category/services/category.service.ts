@@ -66,7 +66,7 @@ export class CategoryService extends BaseService {
     if (orderBy === 'categoryGroupName') {
       orderBy = 'category_group.name';
     } else {
-      orderBy = 'category.' + orderBy;
+      orderBy = `category.${orderBy}`;
     }
 
     queryBuilder = this.setOrder(queryBuilder, orderBy, orderDirection);

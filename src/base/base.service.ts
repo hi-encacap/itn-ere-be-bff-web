@@ -14,11 +14,13 @@ export class BaseService {
       | FindOperator<ORDER_DIRECTION_ENUM.DESC>
       | ORDER_DIRECTION_ENUM = ORDER_DIRECTION_ENUM.ASC,
   ): SelectQueryBuilder<T> {
-    if (!orderBy) {
-      orderBy = 'createdAt';
+    let nonEmptyOrderBy = orderBy;
+
+    if (!nonEmptyOrderBy) {
+      nonEmptyOrderBy = 'createdAt';
     }
 
-    return queryBuilder.orderBy(orderBy, orderDirection as ORDER_DIRECTION_ENUM);
+    return queryBuilder.orderBy(nonEmptyOrderBy, orderDirection as ORDER_DIRECTION_ENUM);
   }
 
   setPagination<T = unknown>(
