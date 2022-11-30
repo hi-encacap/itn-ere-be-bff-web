@@ -18,7 +18,7 @@ export class BaseService {
       orderBy = 'createdAt';
     }
 
-    return queryBuilder.orderBy(orderBy as string, orderDirection as ORDER_DIRECTION_ENUM);
+    return queryBuilder.orderBy(orderBy, orderDirection as ORDER_DIRECTION_ENUM);
   }
 
   setPagination<T = unknown>(
