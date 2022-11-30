@@ -1,28 +1,8 @@
-import { Injectable } from '@nestjs/common';
 import { parseBaseListQuery } from 'src/common/utils/request';
-import { FindOperator, FindOptionsWhere, SelectQueryBuilder } from 'typeorm';
-import { ORDER_DIRECTION_ENUM } from './base.constant';
+import { FindOptionsWhere, SelectQueryBuilder } from 'typeorm';
 import { BaseQueryListParamsDto } from './base.dto';
 
-@Injectable()
 export class BaseService {
-  setOrder<T = unknown>(
-    queryBuilder: SelectQueryBuilder<T>,
-    orderBy: string,
-    orderDirection:
-      | FindOperator<ORDER_DIRECTION_ENUM.ASC>
-      | FindOperator<ORDER_DIRECTION_ENUM.DESC>
-      | ORDER_DIRECTION_ENUM = ORDER_DIRECTION_ENUM.ASC,
-  ): SelectQueryBuilder<T> {
-    let nonEmptyOrderBy = orderBy;
-
-    if (!nonEmptyOrderBy) {
-      nonEmptyOrderBy = 'createdAt';
-    }
-
-    return queryBuilder.orderBy(nonEmptyOrderBy, orderDirection as ORDER_DIRECTION_ENUM);
-  }
-
   setPagination<T = unknown>(
     queryBuilder: SelectQueryBuilder<T>,
     query: FindOptionsWhere<BaseQueryListParamsDto>,

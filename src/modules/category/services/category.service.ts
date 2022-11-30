@@ -43,7 +43,7 @@ export class CategoryService extends BaseService {
     return record;
   }
 
-  async getAll(query: FindOptionsWhere<QueryCategoryListDto>) {
+  async getAll(query: QueryCategoryListDto) {
     let queryBuilder = this.getQueryBuilder();
 
     if (query.websiteId) {
@@ -66,10 +66,10 @@ export class CategoryService extends BaseService {
     if (orderBy === 'categoryGroupName') {
       orderBy = 'category_group.name';
     } else {
-      orderBy = `category.${orderBy}`;
+      orderBy = `category.${orderBy ?? 'createdAt'}`;
     }
 
-    queryBuilder = this.setOrder(queryBuilder, orderBy, orderDirection);
+    queryBuilder.orderBy(orderBy, orderDirection);
     queryBuilder = this.setPagination(queryBuilder, query);
 
     const [categories, items] = await queryBuilder.getManyAndCount();
