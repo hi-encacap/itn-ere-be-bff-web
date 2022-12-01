@@ -14,6 +14,19 @@ export class BaseService {
     return queryBuilder;
   }
 
+  setInOperator<T = unknown>(
+    queryBuilder: SelectQueryBuilder<T>,
+    values: unknown[],
+    ...fields: string[]
+  ): SelectQueryBuilder<T> {
+    const fieldValues = values.length > 0 ? values : [null];
+    fields.forEach((field) => {
+      queryBuilder.andWhere(`${field} IN (:...${field})`, { [field]: fieldValues });
+    });
+
+    return queryBuilder;
+  }
+
   generateGetAllResponse<T = unknown>(
     items: T[],
     totalItems: number,

@@ -80,7 +80,7 @@ export class CategoryService extends BaseService {
       ]);
       const matchedCategoryCodes = matchedCategories.map((category) => category.objectID);
 
-      queryBuilder.andWhere('category.code IN (:...codes)', { codes: matchedCategoryCodes });
+      queryBuilder = this.setInOperator(queryBuilder, matchedCategoryCodes, 'category.code');
     }
 
     const [categories, items] = await queryBuilder.getManyAndCount();
