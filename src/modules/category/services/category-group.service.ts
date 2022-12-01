@@ -12,8 +12,8 @@ export class CategoryGroupService {
 
   getGroups() {
     return this.categoryGroupRepository
-      .createQueryBuilder('category_group')
-      .leftJoinAndSelect('category_group.user', 'user')
+      .createQueryBuilder('categoryGroup')
+      .leftJoinAndSelect('categoryGroup.user', 'user')
       .getMany();
   }
 }
