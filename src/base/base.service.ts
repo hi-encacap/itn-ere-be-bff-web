@@ -1,4 +1,4 @@
-import { parseBaseListQuery } from 'src/common/utils/request';
+import { parseBaseListQuery } from 'src/common/utils/request.util';
 import { FindOptionsWhere, SelectQueryBuilder } from 'typeorm';
 import { BaseQueryListParamsDto } from './base.dto';
 

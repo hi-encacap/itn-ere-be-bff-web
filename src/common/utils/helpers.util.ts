@@ -30,4 +30,9 @@ const slugify = (text: string) => {
   return result;
 };
 
-export { randomStringPrefix, slugify };
+const random = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min);
+
+const randomAlphabet = (stringLength: number) =>
+  [...Array(stringLength).keys()].reduce((cur) => cur + String.fromCharCode(random(65, 90)), '');
+
+export { randomStringPrefix, slugify, randomAlphabet };

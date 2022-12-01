@@ -21,7 +21,11 @@ export class BaseQueryListParamsDto {
 
   @IsOptional()
   @IsString()
-  search: string;
+  searchBy: string;
+
+  @IsOptional()
+  @IsString()
+  searchValue: string;
 
   @IsOptional()
   @IsString()

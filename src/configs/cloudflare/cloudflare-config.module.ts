@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import Joi from 'joi';
 import { CloudflareConfigService } from './cloudflare-config.service';
-import cloudflareConfiguration from './cloudflare-configuration';
+import cloudflareConfiguration from './cloudflare.configuration';
 
 @Module({
   imports: [
