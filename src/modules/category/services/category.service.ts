@@ -8,6 +8,7 @@ import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudfla
 import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
+import { AlgoliaService } from 'src/providers/algolia/algolia.service';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { CreateCategoryDto } from '../dto/create-category.dto';
 import { QueryCategoryListDto } from '../dto/query-category-list.dto';
@@ -19,6 +20,7 @@ export class CategoryService extends BaseService {
   constructor(
     @InjectRepository(CategoryEntity) private categoryRepository: Repository<CategoryEntity>,
     private readonly cloudflareImageService: CloudflareImageService,
+    private readonly algoliaService: AlgoliaService,
   ) {
     super();
   }
@@ -72,6 +74,15 @@ export class CategoryService extends BaseService {
     queryBuilder.orderBy(orderBy, orderDirection);
     queryBuilder = this.setPagination(queryBuilder, query);
 
+    if (query.searchValue) {
+      const { hits: matchedCategories } = await this.algoliaService.searchCategories(query.searchValue, [
+        query.searchBy,
+      ]);
+      const matchedCategoryCodes = matchedCategories.map((category) => category.objectID);
+
+      queryBuilder.andWhere('category.code IN (:...codes)', { codes: matchedCategoryCodes });
+    }
+
     const [categories, items] = await queryBuilder.getManyAndCount();
 
     this.cloudflareImageService.mapVariantToImage(categories, 'thumbnail');
@@ -79,17 +90,26 @@ export class CategoryService extends BaseService {
     return this.generateGetAllResponse(categories, items, query);
   }
 
-  create(body: CreateCategoryDto, user: IUser) {
+  async create(body: CreateCategoryDto, user: IUser) {
     const { code } = body;
 
     if (!code) {
       body.code = slugify(body.name);
     }
 
-    return this.categoryRepository.save({
+    const record = await this.categoryRepository.save({
       ...body,
       userId: user.id,
     });
+    const category = await this.getOne({ code: record.code });
+
+    this.algoliaService.addCategory({
+      objectID: category.code,
+      name: category.name,
+      categoryGroupName: category.categoryGroup.name,
+    });
+
+    return category;
   }
 
   async update(code: string, body: UpdateCategoryBodyDto, user: IUser) {
@@ -98,10 +118,19 @@ export class CategoryService extends BaseService {
       userId: user.id,
     });
 
-    return this.getOne({ code });
+    const category = await this.getOne({ code });
+
+    this.algoliaService.updateCategory({
+      objectID: category.code,
+      name: category.name,
+      categoryGroupName: category.categoryGroup.name,
+    });
+
+    return category;
   }
 
-  delete(code: string) {
+  async delete(code: string) {
+    this.algoliaService.removeCategory(code);
     return this.categoryRepository.delete(code);
   }
 

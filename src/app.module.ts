@@ -3,6 +3,7 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { LoggerModule } from './common/modules/logger/logger.module';
+import { AlgoliaConfigModule } from './configs/algolia/algolia-config.module';
 import { CloudflareConfigModule } from './configs/cloudflare/cloudflare-config.module';
 import { AppConfigModule } from './configs/config.module';
 import { DatabaseConfigModule } from './configs/database/database-config.module';
@@ -24,6 +25,7 @@ import { PostgresDatabaseProviderModule } from './providers/postgres/postgres.mo
     AppConfigModule,
     JwtConfigModule,
     CloudflareConfigModule,
+    AlgoliaConfigModule,
 
     PostgresDatabaseProviderModule,
 

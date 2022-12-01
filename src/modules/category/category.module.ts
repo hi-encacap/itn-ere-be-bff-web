@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AlgoliaProviderModule } from 'src/providers/algolia/algolia.module';
 import { CloudflareModule } from '../cloudflare/cloudflare.module';
 import { AdminCategoryController } from './controllers/admin-category.controller';
 import { RootCategoryGroupController } from './controllers/root-category-group.controller';
@@ -12,7 +13,11 @@ import { CategoryCanModifyValidator } from './validators/category-can-modify.val
 import { CategoryExistsValidator } from './validators/category-exists.validator';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CategoryGroupEntity, CategoryEntity]), CloudflareModule],
+  imports: [
+    AlgoliaProviderModule,
+    TypeOrmModule.forFeature([CategoryGroupEntity, CategoryEntity]),
+    CloudflareModule,
+  ],
   controllers: [RootCategoryGroupController, AdminCategoryController],
   providers: [
     CategoryGroupService,

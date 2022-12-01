@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import Joi from 'joi';
 import { JwtConfigService } from './jwt-config.service';
-import jwtConfiguration from './jwt-configuration';
+import jwtConfiguration from './jwt.configuration';
 
 @Module({
   imports: [

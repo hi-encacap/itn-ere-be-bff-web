@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule as NestConfigModule } from '@nestjs/config';
 import Joi from 'joi';
 import DatabaseConfigService from './database-config.service';
-import databaseConfiguration from './database-configuration';
+import databaseConfiguration from './database.configuration';
 
 @Module({
   imports: [
