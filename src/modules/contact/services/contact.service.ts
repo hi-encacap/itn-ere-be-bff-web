@@ -38,8 +38,8 @@ export class ContactService {
   private getQueryBuilder() {
     return this.contactRepository
       .createQueryBuilder('contact')
-      .leftJoin(UserEntity, 'user', 'user.id = contact.user_id')
-      .leftJoinAndMapOne('contact.website', WebsiteEntity, 'website', 'website.id = user.website_id')
+      .leftJoin(UserEntity, 'user', 'user.id = contact.userId')
+      .leftJoinAndMapOne('contact.website', WebsiteEntity, 'website', 'website.id = user.websiteId')
       .orderBy('contact.id', 'DESC');
   }
 }
