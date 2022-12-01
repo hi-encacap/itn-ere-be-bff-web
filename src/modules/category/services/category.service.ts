@@ -129,7 +129,7 @@ export class CategoryService extends BaseService {
     return category;
   }
 
-  async delete(code: string) {
+  delete(code: string) {
     this.algoliaService.removeCategory(code);
     return this.categoryRepository.delete(code);
   }
