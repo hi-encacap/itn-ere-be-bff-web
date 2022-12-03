@@ -33,7 +33,7 @@ export class CategoryService extends BaseService {
     }
 
     if (query.websiteId) {
-      queryBuilder.andWhere('user.websiteId = :websiteId', { websiteId: query.websiteId });
+      queryBuilder.andWhere('user.website_id = :websiteId', { websiteId: query.websiteId });
     }
 
     const record = await queryBuilder.getOne();
@@ -49,7 +49,7 @@ export class CategoryService extends BaseService {
     let queryBuilder = this.getQueryBuilder();
 
     if (query.websiteId) {
-      queryBuilder.andWhere('user.websiteId = :websiteId', { websiteId: query.websiteId });
+      queryBuilder.andWhere('user.website_id = :websiteId', { websiteId: query.websiteId });
     }
 
     if (query.userId) {
@@ -57,7 +57,7 @@ export class CategoryService extends BaseService {
     }
 
     if (query.categoryGroupCodes) {
-      queryBuilder.andWhere('categoryGroup.code IN (:...categoryGroup)', {
+      queryBuilder.andWhere('category_group.code IN (:...categoryGroup)', {
         categoryGroup: query.categoryGroupCodes,
       });
     }
@@ -66,9 +66,9 @@ export class CategoryService extends BaseService {
     let { orderBy } = query;
 
     if (orderBy === 'categoryGroupName') {
-      orderBy = 'categoryGroup.name';
+      orderBy = 'category_group.name';
     } else {
-      orderBy = `category.${orderBy ?? 'createdAt'}`;
+      orderBy = `category.${orderBy ?? 'created_at'}`;
     }
 
     queryBuilder.orderBy(orderBy, orderDirection);
@@ -139,19 +139,23 @@ export class CategoryService extends BaseService {
       .createQueryBuilder('category')
       .leftJoinAndSelect('category.user', 'user')
       .leftJoinAndSelect('category.thumbnail', 'thumbnail')
-      .leftJoin(UserEntity, 'thumbnailUser', 'thumbnailUser.id = thumbnail.userId')
-      .leftJoin(WebsiteEntity, 'thumbnailUserWebsite', 'thumbnailUserWebsite.id = thumbnailUser.websiteId')
+      .leftJoin(UserEntity, 'thumbnail_user', 'thumbnail_user.id = thumbnail.user_id')
+      .leftJoin(
+        WebsiteEntity,
+        'thumbnail_user_website',
+        'thumbnail_user_website.id = thumbnail_user.website_id',
+      )
       .leftJoin(
         CloudflareVariantWebsiteEntity,
-        'thumbnailVariantWebsite',
-        'thumbnailVariantWebsite.websiteId = thumbnailUserWebsite.id',
+        'thumbnail_variant_website',
+        'thumbnail_variant_website.website_id = thumbnail_user_website.id',
       )
       .leftJoinAndMapMany(
         'thumbnail.variants',
         CloudflareVariantEntity,
-        'thumbnailVariant',
-        'thumbnailVariant.id = thumbnailVariantWebsite.variantId',
+        'thumbnail_variant',
+        'thumbnail_variant.id = thumbnail_variant_website.variant_id',
       )
-      .leftJoinAndSelect('category.categoryGroup', 'categoryGroup');
+      .leftJoinAndSelect('category.category_group', 'category_group');
   }
 }

@@ -17,10 +17,10 @@ export class CloudflareVariantWebsiteService {
 
   getAll(query: FindOptionsWhere<CloudflareVariantWebsiteEntity>) {
     const queryBuilder = this.cloudflareVariantWebsiteRepository
-      .createQueryBuilder('variantWebsite')
+      .createQueryBuilder('variant_website')
       .where(query)
-      .leftJoinAndSelect('variantWebsite.website', 'website')
-      .leftJoinAndSelect('variantWebsite.variant', 'variant');
+      .leftJoinAndSelect('variant_website.website', 'website')
+      .leftJoinAndSelect('variant_website.variant', 'variant');
 
     if (query.websiteId) {
       queryBuilder.andWhere('website.id = :websiteId', { websiteId: query.websiteId });

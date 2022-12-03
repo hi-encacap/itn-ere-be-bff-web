@@ -75,12 +75,12 @@ export class CloudflareVariantService {
   private getQueryBuilder() {
     return this.cloudflareVariantRepository
       .createQueryBuilder('variant')
-      .leftJoin(CloudflareVariantWebsiteEntity, 'variantWebsite', 'variantWebsite.variantId = variant.id')
+      .leftJoin(CloudflareVariantWebsiteEntity, 'variant_website', 'variant_website.variant_id = variant.id')
       .leftJoinAndMapMany(
         'variant.websites',
         WebsiteEntity,
         'website',
-        'website.id = variantWebsite.websiteId',
+        'website.id = variant_website.website_id',
       );
   }
 }

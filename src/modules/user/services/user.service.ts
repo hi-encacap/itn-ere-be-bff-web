@@ -98,9 +98,9 @@ export class UserService extends BaseService {
     return this.userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.website', 'website')
-      .leftJoin(UserRoleMappingEntity, 'userRole', 'userRole.userId = user.id')
-      .leftJoinAndMapMany('user.roles', RoleEntity, 'role', 'role.id = userRole.roleId')
+      .leftJoin(UserRoleMappingEntity, 'user_role', 'user_role.user_id = user.id')
+      .leftJoinAndMapMany('user.roles', RoleEntity, 'role', 'role.id = user_role.role_id')
       .leftJoinAndSelect('user.avatar', 'avatar')
-      .leftJoinAndMapMany('avatar.variants', CloudflareVariantEntity, 'variant', 'variant.isDefault = TRUE');
+      .leftJoinAndMapMany('avatar.variants', CloudflareVariantEntity, 'variant', 'variant.is_default = TRUE');
   }
 }

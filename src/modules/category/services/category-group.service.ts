@@ -14,17 +14,17 @@ export class CategoryGroupService {
 
   getGroups(query?: QueryCategoryGroupListDto) {
     const queryBuilder = this.categoryGroupRepository
-      .createQueryBuilder('categoryGroup')
-      .leftJoinAndSelect('categoryGroup.user', 'user');
+      .createQueryBuilder('category_group')
+      .leftJoinAndSelect('category_group.user', 'user');
 
     if (query.websiteId) {
       queryBuilder
         .leftJoin(
           CategoryGroupWebsiteEntity,
-          'categoryGroupWebsite',
-          'categoryGroupWebsite.categoryGroupCode = categoryGroup.code',
+          'category_group_website',
+          'category_group_website.category_group_code = category_group.code',
         )
-        .andWhere('categoryGroupWebsite.websiteId = :websiteId', { websiteId: query.websiteId });
+        .andWhere('category_group_website.website_id = :websiteId', { websiteId: query.websiteId });
     }
 
     return queryBuilder.getMany();
