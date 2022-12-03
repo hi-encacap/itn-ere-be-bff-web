@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { capitalize, omit, values } from 'lodash';
 import { Seeder } from 'nestjs-seeder';
@@ -9,19 +9,17 @@ import { ICategoryGroup } from 'src/modules/category/interfaces/category-group.i
 import { RoleEntity } from 'src/modules/user/entities/role.entity';
 import { UserRoleMappingEntity } from 'src/modules/user/entities/user-role-mapping.entity';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
-import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { Repository } from 'typeorm';
 
-export const categoryGroupItems: Array<ICategoryGroup> = values(CATEGORY_GROUP_ENUM).map((categoryGroup) => ({
-  name: capitalize(categoryGroup),
-  code: categoryGroup,
-  userId: 0,
-}));
+export const categoryGroupItems: Array<Partial<ICategoryGroup>> = values(CATEGORY_GROUP_ENUM).map(
+  (categoryGroup) => ({
+    name: capitalize(categoryGroup),
+    code: categoryGroup,
+  }),
+);
 
 @Injectable()
 export class CategoryGroupSeeder implements Seeder {
-  private rootUser: IUser;
-
   constructor(
     @InjectRepository(CategoryGroupEntity)
     private readonly categoryGroupRepository: Repository<CategoryGroupEntity>,
@@ -29,9 +27,9 @@ export class CategoryGroupSeeder implements Seeder {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async upsertItem(item: ICategoryGroup) {
+  async upsertItem(item: Partial<ICategoryGroup>, userId: number) {
     const record = await this.categoryGroupRepository.findOneBy({ code: item.code });
-    let updatedItem = { ...item, userId: this.rootUser.id };
+    let updatedItem = { ...item, userId };
 
     if (record) {
       updatedItem = { ...record, ...omit(item, ['code']) };
@@ -49,12 +47,10 @@ export class CategoryGroupSeeder implements Seeder {
       .getOne();
 
     if (!rootUser) {
-      return undefined;
+      throw new BadRequestException('Root user not found');
     }
 
-    this.rootUser = rootUser;
-
-    const seedTasks = categoryGroupItems.map((item) => this.upsertItem(item));
+    const seedTasks = categoryGroupItems.map((item) => this.upsertItem(item, rootUser.id));
     return Promise.all(seedTasks);
   }
 
