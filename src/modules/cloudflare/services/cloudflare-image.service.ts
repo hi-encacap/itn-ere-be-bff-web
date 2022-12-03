@@ -1,8 +1,8 @@
 import { HttpService } from '@nestjs/axios';
-import { InjectQueue } from '@nestjs/bull';
+// import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Queue } from 'bull';
+// import { Queue } from 'bull';
 import FormData from 'form-data';
 import { get, set } from 'lodash';
 import { LoggerService } from 'src/common/modules/logger/logger.service';
@@ -23,8 +23,8 @@ export class CloudflareImageService {
     @InjectRepository(CloudflareImageEntity)
     private readonly cloudflareImageRepository: Repository<CloudflareImageEntity>,
     private readonly httpService: HttpService,
-    @InjectQueue('cloudflare-image')
-    private readonly cloudflareImageQueue: Queue,
+    // @InjectQueue('cloudflare-image')
+    // private readonly cloudflareImageQueue: Queue,
     private readonly cloudflareConfigService: CloudflareConfigService,
   ) {
     this.imageURL = this.cloudflareConfigService.images.delivery;
@@ -41,10 +41,7 @@ export class CloudflareImageService {
       userId: user.id,
     });
 
-    await this.cloudflareImageQueue.add('upload', {
-      imageId,
-      file,
-    });
+    await this.uploadToCloudflare(imageId, file.mimetype, file.buffer);
 
     return record;
   }
