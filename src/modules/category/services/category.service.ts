@@ -156,6 +156,6 @@ export class CategoryService extends BaseService {
         'thumbnail_variant',
         'thumbnail_variant.id = thumbnail_variant_website.variant_id',
       )
-      .leftJoinAndSelect('category.category_group', 'category_group');
+      .leftJoinAndSelect('category.categoryGroup', 'category_group');
   }
 }
