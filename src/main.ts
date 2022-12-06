@@ -42,8 +42,6 @@ async function bootstrap() {
   );
   app.useGlobalInterceptors(new ResponseInterceptor());
 
-  console.log(configService.port);
-
   await app.listen(configService.port);
 }
 bootstrap();
