@@ -1,4 +1,5 @@
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
+import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
@@ -25,9 +26,16 @@ export class ContactEntity extends BaseEntityWithPrimaryGeneratedColumn implemen
   @Column({ name: 'user_id' })
   userId!: number;
 
+  @Column({ name: 'avatar_id' })
+  avatarId!: string;
+
   @ManyToOne(() => UserEntity, (user) => user.contacts)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   user: UserEntity;
+
+  @ManyToOne(() => CloudflareImageEntity)
+  @JoinColumn({ name: 'avatar_id', referencedColumnName: 'id' })
+  avatar: CloudflareImageEntity;
 
   website!: WebsiteEntity;
 }
