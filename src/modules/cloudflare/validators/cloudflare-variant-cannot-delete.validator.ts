@@ -8,7 +8,7 @@ export class CloudflareVariantCannotDeleteValidator implements ValidatorConstrai
   constructor(private readonly cloudflareVariantService: CloudflareVariantService) {}
 
   async validate(name: string) {
-    const variant = await this.cloudflareVariantService.getOne({ id: name });
+    const variant = await this.cloudflareVariantService.getOne({ code: name });
 
     if (!variant) {
       this.errorMessage = `Variant ${name} does not exists.`;

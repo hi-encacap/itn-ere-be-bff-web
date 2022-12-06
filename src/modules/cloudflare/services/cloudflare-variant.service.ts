@@ -41,22 +41,22 @@ export class CloudflareVariantService {
     }
   }
 
-  async updateVariant(id: string, variant: RootUpdateCloudflareVariantDto) {
-    const record = await this.getOne({ id });
+  async updateVariant(code: string, variant: RootUpdateCloudflareVariantDto) {
+    const record = await this.getOne({ code });
 
     if (!record) {
-      throw new NotFoundException(`Variant with id ${id} not found.`);
+      throw new NotFoundException(`Variant with code ${code} not found.`);
     }
 
     const updateBody = pick(variant, ['fit', 'width', 'height']);
 
     try {
-      await this.httpService.axiosRef.patch(`variants/${id}`, {
-        id,
+      await this.httpService.axiosRef.patch(`variants/${code}`, {
+        id: code,
         options: updateBody,
       });
 
-      return this.cloudflareVariantRepository.update(id, updateBody);
+      return this.cloudflareVariantRepository.update(code, updateBody);
     } catch (error) {
       throw new BadRequestException(error.response.data);
     }

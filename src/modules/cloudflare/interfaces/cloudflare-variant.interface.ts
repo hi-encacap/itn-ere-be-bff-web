@@ -1,8 +1,8 @@
-import { CloudflareVariantFitEnum } from '../constants/cloudflare-variant-fit.constant';
+import { CLOUDFLARE_VARIANT_FIT_ENUM } from '../constants/cloudflare-variant.constant';
 
 export interface ICloudflareVariant {
-  id: string;
-  fit: CloudflareVariantFitEnum;
+  code: string;
+  fit: CLOUDFLARE_VARIANT_FIT_ENUM;
   width: number | null;
   height: number | null;
   isDefault: boolean;
