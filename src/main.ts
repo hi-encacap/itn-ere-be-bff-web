@@ -6,10 +6,12 @@ import { AppModule } from './app.module';
 import { AllExceptionFilter } from './common/filters/all-exception.filter';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { LoggerService } from './common/modules/logger/logger.service';
+import AppConfigService from './configs/config.service';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const httpAdapter = app.get(HttpAdapterHost);
+  const configService = app.get(AppConfigService);
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   app.enableCors({
@@ -40,6 +42,6 @@ async function bootstrap() {
   );
   app.useGlobalInterceptors(new ResponseInterceptor());
 
-  await app.listen(3000);
+  await app.listen(configService.port);
 }
 bootstrap();
