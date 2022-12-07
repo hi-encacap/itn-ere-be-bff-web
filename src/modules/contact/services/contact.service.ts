@@ -52,6 +52,10 @@ export class ContactService extends BaseService {
     return this.getQueryBuilder().where(query).getOne();
   }
 
+  delete(id: number) {
+    return this.contactRepository.delete(id);
+  }
+
   private getQueryBuilder() {
     return this.contactRepository
       .createQueryBuilder('contact')
