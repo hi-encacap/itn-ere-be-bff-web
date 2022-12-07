@@ -6,7 +6,7 @@ export class CloudflareVariantExistsValidator implements ValidatorConstraintInte
   constructor(private readonly cloudflareVariantService: CloudflareVariantService) {}
 
   async validate(name: string) {
-    const user = await this.cloudflareVariantService.getOne({ id: name });
+    const user = await this.cloudflareVariantService.getOne({ code: name });
 
     return !user;
   }

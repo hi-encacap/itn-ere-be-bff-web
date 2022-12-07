@@ -150,7 +150,7 @@ export class CategoryService extends BaseService {
         'thumbnail.variants',
         CloudflareVariantEntity,
         'thumbnailVariant',
-        'thumbnailVariant.id = thumbnailVariantWebsite.variantId',
+        'thumbnailVariant.code = thumbnailVariantWebsite.variantCode',
       )
       .leftJoinAndSelect('category.categoryGroup', 'categoryGroup');
   }

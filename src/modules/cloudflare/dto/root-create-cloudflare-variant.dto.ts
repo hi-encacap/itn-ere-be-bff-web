@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import { IsBoolean, IsEnum, IsNumber, IsOptional, IsString, MinLength, Validate } from 'class-validator';
-import { CloudflareVariantFitEnum } from '../constants/cloudflare-variant-fit.constant';
+import { CLOUDFLARE_VARIANT_FIT_ENUM } from '../constants/cloudflare-variant.constant';
 import { CloudflareVariantExistsValidator } from '../validators/cloudflare-variant-exists.validator';
 
 export class RootCreateCloudflareVariantDto {
@@ -11,9 +11,9 @@ export class RootCreateCloudflareVariantDto {
   @ApiProperty()
   name: string;
 
-  @IsEnum(CloudflareVariantFitEnum)
+  @IsEnum(CLOUDFLARE_VARIANT_FIT_ENUM)
   @ApiProperty()
-  fit: CloudflareVariantFitEnum;
+  fit: CLOUDFLARE_VARIANT_FIT_ENUM;
 
   @IsOptional()
   @IsNumber()
