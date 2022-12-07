@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Seeder } from 'nestjs-seeder';
-import { CloudflareVariantFitEnum } from 'src/modules/cloudflare/constants/cloudflare-variant-fit.constant';
+import {
+  CLOUDFLARE_VARIANT_ENUM,
+  CLOUDFLARE_VARIANT_FIT_ENUM,
+} from 'src/modules/cloudflare/constants/cloudflare-variant.constant';
 import { CloudflareVariantWebsiteEntity } from 'src/modules/cloudflare/entities/cloudflare-variant-website.entity';
 import { CloudflareVariantEntity } from 'src/modules/cloudflare/entities/cloudflare-variant.entity';
 import { ICloudflareVariant } from 'src/modules/cloudflare/interfaces/cloudflare-variant.interface';
@@ -10,9 +13,16 @@ import { Repository } from 'typeorm';
 
 const variantItems: ICloudflareVariant[] = [
   {
-    id: 'public',
-    fit: CloudflareVariantFitEnum.SCALE_DOWN,
+    code: CLOUDFLARE_VARIANT_ENUM.PUBLIC,
+    fit: CLOUDFLARE_VARIANT_FIT_ENUM.SCALE_DOWN,
     width: null,
+    height: null,
+    isDefault: true,
+  },
+  {
+    code: CLOUDFLARE_VARIANT_ENUM.SMALL,
+    fit: CLOUDFLARE_VARIANT_FIT_ENUM.SCALE_DOWN,
+    width: 96,
     height: null,
     isDefault: true,
   },
@@ -32,20 +42,20 @@ export class CloudflareVariantSeeder implements Seeder {
   ) {}
 
   async upsertItem(item: ICloudflareVariant) {
-    let record = await this.cloudflareVariantRepository.findOneBy({ id: item.id });
+    let record = await this.cloudflareVariantRepository.findOneBy({ code: item.code });
 
     if (!record) {
       record = await this.cloudflareVariantRepository.save(item);
     }
 
-    const { id } = record;
+    const { code } = record;
 
     const variantWebsites = this.websites.map((website) => ({
-      variantId: id,
+      variantCode: code,
       websiteId: website.id,
     }));
 
-    await this.cloudflareVariantWebsiteRepository.delete({ variantId: id });
+    await this.cloudflareVariantWebsiteRepository.delete({ variantCode: code });
     await this.cloudflareVariantWebsiteRepository.save(variantWebsites);
 
     return this.cloudflareVariantRepository.save(item);
@@ -61,12 +71,4 @@ export class CloudflareVariantSeeder implements Seeder {
     await this.cloudflareVariantWebsiteRepository.delete({});
     return this.cloudflareVariantRepository.delete({});
   }
-
-  private readonly getWebsites = async () => {
-    if (!this.websites) {
-      this.websites = await this.websiteRepository.find();
-    }
-
-    return this.websites;
-  };
 }

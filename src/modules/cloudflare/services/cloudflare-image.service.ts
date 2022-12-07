@@ -90,7 +90,7 @@ export class CloudflareImageService {
   }
 
   getURLsFromVariants(imageId: string, variants: CloudflareVariantEntity[]) {
-    return variants.map((variant) => `${this.imageURL}/${imageId}/${variant.id}`);
+    return variants.map((variant) => `${this.imageURL}/${imageId}/${variant.code}`);
   }
 
   mapVariantToImage<T>(object: T, imageKey: string) {
@@ -109,7 +109,7 @@ export class CloudflareImageService {
 
     const { id } = image;
     const imageVariantObject = variants.reduce((acc, variant: CloudflareVariantEntity) => {
-      acc[variant.id] = `${this.imageURL}/${id}/${variant.id}`;
+      acc[variant.code] = `${this.imageURL}/${id}/${variant.code}`;
       return acc;
     }, {});
 

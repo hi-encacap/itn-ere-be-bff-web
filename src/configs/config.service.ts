@@ -26,4 +26,8 @@ export default class AppConfigService {
 
     return env;
   }
+
+  get port() {
+    return this.configService.get<number>('port');
+  }
 }

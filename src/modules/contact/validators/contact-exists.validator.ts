@@ -1,4 +1,5 @@
 import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
+import { CONTACT_ERROR_CODE } from 'src/common/constants/error.constant';
 import { CreateContactDto } from '../dto/create-contact.dto';
 import { ContactService } from '../services/contact.service';
 
@@ -21,7 +22,7 @@ export class ContactExistsValidator implements ValidatorConstraintInterface {
     return !user;
   }
 
-  defaultMessage(args: ContactExistsValidatorValidationArguments) {
-    return `Contact ${args.object.name} - ${args.object.phone} already exists.`;
+  defaultMessage() {
+    return CONTACT_ERROR_CODE.CONTACT_ALREADY_EXISTS;
   }
 }

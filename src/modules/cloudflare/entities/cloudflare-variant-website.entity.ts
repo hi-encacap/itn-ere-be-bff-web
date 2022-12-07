@@ -4,14 +4,14 @@ import { CloudflareVariantEntity } from './cloudflare-variant.entity';
 
 @Entity({ name: 'cloudflare_variant_websites' })
 export class CloudflareVariantWebsiteEntity {
-  @PrimaryColumn({ name: 'variant_id' })
-  variantId: string;
+  @PrimaryColumn({ name: 'variant_code' })
+  variantCode: string;
 
   @PrimaryColumn({ name: 'website_id' })
   websiteId: number;
 
-  @ManyToOne(() => CloudflareVariantEntity, (variant) => variant.id)
-  @JoinColumn({ name: 'variant_id', referencedColumnName: 'id' })
+  @ManyToOne(() => CloudflareVariantEntity, (variant) => variant.code)
+  @JoinColumn({ name: 'variant_code', referencedColumnName: 'code' })
   variant: CloudflareVariantEntity;
 
   @ManyToOne(() => WebsiteEntity, (website) => website.id)
