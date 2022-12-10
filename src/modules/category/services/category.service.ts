@@ -2,13 +2,13 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/base/base.service';
 import { slugify } from 'src/common/utils/helpers.util';
+import { AlgoliaCategoryService } from 'src/modules/algolia/services/algolia-category.service';
 import { CloudflareVariantWebsiteEntity } from 'src/modules/cloudflare/entities/cloudflare-variant-website.entity';
 import { CloudflareVariantEntity } from 'src/modules/cloudflare/entities/cloudflare-variant.entity';
 import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
-import { AlgoliaService } from 'src/providers/algolia/algolia.service';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { CreateCategoryDto } from '../dto/create-category.dto';
 import { QueryCategoryListDto } from '../dto/query-category-list.dto';
@@ -20,7 +20,7 @@ export class CategoryService extends BaseService {
   constructor(
     @InjectRepository(CategoryEntity) private categoryRepository: Repository<CategoryEntity>,
     private readonly cloudflareImageService: CloudflareImageService,
-    private readonly algoliaService: AlgoliaService,
+    private readonly algoliaService: AlgoliaCategoryService,
   ) {
     super();
   }
@@ -73,15 +73,12 @@ export class CategoryService extends BaseService {
 
     queryBuilder.orderBy(orderBy, orderDirection);
     queryBuilder = this.setPagination(queryBuilder, query);
-
-    if (query.searchValue) {
-      const { hits: matchedCategories } = await this.algoliaService.searchCategories(query.searchValue, [
-        query.searchBy,
-      ]);
-      const matchedCategoryCodes = matchedCategories.map((category) => category.objectID);
-
-      queryBuilder = this.setInOperator(queryBuilder, matchedCategoryCodes, 'category.code');
-    }
+    queryBuilder = await this.setAlgoliaSearch(
+      queryBuilder,
+      query,
+      this.algoliaService.search.bind(this.algoliaService),
+      'category.code',
+    );
 
     const [categories, items] = await queryBuilder.getManyAndCount();
 
@@ -103,7 +100,7 @@ export class CategoryService extends BaseService {
     });
     const category = await this.getOne({ code: record.code });
 
-    this.algoliaService.addCategory({
+    this.algoliaService.save({
       objectID: category.code,
       name: category.name,
       categoryGroupName: category.categoryGroup.name,
@@ -120,7 +117,7 @@ export class CategoryService extends BaseService {
 
     const category = await this.getOne({ code });
 
-    this.algoliaService.updateCategory({
+    this.algoliaService.update({
       objectID: category.code,
       name: category.name,
       categoryGroupName: category.categoryGroup.name,
@@ -130,7 +127,7 @@ export class CategoryService extends BaseService {
   }
 
   delete(code: string) {
-    this.algoliaService.removeCategory(code);
+    this.algoliaService.remove(code);
     return this.categoryRepository.delete(code);
   }
 

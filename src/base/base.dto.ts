@@ -12,29 +12,29 @@ export class BaseQueryListParamsDto {
   @IsOptional()
   @IsPositive()
   @Type(() => Number)
-  page: number;
+  page?: number;
 
   @IsOptional()
   @IsPositive()
   @Type(() => Number)
-  limit: number;
+  limit?: number;
 
   @IsOptional()
   @IsString()
-  searchBy: string;
+  searchBy?: string;
 
   @IsOptional()
   @IsString()
-  searchValue: string;
+  searchValue?: string;
 
   @IsOptional()
   @IsString()
-  orderBy: string;
+  orderBy?: string;
 
   @IsOptional()
   @IsEnum(ORDER_DIRECTION_ENUM)
   @Transform(({ value }) => value.toUpperCase())
-  orderDirection: ORDER_DIRECTION_ENUM = ORDER_DIRECTION_ENUM.ASC;
+  orderDirection?: ORDER_DIRECTION_ENUM = ORDER_DIRECTION_ENUM.ASC;
 }
 
 export class BaseQueryCodeParamsDto {

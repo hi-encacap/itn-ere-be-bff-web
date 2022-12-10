@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AlgoliaProviderModule } from 'src/providers/algolia/algolia.module';
+import { AlgoliaModule } from 'src/modules/algolia/algolia.module';
 import { CloudflareModule } from '../cloudflare/cloudflare.module';
 import { AdminCategoryGroupController } from './controllers/admin-category-group.controller';
 import { AdminCategoryController } from './controllers/admin-category.controller';
@@ -16,7 +16,7 @@ import { CategoryExistsValidator } from './validators/category-exists.validator'
 
 @Module({
   imports: [
-    AlgoliaProviderModule,
+    AlgoliaModule,
     TypeOrmModule.forFeature([CategoryGroupEntity, CategoryGroupWebsiteEntity, CategoryEntity]),
     CloudflareModule,
   ],
