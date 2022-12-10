@@ -1,5 +1,7 @@
 import { parseBaseListQuery } from 'src/common/utils/request.util';
+import { IAlgoliaSearchFunction } from 'src/modules/algolia/interfaces/algolia.interface';
 import { FindOptionsWhere, SelectQueryBuilder } from 'typeorm';
+import { ORDER_DIRECTION_ENUM } from './base.constant';
 import { BaseQueryListParamsDto } from './base.dto';
 
 export class BaseService {
@@ -23,6 +25,36 @@ export class BaseService {
     fields.forEach((field) => {
       queryBuilder.andWhere(`${field} IN (:...${field})`, { [field]: fieldValues });
     });
+
+    return queryBuilder;
+  }
+
+  setSorting<T = unknown>(
+    queryBuilder: SelectQueryBuilder<T>,
+    query: FindOptionsWhere<BaseQueryListParamsDto>,
+    tableAlias: string,
+  ): SelectQueryBuilder<T> {
+    const { orderBy = 'createdAt', orderDirection } = query;
+
+    if (orderBy) {
+      queryBuilder.orderBy(`${tableAlias}.${orderBy}`, orderDirection as ORDER_DIRECTION_ENUM);
+    }
+
+    return queryBuilder;
+  }
+
+  async setAlgoliaSearch<T = unknown>(
+    queryBuilder: SelectQueryBuilder<T>,
+    query: FindOptionsWhere<BaseQueryListParamsDto>,
+    searchSynonyms: IAlgoliaSearchFunction,
+    ...columns: string[]
+  ) {
+    if (query.searchValue) {
+      const { hits } = await searchSynonyms(query.searchValue as string, [query.searchBy as string]);
+      const matchedIdentities = hits.map((item) => item.objectID);
+
+      return this.setInOperator(queryBuilder, matchedIdentities, ...columns);
+    }
 
     return queryBuilder;
   }

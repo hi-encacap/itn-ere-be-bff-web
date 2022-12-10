@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
 import { AddUserIdToParam } from 'src/common/decorators/add-user-id-to-param.decorator';
 import { AdminGuard } from 'src/common/guards/admin.guard';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { CreateContactDto } from '../dto/create-contact.dto';
 import { DeleteContactDto } from '../dto/delete-contact.dto';
+import { QueryContactListDto } from '../dto/query-contact-list.dto';
 import { UpdateContactBodyDto } from '../dto/update-contact-body.dto';
 import { UpdateContactParamDto } from '../dto/update-contact-param.dto';
 import { ContactService } from '../services/contact.service';
@@ -14,8 +15,8 @@ export class AdminContactController {
   constructor(private readonly contactService: ContactService) {}
 
   @Get()
-  findAll(@Req() { user }) {
-    return this.contactService.findAll({ websiteId: user.website.id });
+  findAll(@Req() { user }, @Query() query: QueryContactListDto) {
+    return this.contactService.findAll({ ...query, websiteId: user.website.id });
   }
 
   @Post()
