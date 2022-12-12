@@ -8,6 +8,7 @@ import { CloudflareConfigModule } from './configs/cloudflare/cloudflare-config.m
 import { AppConfigModule } from './configs/config.module';
 import { DatabaseConfigModule } from './configs/database/database-config.module';
 import DatabaseConfigService from './configs/database/database-config.service';
+import { GHNConfigModule } from './configs/ghn/ghn-config.module';
 import { JwtConfigModule } from './configs/jwt/jwt-config.module';
 import { JwtConfigService } from './configs/jwt/jwt-config.service';
 import { AuthModule } from './modules/auth/auth.module';
@@ -15,6 +16,7 @@ import { JwtStrategy } from './modules/auth/strategies/jwt.strategy';
 import { CategoryModule } from './modules/category/category.module';
 import { CloudflareModule } from './modules/cloudflare/cloudflare.module';
 import { ContactModule } from './modules/contact/contact.module';
+import { LocationModule } from './modules/location/location.module';
 import { TokenModule } from './modules/token/token.module';
 import { UserModule } from './modules/user/user.module';
 import { WebsiteModule } from './modules/website/website.module';
@@ -26,6 +28,7 @@ import { PostgresDatabaseProviderModule } from './providers/postgres/postgres.mo
     JwtConfigModule,
     CloudflareConfigModule,
     AlgoliaConfigModule,
+    GHNConfigModule,
 
     PostgresDatabaseProviderModule,
 
@@ -56,6 +59,7 @@ import { PostgresDatabaseProviderModule } from './providers/postgres/postgres.mo
     ContactModule,
     CloudflareModule,
     CategoryModule,
+    LocationModule,
   ],
   controllers: [],
   providers: [JwtStrategy, JwtService],

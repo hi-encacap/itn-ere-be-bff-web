@@ -6,7 +6,7 @@ import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflar
 import { ContactEntity } from 'src/modules/contact/entities/contact.entity';
 import { IWebsite } from 'src/modules/website/constants/website.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne as OneToOne, OneToMany } from 'typeorm';
 import { IRole, IUser } from '../interfaces/user.interface';
 import { UserRoleMappingEntity } from './user-role-mapping.entity';
 
@@ -37,7 +37,7 @@ export class UserEntity extends BaseEntityWithPrimaryGeneratedColumn implements 
   @Column({ name: 'avatar_id', nullable: true })
   avatarId!: string;
 
-  @ManyToOne(() => CloudflareImageEntity, (image) => image.users)
+  @OneToOne(() => CloudflareImageEntity)
   @JoinColumn({ name: 'avatar_id', referencedColumnName: 'id' })
   avatar?: CloudflareImageEntity;
 
@@ -61,7 +61,7 @@ export class UserEntity extends BaseEntityWithPrimaryGeneratedColumn implements 
   @JoinColumn({ name: 'category_id', referencedColumnName: 'id' })
   categories!: CategoryEntity[];
 
-  @ManyToOne(() => WebsiteEntity, (website) => website.users)
+  @OneToOne(() => WebsiteEntity, (website) => website.users)
   @JoinColumn({ name: 'website_id', referencedColumnName: 'id' })
   website!: IWebsite;
 
