@@ -6,7 +6,7 @@ import { CloudflareImageNotExistsValidator } from 'src/modules/cloudflare/valida
 import { CATEGORY_GROUP_ENUM } from '../constants/category-group.constant';
 import { CategoryExistsValidator } from '../validators/category-exists.validator';
 
-export class CreateCategoryDto {
+export class CategoryCreateBodyDto {
   @IsString()
   @ApiProperty()
   name: string;

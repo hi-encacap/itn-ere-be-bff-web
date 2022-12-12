@@ -4,7 +4,7 @@ import { IsBoolean, IsEnum, IsNumber, IsOptional, IsString, MinLength, Validate 
 import { CLOUDFLARE_VARIANT_FIT_ENUM } from '../constants/cloudflare-variant.constant';
 import { CloudflareVariantExistsValidator } from '../validators/cloudflare-variant-exists.validator';
 
-export class RootCreateCloudflareVariantDto {
+export class RootCloudflareVariantCreateBodyDto {
   @IsString()
   @MinLength(1)
   @Validate(CloudflareVariantExistsValidator)

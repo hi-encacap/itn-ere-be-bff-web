@@ -5,9 +5,9 @@ import { Type } from 'class-transformer';
 import { IsArray, IsNotEmpty, IsNumber, Validate } from 'class-validator';
 import { ROLE_ENUM } from 'src/common/constants/role.constant';
 import { RoleArrayNotExistsValidator } from '../validators/role-array-not-exists.validator';
-import { CreateUserDto } from './create-user.dto';
+import { UserCreateBodyDto } from './user-create-body.dto';
 
-export class RootCreateUserDto extends CreateUserDto {
+export class RootUserCreateBodyDto extends UserCreateBodyDto {
   @IsArray()
   @IsNotEmpty()
   @Type(() => Number)

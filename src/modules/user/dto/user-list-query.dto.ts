@@ -1,6 +1,6 @@
 import { IsOptional, IsString } from 'class-validator';
 
-export class GetUserQueryParamsDto {
+export class UserListQueryDto {
   @IsOptional()
   @IsString()
   emails: string[];

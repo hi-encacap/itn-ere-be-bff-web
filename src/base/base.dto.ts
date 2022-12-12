@@ -8,7 +8,7 @@ export class BaseQueryParamsDto {
   id: number;
 }
 
-export class BaseQueryListParamsDto {
+export class BaseListQueryDto {
   @IsOptional()
   @IsPositive()
   @Type(() => Number)

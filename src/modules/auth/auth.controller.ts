@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common'
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { UserService } from '../user/services/user.service';
 import { AuthService } from './auth.service';
-import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { TokenRefreshBodyDto } from './dto/token-refresh-body.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 
 @Controller('auth')
@@ -16,7 +16,7 @@ export class AuthController {
   }
 
   @Post('refresh')
-  refreshToken(@Body() { token }: RefreshTokenDto) {
+  refreshToken(@Body() { token }: TokenRefreshBodyDto) {
     return this.authService.refreshToken(token);
   }
 

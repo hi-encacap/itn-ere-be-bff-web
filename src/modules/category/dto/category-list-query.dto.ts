@@ -1,9 +1,9 @@
 import { Type } from 'class-transformer';
 import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
-import { BaseQueryListParamsDto } from 'src/base/base.dto';
+import { BaseListQueryDto } from 'src/base/base.dto';
 import { CATEGORY_GROUP_ENUM } from '../constants/category-group.constant';
 
-export class QueryCategoryListDto extends BaseQueryListParamsDto {
+export class CategoryListQueryDto extends BaseListQueryDto {
   @IsOptional()
   @IsString()
   name?: string;

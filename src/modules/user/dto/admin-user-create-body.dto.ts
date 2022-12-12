@@ -1,9 +1,9 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsArray, IsNotEmpty, IsNumber } from 'class-validator';
-import { CreateUserDto } from './create-user.dto';
+import { UserCreateBodyDto } from './user-create-body.dto';
 
-export class AdminCreateUserDto extends CreateUserDto {
+export class AdminUserCreateBodyDto extends UserCreateBodyDto {
   @IsArray({
     groups: ['admin'],
   })
