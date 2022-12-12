@@ -21,7 +21,7 @@ export class ProvinceService extends BaseService {
     super();
   }
 
-  async getAll(query: ProvinceWebsiteListQueryDto) {
+  getAll(query: ProvinceWebsiteListQueryDto) {
     const queryBuilder = this.queryBuilder;
 
     if (query.websiteId) {

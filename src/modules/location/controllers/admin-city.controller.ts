@@ -15,22 +15,19 @@ export class AdminCityController {
   constructor(private readonly provinceWebsiteService: ProvinceWebsiteService) {}
 
   @Get()
-  async getCities(@User() user: IUser) {
+  getCities(@User() user: IUser) {
     return this.provinceWebsiteService.getAll({
       websiteId: user.websiteId,
     });
   }
 
   @Post()
-  async createCity(@AddWebsiteIdToBody() @Body() body: ProvinceWebsiteCreateBodyDto, @User() user: IUser) {
+  createCity(@AddWebsiteIdToBody() @Body() body: ProvinceWebsiteCreateBodyDto, @User() user: IUser) {
     return this.provinceWebsiteService.create(body, user);
   }
 
   @Delete(':code')
-  async deleteCity(
-    @User() user: IUser,
-    @AddWebsiteIdToParam() @Param() { code }: ProvinceWebsiteDeleteParamDto,
-  ) {
+  deleteCity(@User() user: IUser, @AddWebsiteIdToParam() @Param() { code }: ProvinceWebsiteDeleteParamDto) {
     return this.provinceWebsiteService.delete(code, user.websiteId);
   }
 }
