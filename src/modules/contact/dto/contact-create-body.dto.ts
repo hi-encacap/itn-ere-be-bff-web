@@ -3,7 +3,7 @@ import { IsEmail, IsNotEmpty, IsOptional, IsString, Validate } from 'class-valid
 import { CloudflareImageNotExistsValidator } from 'src/modules/cloudflare/validators/cloudflare-image-not-exists.validator';
 import { ContactExistsValidator } from '../validators/contact-exists.validator';
 
-export class CreateContactDto {
+export class ContactCreateBodyDto {
   @IsString()
   @Validate(ContactExistsValidator)
   @ApiProperty()

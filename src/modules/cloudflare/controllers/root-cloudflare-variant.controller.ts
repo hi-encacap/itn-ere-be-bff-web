@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { RootGuard } from 'src/common/guards/root.guard';
-import { RootCreateCloudflareVariantDto } from '../dto/root-create-cloudflare-variant.dto';
-import { RootDeleteCloudflareVariantParamDto } from '../dto/root-delete-cloudflare-variant-param.dto';
-import { RootUpdateCloudflareVariantDto } from '../dto/root-update-cloudflare-variant.dto';
+import { RootCloudflareVariantCreateBodyDto } from '../dto/root-cloudflare-variant-create-body.dto';
+import { RootCloudflareVariantDeleteParamDto } from '../dto/root-cloudflare-variant-delete-query.dto';
+import { RootCloudflareVariantUpdateBodyDto } from '../dto/root-cloudflare-variant-update-body.dto';
 import { CloudflareVariantService } from '../services/cloudflare-variant.service';
 
 @Controller('root/cloudflare/variants')
@@ -12,7 +12,7 @@ export class RootCloudflareVariantController {
   constructor(private readonly cloudflareVariantService: CloudflareVariantService) {}
 
   @Post()
-  createVariant(@Body() body: RootCreateCloudflareVariantDto) {
+  createVariant(@Body() body: RootCloudflareVariantCreateBodyDto) {
     return this.cloudflareVariantService.createVariant(body);
   }
 
@@ -22,12 +22,12 @@ export class RootCloudflareVariantController {
   }
 
   @Patch(':id')
-  updateVariant(@Param('id') id: string, @Body() body: RootUpdateCloudflareVariantDto) {
+  updateVariant(@Param('id') id: string, @Body() body: RootCloudflareVariantUpdateBodyDto) {
     return this.cloudflareVariantService.updateVariant(id, body);
   }
 
   @Delete(':id')
-  deleteVariant(@Param() { id }: RootDeleteCloudflareVariantParamDto) {
+  deleteVariant(@Param() { id }: RootCloudflareVariantDeleteParamDto) {
     return this.cloudflareVariantService.deleteVariant(id);
   }
 }

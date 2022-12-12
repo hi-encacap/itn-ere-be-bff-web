@@ -9,7 +9,7 @@ import { IRole, IUser } from '../interfaces/user.interface';
 import { EmailExistsValidator } from '../validators/email-exists.validator';
 import { UsernameExistsValidator } from '../validators/username-exists.validator';
 
-export class CreateUserDto implements IUser {
+export class UserCreateBodyDto implements IUser {
   @IsString()
   @IsNotEmpty()
   @ApiPropertyOptional()

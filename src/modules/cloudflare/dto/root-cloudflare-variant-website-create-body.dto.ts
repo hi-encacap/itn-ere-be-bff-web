@@ -3,7 +3,7 @@ import { IsNumber, IsString, Validate } from 'class-validator';
 import { WebsiteNotExistsValidator } from 'src/modules/website/validators/website-not-exists.validator';
 import { CloudflareVariantNotExistsValidator } from '../validators/cloudflare-variant-not-exists.validator';
 
-export class RootCreateCloudflareVariantWebsiteDto {
+export class RootCloudflareVariantWebsiteCreateBodyDto {
   @IsString()
   @Validate(CloudflareVariantNotExistsValidator)
   variantId!: string;

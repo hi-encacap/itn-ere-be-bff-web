@@ -2,12 +2,12 @@ import { parseBaseListQuery } from 'src/common/utils/request.util';
 import { IAlgoliaSearchFunction } from 'src/modules/algolia/interfaces/algolia.interface';
 import { FindOptionsWhere, SelectQueryBuilder } from 'typeorm';
 import { ORDER_DIRECTION_ENUM } from './base.constant';
-import { BaseQueryListParamsDto } from './base.dto';
+import { BaseListQueryDto } from './base.dto';
 
 export class BaseService {
   setPagination<T = unknown>(
     queryBuilder: SelectQueryBuilder<T>,
-    query: FindOptionsWhere<BaseQueryListParamsDto>,
+    query: FindOptionsWhere<BaseListQueryDto>,
   ): SelectQueryBuilder<T> {
     const { limit, offset } = parseBaseListQuery(query);
     queryBuilder.skip(offset);
@@ -31,7 +31,7 @@ export class BaseService {
 
   setSorting<T = unknown>(
     queryBuilder: SelectQueryBuilder<T>,
-    query: FindOptionsWhere<BaseQueryListParamsDto>,
+    query: FindOptionsWhere<BaseListQueryDto>,
     tableAlias: string,
   ): SelectQueryBuilder<T> {
     const { orderBy = 'createdAt', orderDirection } = query;
@@ -45,7 +45,7 @@ export class BaseService {
 
   async setAlgoliaSearch<T = unknown>(
     queryBuilder: SelectQueryBuilder<T>,
-    query: FindOptionsWhere<BaseQueryListParamsDto>,
+    query: FindOptionsWhere<BaseListQueryDto>,
     searchSynonyms: IAlgoliaSearchFunction,
     ...columns: string[]
   ) {
@@ -62,7 +62,7 @@ export class BaseService {
   generateGetAllResponse<T = unknown>(
     items: T[],
     totalItems: number,
-    query: FindOptionsWhere<BaseQueryListParamsDto>,
+    query: FindOptionsWhere<BaseListQueryDto>,
   ) {
     const { page = 1, limit = 0 } = query;
     const totalPages = Math.ceil(totalItems / Number(limit));

@@ -9,8 +9,8 @@ import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
-import { CreateContactDto } from '../dto/create-contact.dto';
-import { QueryContactListDto } from '../dto/query-contact-list.dto';
+import { ContactCreateBodyDto } from '../dto/contact-create-body.dto';
+import { ContactListQueryDto } from '../dto/contact-list-query.dto';
 import { ContactEntity } from '../entities/contact.entity';
 
 @Injectable()
@@ -23,7 +23,7 @@ export class ContactService extends BaseService {
     super();
   }
 
-  async create(createContactDto: CreateContactDto, user?: IUser) {
+  async create(createContactDto: ContactCreateBodyDto, user?: IUser) {
     const contact = await this.contactRepository.save({
       ...createContactDto,
       userId: user?.id,
@@ -34,12 +34,12 @@ export class ContactService extends BaseService {
     return contact;
   }
 
-  update(id: number, updateContactDto: CreateContactDto) {
+  update(id: number, updateContactDto: ContactCreateBodyDto) {
     this.algoliaContactService.update(this.extractAlgoliaBodyFromContact(updateContactDto, id));
     return this.contactRepository.update(id, updateContactDto);
   }
 
-  async findAll(query: QueryContactListDto) {
+  async findAll(query: ContactListQueryDto) {
     let queryBuilder = this.getQueryBuilder();
 
     if (query.websiteId) {
