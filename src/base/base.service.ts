@@ -77,4 +77,13 @@ export class BaseService {
       },
     };
   }
+
+  async getManyAndCount<T = unknown>(
+    queryBuilder: SelectQueryBuilder<T>,
+    query?: FindOptionsWhere<BaseListQueryDto>,
+  ) {
+    const [items, totalItems] = await queryBuilder.getManyAndCount();
+
+    return this.generateGetAllResponse(items, totalItems, query);
+  }
 }
