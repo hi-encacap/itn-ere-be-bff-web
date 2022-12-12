@@ -1,14 +1,17 @@
 import { BaseEntityWithPrimaryStringColumn } from 'src/base/base.entity';
-import { CategoryEntity } from 'src/modules/category/entities/category.entity';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
-import { CloudflareImageStatusEnum } from '../constants/cloudflare-image-status.constant';
+import { CLOUDFLARE_IMAGE_STATUS_ENUM } from '../constants/cloudflare-image-status.constant';
 import { CloudflareVariantEntity } from './cloudflare-variant.entity';
 
 @Entity({ name: 'cloudflare_images' })
 export class CloudflareImageEntity extends BaseEntityWithPrimaryStringColumn {
-  @Column({ name: 'status', default: CloudflareImageStatusEnum.PROCESSING, enum: CloudflareImageStatusEnum })
-  status: CloudflareImageStatusEnum;
+  @Column({
+    name: 'status',
+    default: CLOUDFLARE_IMAGE_STATUS_ENUM.PROCESSING,
+    enum: CLOUDFLARE_IMAGE_STATUS_ENUM,
+  })
+  status: CLOUDFLARE_IMAGE_STATUS_ENUM;
 
   @Column({ name: 'size', default: 0 })
   size: number;
@@ -22,9 +25,6 @@ export class CloudflareImageEntity extends BaseEntityWithPrimaryStringColumn {
   @ManyToOne(() => UserEntity, (user) => user.cloudflareImages)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   user: UserEntity;
-
-  @OneToMany(() => CategoryEntity, (category) => category.thumbnail)
-  categories: CategoryEntity[];
 
   @OneToMany(() => UserEntity, (user) => user.avatar)
   users: UserEntity[];

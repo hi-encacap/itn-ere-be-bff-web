@@ -1,5 +1,5 @@
 import { isNumber } from 'lodash';
-import { BaseQueryListParamsDto } from 'src/base/base.dto';
+import { BaseListQueryDto } from 'src/base/base.dto';
 import { FindOptionsWhere } from 'typeorm';
 
 interface BaseListQueryInterface {
@@ -7,9 +7,7 @@ interface BaseListQueryInterface {
   offset: number;
 }
 
-export const parseBaseListQuery = (
-  query: FindOptionsWhere<BaseQueryListParamsDto>,
-): BaseListQueryInterface => {
+export const parseBaseListQuery = (query: FindOptionsWhere<BaseListQueryDto>): BaseListQueryInterface => {
   let limit = -1;
   let offset = 0;
 

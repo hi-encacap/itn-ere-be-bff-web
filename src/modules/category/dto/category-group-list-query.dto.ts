@@ -1,6 +1,6 @@
 import { IsNumber, IsOptional } from 'class-validator';
 
-export class QueryCategoryGroupListDto {
+export class CategoryGroupListQueryDto {
   @IsOptional()
   @IsNumber()
   websiteId?: number;
