@@ -20,7 +20,6 @@ export class GHNService {
   }
 
   async getDistricts({ provinceId }: DistrictListQueryDto) {
-    console.log(provinceId);
     try {
       const {
         data: { data },
