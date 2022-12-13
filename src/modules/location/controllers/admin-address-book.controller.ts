@@ -12,7 +12,7 @@ export class AdminAddressBookController {
   constructor(private readonly addressBookService: AddressBookService) {}
 
   @Get()
-  async getAll(query: AddressBookListQueryDto, @User() user: IUser) {
+  getAll(query: AddressBookListQueryDto, @User() user: IUser) {
     return this.addressBookService.getAll({
       ...query,
       websiteId: user.websiteId,
