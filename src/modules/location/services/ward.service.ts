@@ -39,8 +39,6 @@ export class WardService extends BaseService {
     const ward = await this.ghnService.getWardById(body.ghnRefId, body.districtGhnRefId);
     const district = await this.districtService.getByGHNId(ward.districtId, true);
 
-    console.log(district);
-
     return this.wardRepository.save({
       code: slugify(ward.name),
       name: ward.name,
