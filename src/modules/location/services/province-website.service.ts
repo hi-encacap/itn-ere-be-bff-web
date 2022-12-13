@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { pick } from 'lodash';
 import { BaseService } from 'src/base/base.service';
 import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
-import { FindOptionsWhere, Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 import { ProvinceWebsiteCreateBodyDto } from '../dto/province-website-create-body.dto';
 import { ProvinceWebsiteListQueryDto } from '../dto/province-website-list-query.dto';
 import { ProvinceWebsiteEntity } from '../entities/province-website.entity';
@@ -21,10 +22,14 @@ export class ProvinceWebsiteService extends BaseService {
     super();
   }
 
-  get(query: FindOptionsWhere<ProvinceWebsiteEntity>) {
+  get(query: DeepPartial<ProvinceWebsiteEntity & ProvinceEntity>) {
     const queryBuilder = this.queryBuilder;
 
-    queryBuilder.andWhere(query);
+    if (query.ghnRefId) {
+      queryBuilder.andWhere('province.ghnRefId = :ghnRefId', { ghnRefId: query.ghnRefId });
+    }
+
+    queryBuilder.andWhere(pick(query, ['provinceCode', 'websiteId']));
 
     return queryBuilder.getOne();
   }
