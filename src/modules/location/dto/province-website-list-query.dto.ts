@@ -1,10 +1,3 @@
-import { IsNumber, IsOptional } from 'class-validator';
-import { BaseListQueryDto } from 'src/base/base.dto';
+import { BaseLocationListQueryDto } from './base-location-list-query.dto';
 
-export class ProvinceWebsiteListQueryDto extends BaseListQueryDto {
-  @IsOptional()
-  @IsNumber()
-  websiteId?: number;
-
-  provinceCode?: string;
-}
+export class ProvinceWebsiteListQueryDto extends BaseLocationListQueryDto {}

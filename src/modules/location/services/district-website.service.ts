@@ -6,22 +6,23 @@ import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { ProvinceWebsiteCreateBodyDto } from '../dto/province-website-create-body.dto';
 import { ProvinceWebsiteListQueryDto } from '../dto/province-website-list-query.dto';
-import { ProvinceWebsiteEntity } from '../entities/province-website.entity';
+import { DistrictWebsiteEntity } from '../entities/district-website.entity';
+import { DistrictEntity } from '../entities/district.entity';
 import { ProvinceEntity } from '../entities/province.entity';
-import { ProvinceService } from './province.service';
+import { DistrictService } from './district.service';
 
 @Injectable()
-export class ProvinceWebsiteService extends BaseService {
+export class DistrictWebsiteService extends BaseService {
   constructor(
-    @InjectRepository(ProvinceWebsiteEntity)
-    private readonly provinceWebsiteRepository: Repository<ProvinceWebsiteEntity>,
+    @InjectRepository(DistrictWebsiteEntity)
+    private readonly districtWebsiteRepository: Repository<DistrictWebsiteEntity>,
 
-    private readonly provinceService: ProvinceService,
+    private readonly districtService: DistrictService,
   ) {
     super();
   }
 
-  get(query: FindOptionsWhere<ProvinceWebsiteEntity>) {
+  get(query: FindOptionsWhere<DistrictWebsiteEntity>) {
     const queryBuilder = this.queryBuilder;
 
     queryBuilder.andWhere(query);
@@ -33,47 +34,53 @@ export class ProvinceWebsiteService extends BaseService {
     const queryBuilder = this.queryBuilder;
 
     if (query.websiteId) {
-      queryBuilder.andWhere('provinceWebsite.websiteId = :websiteId', { websiteId: query.websiteId });
+      queryBuilder.andWhere('districtWebsite.websiteId = :websiteId', { websiteId: query.websiteId });
     }
 
     return this.getManyAndCount(queryBuilder, query);
   }
 
   async create(body: ProvinceWebsiteCreateBodyDto, user: IUser) {
-    const province = await this.provinceService.getByGHNId(body.id, true);
+    const district = await this.districtService.getByGHNId(body.id, true);
 
-    const record = await this.provinceWebsiteRepository.save({
-      provinceCode: province.code,
+    const record = await this.districtWebsiteRepository.save({
+      districtCode: district.code,
       websiteId: user.websiteId,
     });
 
     return this.get({
-      provinceCode: record.provinceCode,
+      districtCode: record.districtCode,
       websiteId: record.websiteId,
     });
   }
 
   async delete(code: string, websiteId: number) {
-    await this.provinceWebsiteRepository.delete({
-      provinceCode: code,
+    await this.districtWebsiteRepository.delete({
+      districtCode: code,
       websiteId,
     });
   }
 
   private get queryBuilder() {
-    return this.provinceWebsiteRepository
-      .createQueryBuilder('provinceWebsite')
+    return this.districtWebsiteRepository
+      .createQueryBuilder('districtWebsite')
       .leftJoinAndMapOne(
-        'provinceWebsite.province',
-        ProvinceEntity,
-        'province',
-        'province.code = provinceWebsite.provinceCode',
+        'districtWebsite.district',
+        DistrictEntity,
+        'district',
+        'district.code = districtWebsite.districtCode',
       )
       .leftJoinAndMapOne(
-        'provinceWebsite.website',
+        'district.province',
+        ProvinceEntity,
+        'province',
+        'district.provinceCode = province.code',
+      )
+      .leftJoinAndMapOne(
+        'districtWebsite.website',
         WebsiteEntity,
         'website',
-        'website.id = provinceWebsite.websiteId',
+        'website.id = districtWebsite.websiteId',
       );
   }
 }
