@@ -30,9 +30,9 @@ export class ProvinceExistsValidator implements ValidatorConstraintInterface {
 
   defaultMessage(args: ValidationArgumentsWithConstraints) {
     if (args.constraints[0] === EXIST_VALIDATOR_TYPE.EXISTS) {
-      return PROVINCE_ERROR_CODE.PROVINCE_ALREADY_EXISTS;
+      return PROVINCE_ERROR_CODE.ALREADY_EXISTS;
     }
 
-    return PROVINCE_ERROR_CODE.PROVINCE_NOT_EXISTS;
+    return PROVINCE_ERROR_CODE.NOT_EXISTS;
   }
 }

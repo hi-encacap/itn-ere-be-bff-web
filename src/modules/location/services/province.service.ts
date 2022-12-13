@@ -4,7 +4,7 @@ import { BaseService } from 'src/base/base.service';
 import { slugify } from 'src/common/utils/helpers.util';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { PROVINCE_ERROR_CODE } from '../constants/error.constant';
-import { ProvinceCreateBodyDto } from '../dto/province-create-body.dto';
+import { ProvinceWebsiteCreateBodyDto } from '../dto/province-website-create-body.dto';
 import { ProvinceWebsiteListQueryDto } from '../dto/province-website-list-query.dto';
 import { ProvinceWebsiteEntity } from '../entities/province-website.entity';
 import { ProvinceEntity } from '../entities/province.entity';
@@ -35,7 +35,7 @@ export class ProvinceService extends BaseService {
     const province = await this.queryBuilder.andWhere(query).getOne();
 
     if (!province) {
-      throw new NotFoundException(PROVINCE_ERROR_CODE.PROVINCE_NOT_EXISTS);
+      throw new NotFoundException(PROVINCE_ERROR_CODE.NOT_EXISTS);
     }
 
     return province;
@@ -45,7 +45,7 @@ export class ProvinceService extends BaseService {
     const province = await this.queryBuilder.andWhere('province.ghnRefId = :id', { id }).getOne();
 
     if (!province && !createIfNotExists) {
-      throw new NotFoundException(PROVINCE_ERROR_CODE.PROVINCE_NOT_EXISTS);
+      throw new NotFoundException(PROVINCE_ERROR_CODE.NOT_EXISTS);
     }
 
     if (province) {
@@ -55,7 +55,7 @@ export class ProvinceService extends BaseService {
     return this.create({ id });
   }
 
-  async create(body: ProvinceCreateBodyDto) {
+  async create(body: ProvinceWebsiteCreateBodyDto) {
     const city = await this.ghnService.getProvinceById(body.id);
 
     return this.provinceRepository.save({
