@@ -2,9 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/base/base.service';
 import { slugify } from 'src/common/utils/helpers.util';
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 import { PROVINCE_ERROR_CODE } from '../constants/error.constant';
-import { ProvinceWebsiteCreateBodyDto } from '../dto/province-website-create-body.dto';
 import { DistrictWebsiteEntity } from '../entities/district-website.entity';
 import { DistrictEntity } from '../entities/district.entity';
 import { GHNService } from './ghn.service';
@@ -23,22 +22,22 @@ export class DistrictService extends BaseService {
   }
 
   async getByGHNId(id: number, createIfNotExists = false) {
-    const province = await this.queryBuilder.andWhere('district.ghnRefId = :id', { id }).getOne();
+    const item = await this.queryBuilder.andWhere('district.ghnRefId = :id', { id }).getOne();
 
-    if (!province && !createIfNotExists) {
+    if (!item && !createIfNotExists) {
       throw new NotFoundException(PROVINCE_ERROR_CODE.NOT_EXISTS);
     }
 
-    if (province) {
-      return province;
+    if (item) {
+      return item;
     }
 
-    return this.create({ id });
+    return this.create({ ghnRefId: id });
   }
 
-  async create(body: ProvinceWebsiteCreateBodyDto) {
-    const district = await this.ghnService.getDistrictById(body.id);
-    const province = await this.provinceService.getByGHNId(district.provinceId, false);
+  async create(body: DeepPartial<DistrictEntity>) {
+    const district = await this.ghnService.getDistrictById(body.ghnRefId);
+    const province = await this.provinceService.getByGHNId(district.provinceId, true);
 
     return this.districtRepository.save({
       code: slugify(district.name),
