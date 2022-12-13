@@ -5,12 +5,12 @@ import { User } from 'src/common/decorators/user.decorator';
 import { AdminGuard } from 'src/common/guards/admin.guard';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { IUser } from 'src/modules/user/interfaces/user.interface';
-import { ProvinceCreateBodyDto as ProvinceWebsiteCreateBodyDto } from '../dto/province-create-body.dto';
+import { ProvinceWebsiteCreateBodyDto } from '../dto/province-website-create-body.dto';
 import { ProvinceWebsiteDeleteParamDto } from '../dto/province-website-delete-param.dto';
 import { ProvinceWebsiteService } from '../services/province-website.service';
 
 @UseGuards(JwtAuthGuard, AdminGuard)
-@Controller('admin/locations/cities')
+@Controller('admin/locations/provinces')
 export class AdminCityController {
   constructor(private readonly provinceWebsiteService: ProvinceWebsiteService) {}
 

@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { PROVINCE_ERROR_CODE } from '../constants/error.constant';
+import { DISTRICT_ERROR_CODE, PROVINCE_ERROR_CODE } from '../constants/error.constant';
 import { DistrictListQueryDto } from '../dto/district-list-query.dto';
 import { WardListQueryDto } from '../dto/ward-list-query.dto';
 import { IGHNDistrict, IGHNProvince, IGHNWard } from '../interfaces/ghn.interface';
@@ -25,7 +25,7 @@ export class GHNService {
     const province = provinces.find((item) => item.id === id);
 
     if (!province) {
-      throw new NotFoundException(PROVINCE_ERROR_CODE.PROVINCE_NOT_EXISTS);
+      throw new NotFoundException(PROVINCE_ERROR_CODE.NOT_EXISTS);
     }
 
     return province;
@@ -44,6 +44,18 @@ export class GHNService {
     } catch (error) {
       throw new BadRequestException(error);
     }
+  }
+
+  async getDistrictById(id: number) {
+    const districts = await this.getDistricts({ provinceId: null });
+
+    const district = districts.find((item) => item.id === id);
+
+    if (!district) {
+      throw new NotFoundException(DISTRICT_ERROR_CODE.NOT_EXISTS);
+    }
+
+    return district;
   }
 
   async getWards(query: WardListQueryDto) {
