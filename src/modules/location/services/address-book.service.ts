@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/base/base.service';
-import { DeepPartial, Repository } from 'typeorm';
+import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
 import { AddressBookListQueryDto } from '../dto/address-book-list-query.dto';
 import { AddressBookEntity } from '../entities/address-book.entity';
 import { DistrictEntity } from '../entities/district.entity';
@@ -15,6 +15,14 @@ export class AddressBookService extends BaseService {
     private readonly addressBookRepository: Repository<AddressBookEntity>,
   ) {
     super();
+  }
+
+  get(query: FindOptionsWhere<AddressBookEntity>) {
+    const queryBuilder = this.queryBuilder;
+
+    queryBuilder.andWhere(query);
+
+    return queryBuilder.getOne();
   }
 
   getAll(query: AddressBookListQueryDto) {
