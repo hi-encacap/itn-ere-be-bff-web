@@ -4,7 +4,7 @@ import { PROVINCE_WEBSITE_ERROR_CODE } from '../constants/error.constant';
 import { ProvinceWebsiteService } from '../services/province-website.service';
 
 interface ValidationArgumentsWithConstraints extends ValidationArguments {
-  constraints: [EXIST_VALIDATOR_TYPE];
+  constraints: [EXIST_VALIDATOR_TYPE, string];
   object: {
     websiteId: number;
   };
@@ -14,11 +14,12 @@ interface ValidationArgumentsWithConstraints extends ValidationArguments {
 export class ProvinceWebsiteExistsValidator implements ValidatorConstraintInterface {
   constructor(private readonly provinceWebsiteService: ProvinceWebsiteService) {}
 
-  async validate(code: string, args: ValidationArgumentsWithConstraints) {
+  async validate(value: string | number, args: ValidationArgumentsWithConstraints) {
     const { constraints } = args;
+    const [, key = 'provinceCode'] = constraints;
 
     const province = await this.provinceWebsiteService.get({
-      provinceCode: code,
+      [key]: value,
       websiteId: args.object.websiteId,
     });
 
