@@ -2,7 +2,7 @@ import { Transform, Type } from 'class-transformer';
 import { IsEnum, IsNumber, IsOptional, IsPositive, IsString } from 'class-validator';
 import { ORDER_DIRECTION_ENUM } from './base.constant';
 
-export class BaseQueryParamsDto {
+export class BaseListParamDto {
   @IsNumber()
   @Type(() => Number)
   id: number;
@@ -37,7 +37,7 @@ export class BaseListQueryDto {
   orderDirection?: ORDER_DIRECTION_ENUM = ORDER_DIRECTION_ENUM.ASC;
 }
 
-export class BaseQueryCodeParamsDto {
+export class BaseListWithCodeQueryDto {
   @IsString()
   code: string;
 }

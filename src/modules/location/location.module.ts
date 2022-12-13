@@ -3,16 +3,19 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GHNConfigModule } from 'src/configs/ghn/ghn-config.module';
 import GHNConfigService from 'src/configs/ghn/ghn-config.service';
+import { AdminAddressBookController } from './controllers/admin-address-book.controller';
 import { AdminCityController } from './controllers/admin-city.controller';
 import { AdminDistrictController } from './controllers/admin-district.controller';
 import { AdminWardController } from './controllers/admin-ward.controller';
 import { GHNController } from './controllers/ghn.controller';
+import { AddressBookEntity } from './entities/address-book.entity';
 import { DistrictWebsiteEntity } from './entities/district-website.entity';
 import { DistrictEntity } from './entities/district.entity';
 import { ProvinceWebsiteEntity } from './entities/province-website.entity';
 import { ProvinceEntity } from './entities/province.entity';
 import { WardWebsiteEntity } from './entities/ward-website.entity';
 import { WardEntity } from './entities/ward.entity';
+import { AddressBookService } from './services/address-book.service';
 import { DistrictWebsiteService } from './services/district-website.service';
 import { DistrictService } from './services/district.service';
 import { GHNService } from './services/ghn.service';
@@ -45,9 +48,16 @@ import { WardWebsiteExistsValidator } from './validators/ward-website-exists.val
       DistrictWebsiteEntity,
       WardEntity,
       WardWebsiteEntity,
+      AddressBookEntity,
     ]),
   ],
-  controllers: [GHNController, AdminCityController, AdminDistrictController, AdminWardController],
+  controllers: [
+    GHNController,
+    AdminCityController,
+    AdminDistrictController,
+    AdminWardController,
+    AdminAddressBookController,
+  ],
   providers: [
     GHNService,
     ProvinceService,
@@ -60,6 +70,7 @@ import { WardWebsiteExistsValidator } from './validators/ward-website-exists.val
     WardService,
     WardWebsiteService,
     WardWebsiteExistsValidator,
+    AddressBookService,
   ],
 })
 export class LocationModule {}
