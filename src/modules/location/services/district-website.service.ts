@@ -4,8 +4,8 @@ import { BaseService } from 'src/base/base.service';
 import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { FindOptionsWhere, Repository } from 'typeorm';
-import { ProvinceWebsiteCreateBodyDto } from '../dto/province-website-create-body.dto';
-import { ProvinceWebsiteListQueryDto } from '../dto/province-website-list-query.dto';
+import { DistrictWebsiteCreateBodyDto } from '../dto/district-website-create-body.dto';
+import { DistrictWebsiteListQueryDto } from '../dto/district-website-list-query.dto';
 import { DistrictWebsiteEntity } from '../entities/district-website.entity';
 import { DistrictEntity } from '../entities/district.entity';
 import { ProvinceEntity } from '../entities/province.entity';
@@ -30,7 +30,7 @@ export class DistrictWebsiteService extends BaseService {
     return queryBuilder.getOne();
   }
 
-  getAll(query: ProvinceWebsiteListQueryDto) {
+  getAll(query: DistrictWebsiteListQueryDto) {
     const queryBuilder = this.queryBuilder;
 
     if (query.websiteId) {
@@ -40,7 +40,7 @@ export class DistrictWebsiteService extends BaseService {
     return this.getManyAndCount(queryBuilder, query);
   }
 
-  async create(body: ProvinceWebsiteCreateBodyDto, user: IUser) {
+  async create(body: DistrictWebsiteCreateBodyDto, user: IUser) {
     const district = await this.districtService.getByGHNId(body.id, true);
 
     const record = await this.districtWebsiteRepository.save({

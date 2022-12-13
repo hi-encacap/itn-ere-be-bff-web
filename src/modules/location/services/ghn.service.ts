@@ -73,6 +73,18 @@ export class GHNService {
     }
   }
 
+  async getWardById(id: number, districtId: number) {
+    const wards = await this.getWards({ districtId });
+
+    const ward = wards.find((item) => item.id === id);
+
+    if (!ward) {
+      throw new NotFoundException(DISTRICT_ERROR_CODE.NOT_EXISTS);
+    }
+
+    return ward;
+  }
+
   private mapToProvinceResponseData(data: IGHNProvince[]) {
     return data.map((item) => ({
       id: item.ProvinceID,
@@ -90,7 +102,7 @@ export class GHNService {
 
   private mapToWardResponseData(data: IGHNWard[]) {
     return data.map((item) => ({
-      id: item.WardCode,
+      id: Number(item.WardCode),
       name: item.WardName,
       districtId: item.DistrictID,
     }));

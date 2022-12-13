@@ -2,9 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/base/base.service';
 import { slugify } from 'src/common/utils/helpers.util';
-import { FindOptionsWhere, Repository } from 'typeorm';
+import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
 import { PROVINCE_ERROR_CODE } from '../constants/error.constant';
-import { ProvinceWebsiteCreateBodyDto } from '../dto/province-website-create-body.dto';
 import { ProvinceWebsiteListQueryDto } from '../dto/province-website-list-query.dto';
 import { ProvinceWebsiteEntity } from '../entities/province-website.entity';
 import { ProvinceEntity } from '../entities/province.entity';
@@ -52,11 +51,11 @@ export class ProvinceService extends BaseService {
       return province;
     }
 
-    return this.create({ id });
+    return this.create({ ghnRefId: id });
   }
 
-  async create(body: ProvinceWebsiteCreateBodyDto) {
-    const city = await this.ghnService.getProvinceById(body.id);
+  async create(body: DeepPartial<ProvinceEntity>) {
+    const city = await this.ghnService.getProvinceById(body.ghnRefId);
 
     return this.provinceRepository.save({
       code: slugify(city.name),
