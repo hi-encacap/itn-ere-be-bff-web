@@ -1,20 +1,37 @@
 import { HttpService } from '@nestjs/axios';
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { DISTRICT_ERROR_CODE, PROVINCE_ERROR_CODE } from '../constants/error.constant';
 import { DistrictListQueryDto } from '../dto/district-list-query.dto';
 import { WardListQueryDto } from '../dto/ward-list-query.dto';
 import { IGHNDistrict, IGHNProvince, IGHNWard } from '../interfaces/ghn.interface';
+import { ProvinceWebsiteService } from './province-website.service';
 
 @Injectable()
 export class GHNService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(
+    private readonly httpService: HttpService,
+    @Inject(forwardRef(() => ProvinceWebsiteService))
+    private readonly provinceWebsiteService: ProvinceWebsiteService,
+  ) {}
 
-  async getProvinces() {
+  async getProvinces(excludeExisted = false, websiteId?: number) {
     try {
       const {
         data: { data },
       } = await this.httpService.axiosRef.get('master-data/province');
-      return this.mapToProvinceResponseData(data);
+
+      let provinces = this.mapToProvinceResponseData(data);
+
+      if (excludeExisted) {
+        const { items: existedProvinces } = await this.provinceWebsiteService.getAll({
+          websiteId,
+        });
+        const existedProvinceIds = existedProvinces.map((item) => item.province.ghnRefId);
+
+        provinces = provinces.filter((item) => !existedProvinceIds.includes(item.id));
+      }
+
+      return provinces;
     } catch (error) {
       throw new BadRequestException(error);
     }
