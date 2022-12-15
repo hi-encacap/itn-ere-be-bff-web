@@ -1,4 +1,5 @@
 import { Entity, PrimaryColumn } from 'typeorm';
+import { ProvinceEntity } from './province.entity';
 
 @Entity({ name: 'province_websites' })
 export class ProvinceWebsiteEntity {
@@ -7,4 +8,6 @@ export class ProvinceWebsiteEntity {
 
   @PrimaryColumn({ name: 'website_id' })
   websiteId: number;
+
+  province: ProvinceEntity;
 }
