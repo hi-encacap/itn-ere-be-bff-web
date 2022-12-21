@@ -11,6 +11,7 @@ import { DistrictService } from './services/district.service';
 import { GHNService } from './services/ghn.service';
 import { ProvinceWebsiteService } from './services/province-website.service';
 import { ProvinceService } from './services/province.service';
+import { ProvinceWebsiteExistsValidator } from './validators/province-website-exists.validator';
 
 @Module({
   imports: [
@@ -27,7 +28,13 @@ import { ProvinceService } from './services/province.service';
     TypeOrmModule.forFeature([ProvinceEntity, ProvinceWebsiteEntity]),
   ],
   controllers: [GHNController, AdminProvinceController],
-  providers: [GHNService, ProvinceService, ProvinceWebsiteService, DistrictService],
+  providers: [
+    GHNService,
+    ProvinceService,
+    ProvinceWebsiteService,
+    DistrictService,
+    ProvinceWebsiteExistsValidator,
+  ],
   exports: [],
 })
 export class LocationModule {}
