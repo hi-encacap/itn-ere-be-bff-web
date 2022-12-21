@@ -1,4 +1,4 @@
-import { Inject, Injectable, forwardRef } from '@nestjs/common';
+import { Inject, Injectable, UnprocessableEntityException, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/base/base.service';
 import { slugify } from 'src/common/utils/helpers.util';
@@ -25,7 +25,7 @@ export class ProvinceService extends BaseService {
     super();
   }
 
-  async get(query: FindOptionsWhere<ProvinceEntity>) {
+  async get(query: FindOptionsWhere<ProvinceEntity>, throwError = true) {
     const queryBuilder = this.queryBuilder;
 
     if (query.code) {
@@ -38,8 +38,8 @@ export class ProvinceService extends BaseService {
 
     const record = await queryBuilder.getOne();
 
-    if (!record) {
-      throw new Error(LOCATION_ERROR_CODE.PROVINCE_NOT_EXISTS);
+    if (!record && throwError) {
+      throw new UnprocessableEntityException(LOCATION_ERROR_CODE.PROVINCE_NOT_EXISTS);
     }
 
     return record;
@@ -58,7 +58,7 @@ export class ProvinceService extends BaseService {
   }
 
   async create(data: ProvinceWebsiteCreateBodyDto, user?: IUser) {
-    const existedRecord = await this.get({ ghnRefId: data.ghnRefId });
+    const existedRecord = await this.get({ ghnRefId: data.ghnRefId }, false);
 
     if (existedRecord) {
       await this.provinceWebsiteService.create(existedRecord.code, user.websiteId);
