@@ -14,6 +14,10 @@ export class ProvinceWebsiteService {
     return this.provinceWebsiteRepository.findOneBy(query);
   }
 
+  getAll(query: FindOptionsWhere<ProvinceWebsiteEntity>) {
+    return this.provinceWebsiteRepository.findBy(query);
+  }
+
   create(provinceCode: string, websiteId: number) {
     const record = this.provinceWebsiteRepository.create({
       provinceCode,

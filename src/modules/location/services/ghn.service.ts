@@ -8,19 +8,25 @@ import { ProvinceService } from './province.service';
 @Injectable()
 export class GHNService {
   constructor(
-    private readonly httpService: HttpService,
     @Inject(forwardRef(() => ProvinceService)) private readonly provinceService: ProvinceService,
     @Inject(forwardRef(() => DistrictService)) private readonly districtService: DistrictService,
+
+    private readonly httpService: HttpService,
   ) {}
 
-  async getProvinces(): Promise<IProvince[]> {
+  async getProvinces(websiteId?: number): Promise<IProvince[]> {
     try {
+      const { items: existedProvinces } = await this.provinceService.getAll({
+        websiteId,
+      });
+      const existedProvinceGhnRefIds = existedProvinces.map((province) => province.ghnRefId);
+
       const response = await this.httpService.axiosRef.get('master-data/province');
       return this.format<IProvince>(
         response.data.data,
         ['ProvinceID', 'ProvinceName', 'CountryID'],
         ['ghnRefId', 'name', 'countryId'],
-      );
+      ).filter((province) => !existedProvinceGhnRefIds.includes(province.ghnRefId));
     } catch (error) {
       throw new UnprocessableEntityException(error);
     }
