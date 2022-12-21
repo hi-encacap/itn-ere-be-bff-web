@@ -12,7 +12,7 @@ export class AdminProvinceController {
   constructor(private readonly provinceService: ProvinceService) {}
 
   @Get()
-  async getAll(@Query() query: ProvinceListQueryDto, @User() user: IUser) {
+  getAll(@Query() query: ProvinceListQueryDto, @User() user: IUser) {
     return this.provinceService.getAll({
       ...query,
       websiteId: user.websiteId,

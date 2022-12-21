@@ -34,7 +34,7 @@ export class ProvinceService extends BaseService {
     return record;
   }
 
-  async getAll(query: ProvinceListQueryDto) {
+  getAll(query: ProvinceListQueryDto) {
     const { websiteId } = query;
 
     const queryBuilder = this.queryBuilder;

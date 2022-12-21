@@ -10,17 +10,17 @@ export class GHNController {
   constructor(private readonly ghnService: GHNService) {}
 
   @Get('provinces')
-  async getProvinces() {
+  getProvinces() {
     return this.ghnService.getProvinces();
   }
 
   @Get('districts')
-  async getDistricts(@Query() { provinceCode }: GHNDistrictListQueryDto) {
+  getDistricts(@Query() { provinceCode }: GHNDistrictListQueryDto) {
     return this.ghnService.getDistricts(provinceCode);
   }
 
   @Get('wards')
-  async getWards(@Query() { districtCode }: GHNWardListQueryDto) {
+  getWards(@Query() { districtCode }: GHNWardListQueryDto) {
     return this.ghnService.getWards(districtCode);
   }
 }
