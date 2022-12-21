@@ -18,7 +18,7 @@ export class LoggerMiddleware implements NestMiddleware {
       return next();
     }
 
-    const requestId = req.headers['x-request-id'] || randomStringPrefix('HTTP');
+    const requestId = req.headers['x-request-id'] || randomStringPrefix();
     res.setHeader('x-request-id', requestId);
 
     this.loggerService.log(

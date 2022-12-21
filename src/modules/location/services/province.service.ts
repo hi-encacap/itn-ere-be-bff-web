@@ -1,72 +1,74 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/base/base.service';
-import { slugify } from 'src/common/utils/helpers.util';
-import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
-import { PROVINCE_ERROR_CODE } from '../constants/error.constant';
-import { ProvinceWebsiteListQueryDto } from '../dto/province-website-list-query.dto';
+import { IUser } from 'src/modules/user/interfaces/user.interface';
+import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
+import { DeepPartial, Repository } from 'typeorm';
+import { LOCATION_ERROR_CODE } from '../constants/location-error-code.constant';
+import { ProvinceCreateBodyDto } from '../dtos/province-create-body.dto';
+import { ProvinceListQueryDto } from '../dtos/province-list-query.dto';
 import { ProvinceWebsiteEntity } from '../entities/province-website.entity';
 import { ProvinceEntity } from '../entities/province.entity';
 import { GHNService } from './ghn.service';
+import { ProvinceWebsiteService } from './province-website.service';
 
 @Injectable()
 export class ProvinceService extends BaseService {
   constructor(
-    @InjectRepository(ProvinceEntity)
-    private readonly provinceRepository: Repository<ProvinceEntity>,
-
+    @InjectRepository(ProvinceEntity) private readonly provinceRepository: Repository<ProvinceEntity>,
+    @Inject(forwardRef(() => GHNService))
     private readonly ghnService: GHNService,
+
+    private readonly provinceWebsiteService: ProvinceWebsiteService,
   ) {
     super();
   }
 
-  getAll(query: ProvinceWebsiteListQueryDto) {
+  async getByCode(code: string) {
+    const record = await this.provinceRepository.findOneBy({ code });
+
+    if (!record) {
+      throw new Error(LOCATION_ERROR_CODE.PROVINCE_NOT_EXISTS);
+    }
+
+    return record;
+  }
+
+  async getAll(query: ProvinceListQueryDto) {
+    const { websiteId } = query;
+
     const queryBuilder = this.queryBuilder;
 
-    if (query.websiteId) {
-      queryBuilder.andWhere('provinceWebsite.websiteId = :websiteId', { websiteId: query.websiteId });
+    if (websiteId) {
+      queryBuilder.andWhere('provinceWebsite.websiteId = :websiteId', { websiteId });
     }
 
     return this.getManyAndCount(queryBuilder, query);
   }
 
-  async get(query: FindOptionsWhere<ProvinceEntity>) {
-    const province = await this.queryBuilder.andWhere(query).getOne();
+  async create(data: ProvinceCreateBodyDto, user?: IUser) {
+    const province = await this.ghnService.getProvince(data.ghnRefId);
+    const record = await this.provinceRepository.save({
+      ...data,
+      code: province.code,
+    } as DeepPartial<ProvinceEntity>);
 
-    if (!province) {
-      throw new NotFoundException(PROVINCE_ERROR_CODE.NOT_EXISTS);
+    if (user) {
+      await this.provinceWebsiteService.create(province.code, user.websiteId);
     }
 
-    return province;
-  }
-
-  async getByGHNId(id: number, createIfNotExists = false) {
-    const province = await this.queryBuilder.andWhere('province.ghnRefId = :id', { id }).getOne();
-
-    if (!province && !createIfNotExists) {
-      throw new NotFoundException(PROVINCE_ERROR_CODE.NOT_EXISTS);
-    }
-
-    if (province) {
-      return province;
-    }
-
-    return this.create({ ghnRefId: id });
-  }
-
-  async create(body: DeepPartial<ProvinceEntity>) {
-    const city = await this.ghnService.getProvinceById(body.ghnRefId);
-
-    return this.provinceRepository.save({
-      code: slugify(city.name),
-      name: city.name,
-      ghnRefId: city.id,
-    });
+    return record;
   }
 
   private get queryBuilder() {
     return this.provinceRepository
       .createQueryBuilder('province')
-      .leftJoin(ProvinceWebsiteEntity, 'provinceWebsite', 'province.code = provinceWebsite.provinceCode');
+      .leftJoin(ProvinceWebsiteEntity, 'provinceWebsite', 'provinceWebsite.provinceCode = province.code')
+      .leftJoinAndMapOne(
+        'province.website',
+        WebsiteEntity,
+        'website',
+        'website.id = provinceWebsite.websiteId',
+      );
   }
 }

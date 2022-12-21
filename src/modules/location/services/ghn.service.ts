@@ -1,127 +1,126 @@
 import { HttpService } from '@nestjs/axios';
-import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { DISTRICT_ERROR_CODE, PROVINCE_ERROR_CODE } from '../constants/error.constant';
-import { DistrictListQueryDto } from '../dto/district-list-query.dto';
-import { WardListQueryDto } from '../dto/ward-list-query.dto';
-import { IGHNDistrict, IGHNProvince, IGHNWard } from '../interfaces/ghn.interface';
-import { ProvinceWebsiteService } from './province-website.service';
+import { Inject, Injectable, UnprocessableEntityException, forwardRef } from '@nestjs/common';
+import { LOCATION_ERROR_CODE } from '../constants/location-error-code.constant';
+import { IDistrict, IProvince, IWard } from '../interfaces/location.interface';
+import { DistrictService } from './district.service';
+import { ProvinceService } from './province.service';
 
 @Injectable()
 export class GHNService {
   constructor(
     private readonly httpService: HttpService,
-    @Inject(forwardRef(() => ProvinceWebsiteService))
-    private readonly provinceWebsiteService: ProvinceWebsiteService,
+    @Inject(forwardRef(() => ProvinceService)) private readonly provinceService: ProvinceService,
+    @Inject(forwardRef(() => DistrictService)) private readonly districtService: DistrictService,
   ) {}
 
-  async getProvinces(excludeExisted = false, websiteId?: number) {
+  async getProvinces(): Promise<IProvince[]> {
     try {
-      const {
-        data: { data },
-      } = await this.httpService.axiosRef.get('master-data/province');
-
-      let provinces = this.mapToProvinceResponseData(data);
-
-      if (excludeExisted) {
-        const { items: existedProvinces } = await this.provinceWebsiteService.getAll({
-          websiteId,
-        });
-        const existedProvinceIds = existedProvinces.map((item) => item.province.ghnRefId);
-
-        provinces = provinces.filter((item) => !existedProvinceIds.includes(item.id));
-      }
-
-      return provinces;
+      const response = await this.httpService.axiosRef.get('master-data/province');
+      return this.format<IProvince>(
+        response.data.data,
+        ['ProvinceID', 'ProvinceName', 'CountryID'],
+        ['ghnRefId', 'name', 'countryId'],
+      );
     } catch (error) {
-      throw new BadRequestException(error);
+      throw new UnprocessableEntityException(error);
     }
   }
 
-  async getProvinceById(id: number) {
+  async getProvince(refId: number) {
     const provinces = await this.getProvinces();
-    const province = provinces.find((item) => item.id === id);
+
+    const province = provinces.find((province) => province.ghnRefId === refId);
 
     if (!province) {
-      throw new NotFoundException(PROVINCE_ERROR_CODE.NOT_EXISTS);
+      throw new UnprocessableEntityException(LOCATION_ERROR_CODE.PROVINCE_NOT_EXISTS);
     }
 
     return province;
   }
 
-  async getDistricts({ provinceId }: DistrictListQueryDto) {
+  async getDistricts(provinceCode: string): Promise<IDistrict[]> {
     try {
-      const {
-        data: { data },
-      } = await this.httpService.axiosRef.get('master-data/district', {
+      const province = await this.provinceService.getByCode(provinceCode);
+
+      const response = await this.httpService.axiosRef.get('master-data/district', {
         params: {
-          province_id: provinceId,
+          province_id: province.ghnRefId,
         },
       });
-      return this.mapToDistrictResponseData(data);
+
+      return this.format(
+        response.data.data,
+        ['DistrictID', 'DistrictName', 'ProvinceID'],
+        ['ghnRefId', 'name', 'provinceGhnRefId'],
+        { provinceCode },
+      );
     } catch (error) {
-      throw new BadRequestException(error);
+      throw new UnprocessableEntityException(error);
     }
   }
 
-  async getDistrictById(id: number) {
-    const districts = await this.getDistricts({ provinceId: null });
+  async getDistrict(provinceCode: string, refId: number) {
+    const districts = await this.getDistricts(provinceCode);
 
-    const district = districts.find((item) => item.id === id);
+    const district = districts.find((district) => district.ghnRefId === refId);
 
     if (!district) {
-      throw new NotFoundException(DISTRICT_ERROR_CODE.NOT_EXISTS);
+      throw new UnprocessableEntityException(LOCATION_ERROR_CODE.DISTRICT_NOT_EXISTS);
     }
 
     return district;
   }
 
-  async getWards(query: WardListQueryDto) {
+  async getWards(districtCode: string): Promise<IWard[]> {
     try {
-      const {
-        data: { data },
-      } = await this.httpService.axiosRef.get('master-data/ward', {
+      const district = this.districtService.getByCode(districtCode);
+
+      const response = await this.httpService.axiosRef.get('master-data/ward', {
         params: {
-          district_id: query.districtId ?? null,
+          district_id: district.ghnRefId,
         },
       });
-      return this.mapToWardResponseData(data);
+
+      return this.format(
+        response.data.data,
+        ['WardCode', 'WardName', 'DistrictID'],
+        ['ghnRefId', 'name', 'districtGhnRefId'],
+        {
+          districtCode,
+        },
+      );
     } catch (error) {
-      throw new BadRequestException(error);
+      throw new UnprocessableEntityException(error);
     }
   }
 
-  async getWardById(id: number, districtId: number) {
-    const wards = await this.getWards({ districtId });
+  async getWard(districtCode: string, refId: number) {
+    const wards = await this.getWards(districtCode);
 
-    const ward = wards.find((item) => item.id === id);
+    const ward = wards.find((ward) => ward.ghnRefId === refId);
 
     if (!ward) {
-      throw new NotFoundException(DISTRICT_ERROR_CODE.NOT_EXISTS);
+      throw new UnprocessableEntityException(LOCATION_ERROR_CODE.WARD_NOT_EXISTS);
     }
 
     return ward;
   }
 
-  private mapToProvinceResponseData(data: IGHNProvince[]) {
-    return data.map((item) => ({
-      id: item.ProvinceID,
-      name: item.ProvinceName,
-    }));
-  }
-
-  private mapToDistrictResponseData(data: IGHNDistrict[]) {
-    return data.map((item) => ({
-      id: item.DistrictID,
-      name: item.DistrictName,
-      provinceId: item.ProvinceID,
-    }));
-  }
-
-  private mapToWardResponseData(data: IGHNWard[]) {
-    return data.map((item) => ({
-      id: Number(item.WardCode),
-      name: item.WardName,
-      districtId: item.DistrictID,
-    }));
+  private format<T = unknown>(
+    data: T[],
+    originalKeys: string[],
+    newKeys: string[],
+    extraData: Record<string, unknown> = {},
+  ): T[] {
+    return data.map((item) => {
+      const newItem = {} as T;
+      originalKeys.forEach((key, index) => {
+        newItem[newKeys[index]] = item[key];
+      });
+      return {
+        ...newItem,
+        ...extraData,
+      };
+    });
   }
 }
