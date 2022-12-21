@@ -1,9 +1,7 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
-import { User } from 'src/common/decorators/user.decorator';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
-import { IUser } from 'src/modules/user/interfaces/user.interface';
-import { DistrictListQueryDto } from '../dto/district-list-query.dto';
-import { WardListQueryDto } from '../dto/ward-list-query.dto';
+import { GHNDistrictListQueryDto } from '../dtos/ghn-district-list-query.dto';
+import { GHNWardListQueryDto } from '../dtos/ghn-ward-list-query.dto';
 import { GHNService } from '../services/ghn.service';
 
 @UseGuards(JwtAuthGuard)
@@ -12,17 +10,17 @@ export class GHNController {
   constructor(private readonly ghnService: GHNService) {}
 
   @Get('provinces')
-  getProvinces(@User() user: IUser) {
-    return this.ghnService.getProvinces(true, user.websiteId);
+  getProvinces() {
+    return this.ghnService.getProvinces();
   }
 
   @Get('districts')
-  getDistricts(@Query() query: DistrictListQueryDto) {
-    return this.ghnService.getDistricts(query);
+  getDistricts(@Query() { provinceCode }: GHNDistrictListQueryDto) {
+    return this.ghnService.getDistricts(provinceCode);
   }
 
   @Get('wards')
-  getWards(@Query() query: WardListQueryDto) {
-    return this.ghnService.getWards(query);
+  getWards(@Query() { districtCode }: GHNWardListQueryDto) {
+    return this.ghnService.getWards(districtCode);
   }
 }

@@ -1,8 +1,10 @@
+import { Type } from 'class-transformer';
 import { IsNumber, IsOptional } from 'class-validator';
 import { BaseListQueryDto } from 'src/base/base.dto';
 
-export class BaseLocationListQueryDto extends BaseListQueryDto {
+export class ProvinceListQueryDto extends BaseListQueryDto {
   @IsOptional()
   @IsNumber()
+  @Type(() => Number)
   websiteId?: number;
 }
