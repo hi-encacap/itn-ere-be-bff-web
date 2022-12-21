@@ -1,12 +1,13 @@
 import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/base/base.service';
+import { slugify } from 'src/common/utils/helpers.util';
 import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
-import { DeepPartial, Repository } from 'typeorm';
+import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
 import { LOCATION_ERROR_CODE } from '../constants/location-error-code.constant';
-import { ProvinceCreateBodyDto } from '../dtos/province-create-body.dto';
 import { ProvinceListQueryDto } from '../dtos/province-list-query.dto';
+import { ProvinceWebsiteCreateBodyDto } from '../dtos/province-website-create-body.dto';
 import { ProvinceWebsiteEntity } from '../entities/province-website.entity';
 import { ProvinceEntity } from '../entities/province.entity';
 import { GHNService } from './ghn.service';
@@ -24,8 +25,18 @@ export class ProvinceService extends BaseService {
     super();
   }
 
-  async getByCode(code: string) {
-    const record = await this.provinceRepository.findOneBy({ code });
+  async get(query: FindOptionsWhere<ProvinceEntity>) {
+    const queryBuilder = this.queryBuilder;
+
+    if (query.code) {
+      queryBuilder.andWhere('province.code = :code', { code: query.code });
+    }
+
+    if (query.ghnRefId) {
+      queryBuilder.andWhere('province.ghnRefId = :ghnRefId', { ghnRefId: query.ghnRefId });
+    }
+
+    const record = await queryBuilder.getOne();
 
     if (!record) {
       throw new Error(LOCATION_ERROR_CODE.PROVINCE_NOT_EXISTS);
@@ -46,18 +57,27 @@ export class ProvinceService extends BaseService {
     return this.getManyAndCount(queryBuilder, query);
   }
 
-  async create(data: ProvinceCreateBodyDto, user?: IUser) {
+  async create(data: ProvinceWebsiteCreateBodyDto, user?: IUser) {
+    const existedRecord = await this.get({ ghnRefId: data.ghnRefId });
+
+    if (existedRecord) {
+      await this.provinceWebsiteService.create(existedRecord.code, user.websiteId);
+
+      return existedRecord;
+    }
+
     const province = await this.ghnService.getProvince(data.ghnRefId);
     const record = await this.provinceRepository.save({
-      ...data,
-      code: province.code,
+      ...province,
+      code: slugify(province.name),
+      countryCode: 'viet-nam',
     } as DeepPartial<ProvinceEntity>);
 
     if (user) {
-      await this.provinceWebsiteService.create(province.code, user.websiteId);
+      await this.provinceWebsiteService.create(record.code, user.websiteId);
     }
 
-    return record;
+    return this.get({ code: record.code });
   }
 
   private get queryBuilder() {
