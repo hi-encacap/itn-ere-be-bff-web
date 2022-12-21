@@ -1,14 +1,17 @@
 import { BaseEntityWithPrimaryCodeColumn } from 'src/base/base.entity';
+import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Column, Entity } from 'typeorm';
-import { DistrictEntity } from './district.entity';
 
-@Entity({ name: 'provinces' })
+@Entity('provinces')
 export class ProvinceEntity extends BaseEntityWithPrimaryCodeColumn {
   @Column()
-  name: string;
+  name!: string;
+
+  @Column({ name: 'country_code' })
+  countryCode!: string;
 
   @Column({ name: 'ghn_ref_id' })
-  ghnRefId: number;
+  ghnRefId!: number;
 
-  districts: DistrictEntity[];
+  website?: WebsiteEntity;
 }
