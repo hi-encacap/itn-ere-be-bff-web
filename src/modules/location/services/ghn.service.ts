@@ -40,7 +40,7 @@ export class GHNService {
 
   async getDistricts(provinceCode: string): Promise<IDistrict[]> {
     try {
-      const province = await this.provinceService.getByCode(provinceCode);
+      const province = await this.provinceService.get({ code: provinceCode });
 
       const response = await this.httpService.axiosRef.get('master-data/district', {
         params: {

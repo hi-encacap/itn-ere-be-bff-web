@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { ProvinceWebsiteEntity } from '../entities/province-website.entity';
 
 @Injectable()
@@ -10,6 +10,10 @@ export class ProvinceWebsiteService {
     private readonly provinceWebsiteRepository: Repository<ProvinceWebsiteEntity>,
   ) {}
 
+  get(query: FindOptionsWhere<ProvinceWebsiteEntity>) {
+    return this.provinceWebsiteRepository.findOneBy(query);
+  }
+
   create(provinceCode: string, websiteId: number) {
     const record = this.provinceWebsiteRepository.create({
       provinceCode,
@@ -17,5 +21,9 @@ export class ProvinceWebsiteService {
     });
 
     return this.provinceWebsiteRepository.save(record);
+  }
+
+  delete(provinceCode: string, websiteId: number) {
+    return this.provinceWebsiteRepository.delete({ provinceCode, websiteId });
   }
 }
