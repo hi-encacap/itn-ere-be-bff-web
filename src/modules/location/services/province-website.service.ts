@@ -24,6 +24,6 @@ export class ProvinceWebsiteService {
   }
 
   delete(provinceCode: string, websiteId: number) {
-    return this.provinceWebsiteRepository.delete({ provinceCode: provinceCode, websiteId: websiteId });
+    return this.provinceWebsiteRepository.delete({ provinceCode, websiteId });
   }
 }
