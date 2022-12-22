@@ -17,8 +17,8 @@ export class GHNController {
   }
 
   @Get('districts')
-  getDistricts(@Query() { provinceCode }: GHNDistrictListQueryDto) {
-    return this.ghnService.getDistricts(provinceCode);
+  getDistricts(@Query() { provinceCode }: GHNDistrictListQueryDto, @User() user: IUser) {
+    return this.ghnService.getDistricts(provinceCode, user.websiteId);
   }
 
   @Get('wards')
