@@ -4,12 +4,14 @@ import { LOCATION_ERROR_CODE } from '../constants/location-error-code.constant';
 import { IDistrict, IProvince, IWard } from '../interfaces/location.interface';
 import { DistrictService } from './district.service';
 import { ProvinceService } from './province.service';
+import { WardService } from './ward.service';
 
 @Injectable()
 export class GHNService {
   constructor(
     @Inject(forwardRef(() => ProvinceService)) private readonly provinceService: ProvinceService,
     @Inject(forwardRef(() => DistrictService)) private readonly districtService: DistrictService,
+    @Inject(forwardRef(() => WardService)) private readonly wardService: WardService,
 
     private readonly httpService: HttpService,
   ) {}
@@ -82,11 +84,16 @@ export class GHNService {
     return district;
   }
 
-  async getWards(districtCode: string): Promise<IWard[]> {
+  async getWards(districtCode: string, websiteId?: number): Promise<IWard[]> {
     try {
       const district = await this.districtService.get({
         code: districtCode,
       });
+      const existedWards = await this.wardService.getAll({
+        districtCode,
+        websiteId,
+      });
+      const existedWardGhnRefIds = existedWards.items.map((ward) => ward.ghnRefId);
 
       const response = await this.httpService.axiosRef.get('master-data/ward', {
         params: {
@@ -94,14 +101,19 @@ export class GHNService {
         },
       });
 
-      return this.format(
+      return this.format<IWard>(
         response.data.data,
         ['WardCode', 'WardName', 'DistrictID'],
         ['ghnRefId', 'name', 'districtGhnRefId'],
         {
           districtCode,
         },
-      );
+      )
+        .map((item) => ({
+          ...item,
+          ghnRefId: Number(item.ghnRefId),
+        }))
+        .filter((ward) => !existedWardGhnRefIds.includes(ward.ghnRefId));
     } catch (error) {
       throw new UnprocessableEntityException(error);
     }
