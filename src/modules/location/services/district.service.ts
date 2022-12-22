@@ -36,15 +36,31 @@ export class DistrictService extends BaseService {
   }
 
   getAll(query: DistrictListQueryDto) {
-    const queryBuilder = this.queryBuilder;
+    let queryBuilder = this.queryBuilder;
 
     if (query.provinceCode) {
-      queryBuilder.andWhere('district.provinceCode = :provinceCode', { provinceCode: query.provinceCode });
+      query.provinceCodes = [query.provinceCode, ...(query.provinceCodes ?? [])];
+    }
+
+    if (query.provinceCodes) {
+      queryBuilder = this.setInOperator(queryBuilder, query.provinceCodes, 'province.code');
     }
 
     if (query.websiteId) {
       queryBuilder.andWhere('districtWebsite.websiteId = :websiteId', { websiteId: query.websiteId });
     }
+
+    const { orderDirection } = query;
+    let { orderBy } = query;
+
+    if (orderBy === 'provinceName') {
+      orderBy = 'province.name';
+    } else {
+      orderBy = `district.${orderBy ?? 'createdAt'}`;
+    }
+
+    queryBuilder.orderBy(orderBy, orderDirection);
+    queryBuilder = this.setPagination(queryBuilder, query);
 
     return this.getManyAndCount(queryBuilder, query);
   }

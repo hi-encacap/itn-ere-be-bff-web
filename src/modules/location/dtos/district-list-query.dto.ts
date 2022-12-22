@@ -8,6 +8,12 @@ export class DistrictListQueryDto extends BaseListQueryDto {
   provinceCode?: string;
 
   @IsOptional()
+  @IsString({
+    each: true,
+  })
+  provinceCodes?: string[];
+
+  @IsOptional()
   @IsNumber()
   @Type(() => Number)
   websiteId?: number;
