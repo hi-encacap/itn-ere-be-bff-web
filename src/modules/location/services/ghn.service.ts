@@ -44,9 +44,14 @@ export class GHNService {
     return province;
   }
 
-  async getDistricts(provinceCode: string): Promise<IDistrict[]> {
+  async getDistricts(provinceCode: string, websiteId?: number): Promise<IDistrict[]> {
     try {
       const province = await this.provinceService.get({ code: provinceCode });
+      const existedDistricts = await this.districtService.getAll({
+        provinceCode,
+        websiteId,
+      });
+      const existedDistrictGhnRefIds = existedDistricts.items.map((district) => district.ghnRefId);
 
       const response = await this.httpService.axiosRef.get('master-data/district', {
         params: {
@@ -54,12 +59,12 @@ export class GHNService {
         },
       });
 
-      return this.format(
+      return this.format<IDistrict>(
         response.data.data,
         ['DistrictID', 'DistrictName', 'ProvinceID'],
         ['ghnRefId', 'name', 'provinceGhnRefId'],
         { provinceCode },
-      );
+      ).filter((district) => !existedDistrictGhnRefIds.includes(district.ghnRefId));
     } catch (error) {
       throw new UnprocessableEntityException(error);
     }
@@ -79,7 +84,9 @@ export class GHNService {
 
   async getWards(districtCode: string): Promise<IWard[]> {
     try {
-      const district = this.districtService.getByCode(districtCode);
+      const district = await this.districtService.get({
+        code: districtCode,
+      });
 
       const response = await this.httpService.axiosRef.get('master-data/ward', {
         params: {
