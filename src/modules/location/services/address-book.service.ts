@@ -16,11 +16,11 @@ export class AddressBookService extends BaseService {
     super();
   }
 
-  async get(query: FindOptionsWhere<AddressBookEntity>) {
+  get(query: FindOptionsWhere<AddressBookEntity>) {
     return this.addressBookRepository.findOneBy(query);
   }
 
-  async getAll(query: AddressBookListQueryDto) {
+  getAll(query: AddressBookListQueryDto) {
     let queryBuilder = this.queryBuilder;
 
     queryBuilder = this.setFilter(queryBuilder, query, 'addressBook', 'provinceCodes', 'provinceCode');
