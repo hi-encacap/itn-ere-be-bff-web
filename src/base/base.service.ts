@@ -21,9 +21,12 @@ export class BaseService {
     values: unknown[],
     ...fields: string[]
   ): SelectQueryBuilder<T> {
-    const fieldValues = values.length > 0 ? values : [null];
+    if (!fields.length || !values.length) {
+      return queryBuilder;
+    }
+
     fields.forEach((field) => {
-      queryBuilder.andWhere(`${field} IN (:...${field})`, { [field]: fieldValues });
+      queryBuilder.andWhere(`${field} IN (:...${field})`, { [field]: values });
     });
 
     return queryBuilder;
@@ -39,6 +42,26 @@ export class BaseService {
     if (orderBy) {
       queryBuilder.orderBy(`${tableAlias}.${orderBy}`, orderDirection as ORDER_DIRECTION_ENUM);
     }
+
+    return queryBuilder;
+  }
+
+  setFilter<T = unknown>(
+    queryBuilder: SelectQueryBuilder<T>,
+    query: FindOptionsWhere<BaseListQueryDto>,
+    tableAlias: string,
+    key: string,
+    ...fields: string[]
+  ) {
+    fields.forEach((field) => {
+      const value = query[key];
+
+      if (Array.isArray(value)) {
+        queryBuilder = this.setInOperator(queryBuilder, value, `${tableAlias}.${field}`);
+      } else if (value) {
+        queryBuilder.andWhere(`${tableAlias}.${field} = :${field}`, { [field]: value });
+      }
+    });
 
     return queryBuilder;
   }
