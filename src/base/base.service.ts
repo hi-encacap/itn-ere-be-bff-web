@@ -53,13 +53,15 @@ export class BaseService {
     key: string,
     ...fields: string[]
   ) {
+    let newQueryBuilder = queryBuilder;
+
     fields.forEach((field) => {
       const value = query[key];
 
       if (Array.isArray(value)) {
-        queryBuilder = this.setInOperator(queryBuilder, value, `${tableAlias}.${field}`);
+        newQueryBuilder = this.setInOperator(queryBuilder, value, `${tableAlias}.${field}`);
       } else if (value) {
-        queryBuilder.andWhere(`${tableAlias}.${field} = :${field}`, { [field]: value });
+        newQueryBuilder.andWhere(`${tableAlias}.${field} = :${field}`, { [field]: value });
       }
     });
 
