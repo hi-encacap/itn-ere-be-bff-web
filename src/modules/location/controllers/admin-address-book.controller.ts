@@ -13,7 +13,7 @@ export class AdminAddressBookController {
   constructor(private readonly addressBookService: AddressBookService) {}
 
   @Get()
-  async index(@Query() query: AddressBookListQueryDto, @User() user: IUser) {
+  index(@Query() query: AddressBookListQueryDto, @User() user: IUser) {
     return this.addressBookService.getAll({
       ...query,
       websiteId: user.websiteId,
@@ -21,7 +21,7 @@ export class AdminAddressBookController {
   }
 
   @Delete(':id')
-  async delete(@Param() { id }: AddressBookDeleteParamDto) {
+  delete(@Param() { id }: AddressBookDeleteParamDto) {
     return this.addressBookService.delete(id);
   }
 }
