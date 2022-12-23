@@ -16,4 +16,6 @@ export class WardEntity extends BaseEntityWithPrimaryCodeColumn {
   @ManyToOne(() => DistrictEntity, (district) => district.wards)
   @JoinColumn({ name: 'district_code', referencedColumnName: 'code' })
   district: DistrictEntity;
+
+  websiteId?: number;
 }

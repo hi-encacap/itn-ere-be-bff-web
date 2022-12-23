@@ -38,6 +38,10 @@ export class WardService extends BaseService {
       queryBuilder.andWhere('ward.ghnRefId = :ghnRefId', { ghnRefId: query.ghnRefId });
     }
 
+    if (query.websiteId) {
+      queryBuilder.andWhere('wardWebsite.websiteId = :websiteId', { websiteId: query.websiteId });
+    }
+
     const record = await queryBuilder.getOne();
 
     if (!record && throwError) {
