@@ -25,6 +25,7 @@ export class CategoryCreateBodyDto {
   @IsEnum(CATEGORY_GROUP_ENUM)
   @ApiProperty({
     enum: CATEGORY_GROUP_ENUM,
+    enumName: 'CATEGORY_GROUP_ENUM',
   })
   categoryGroupCode: CATEGORY_GROUP_ENUM;
 }

@@ -49,11 +49,7 @@ export class CategoryService extends BaseService {
     let queryBuilder = this.getQueryBuilder();
 
     if (query.websiteId) {
-      queryBuilder.andWhere('user.websiteId = :websiteId', { websiteId: query.websiteId });
-    }
-
-    if (query.userId) {
-      queryBuilder.andWhere('user.id = :userId', { userId: query.userId });
+      queryBuilder.andWhere('website.id = :websiteId', { websiteId: query.websiteId });
     }
 
     if (query.categoryGroupCodes) {
@@ -96,7 +92,7 @@ export class CategoryService extends BaseService {
 
     const record = await this.categoryRepository.save({
       ...body,
-      userId: user.id,
+      websiteId: user.websiteId,
     });
     const category = await this.getOne({ code: record.code });
 
@@ -109,11 +105,8 @@ export class CategoryService extends BaseService {
     return category;
   }
 
-  async update(code: string, body: CategoryUpdateBodyDto, user: IUser) {
-    await this.categoryRepository.update(code, {
-      ...body,
-      userId: user.id,
-    });
+  async update(code: string, body: CategoryUpdateBodyDto) {
+    await this.categoryRepository.update(code, body);
 
     const category = await this.getOne({ code });
 
@@ -134,8 +127,8 @@ export class CategoryService extends BaseService {
   private getQueryBuilder() {
     return this.categoryRepository
       .createQueryBuilder('category')
-      .leftJoinAndSelect('category.user', 'user')
       .leftJoinAndSelect('category.thumbnail', 'thumbnail')
+      .leftJoinAndMapOne('category.website', WebsiteEntity, 'website', 'website.id = category.websiteId')
       .leftJoin(UserEntity, 'thumbnailUser', 'thumbnailUser.id = thumbnail.userId')
       .leftJoin(WebsiteEntity, 'thumbnailUserWebsite', 'thumbnailUserWebsite.id = thumbnailUser.websiteId')
       .leftJoin(
