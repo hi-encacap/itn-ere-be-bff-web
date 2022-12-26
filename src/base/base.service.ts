@@ -22,7 +22,7 @@ export class BaseService {
     values: unknown[],
     ...fields: string[]
   ): SelectQueryBuilder<T> {
-    if (!fields.length || !values.length) {
+    if (!fields.length || !values?.length) {
       return queryBuilder;
     }
 

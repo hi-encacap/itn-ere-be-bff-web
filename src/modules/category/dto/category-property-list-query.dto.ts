@@ -13,6 +13,13 @@ export class CategoryPropertyListQueryDto extends BaseListQueryDto {
   categoryId?: number;
 
   @IsOptional()
+  @IsNumber(undefined, {
+    each: true,
+  })
+  @Type(() => Number)
+  categoryIds?: number[];
+
+  @IsOptional()
   @IsNumber()
   @Type(() => Number)
   websiteId?: number;
