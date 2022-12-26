@@ -1,4 +1,4 @@
-import { BaseEntityWithPrimaryCodeColumn } from 'src/base/base.entity';
+import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
 import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
@@ -7,9 +7,12 @@ import { CategoryGroupEntity } from './category-group.entity';
 import { CategoryPropertyEntity } from './category-property.entity';
 
 @Entity({ name: 'categories' })
-export class CategoryEntity extends BaseEntityWithPrimaryCodeColumn {
+export class CategoryEntity extends BaseEntityWithPrimaryGeneratedColumn {
   @Column()
   name: string;
+
+  @Column({ name: 'code', unique: true })
+  code: string;
 
   @Column({ name: 'thumbnail_id' })
   thumbnailId: string;
