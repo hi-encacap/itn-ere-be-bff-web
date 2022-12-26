@@ -26,17 +26,7 @@ export class CategoryService extends BaseService {
   }
 
   async getOne(query: FindOptionsWhere<CategoryEntity>) {
-    const queryBuilder = this.getQueryBuilder();
-
-    if (query.code) {
-      queryBuilder.andWhere('category.code = :code', { code: query.code });
-    }
-
-    if (query.websiteId) {
-      queryBuilder.andWhere('user.websiteId = :websiteId', { websiteId: query.websiteId });
-    }
-
-    const record = await queryBuilder.getOne();
+    const record = await this.getQueryBuilder().where(query).getOne();
 
     if (!record) {
       throw new NotFoundException('CATEGORY_NOT_FOUND');
