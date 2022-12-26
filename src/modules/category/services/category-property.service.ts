@@ -31,6 +31,7 @@ export class CategoryPropertyService extends BaseService {
 
     queryBuilder = this.setFilter(queryBuilder, query, 'categoryProperty', 'name');
     queryBuilder = this.setFilter(queryBuilder, query, 'categoryProperty', 'categoryId');
+    queryBuilder = this.setInOperator(queryBuilder, query.categoryIds, 'category.id');
     queryBuilder = this.setPagination(queryBuilder, query);
 
     return this.getManyAndCount(queryBuilder);
