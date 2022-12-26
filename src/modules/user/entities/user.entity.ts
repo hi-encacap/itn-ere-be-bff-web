@@ -1,12 +1,11 @@
 import { compare, hash } from 'bcrypt';
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
 import { CategoryGroupEntity } from 'src/modules/category/entities/category-group.entity';
-import { CategoryEntity } from 'src/modules/category/entities/category.entity';
 import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
 import { ContactEntity } from 'src/modules/contact/entities/contact.entity';
 import { IWebsite } from 'src/modules/website/constants/website.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
-import { Column, Entity, JoinColumn, ManyToOne as OneToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, ManyToOne as OneToOne } from 'typeorm';
 import { IRole, IUser } from '../interfaces/user.interface';
 import { UserRoleMappingEntity } from './user-role-mapping.entity';
 
@@ -56,10 +55,6 @@ export class UserEntity extends BaseEntityWithPrimaryGeneratedColumn implements 
   @OneToMany(() => CategoryGroupEntity, (categoryGroup) => categoryGroup.user)
   @JoinColumn({ name: 'category_group_code', referencedColumnName: 'code' })
   categoryGroups!: CategoryGroupEntity[];
-
-  @OneToMany(() => CategoryEntity, (category) => category.user)
-  @JoinColumn({ name: 'category_id', referencedColumnName: 'id' })
-  categories!: CategoryEntity[];
 
   @OneToOne(() => WebsiteEntity, (website) => website.users)
   @JoinColumn({ name: 'website_id', referencedColumnName: 'id' })
