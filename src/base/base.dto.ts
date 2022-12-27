@@ -34,7 +34,7 @@ export class BaseListQueryDto {
   @IsOptional()
   @IsEnum(ORDER_DIRECTION_ENUM)
   @Transform(({ value }) => value.toUpperCase())
-  orderDirection?: ORDER_DIRECTION_ENUM = ORDER_DIRECTION_ENUM.ASC;
+  orderDirection?: ORDER_DIRECTION_ENUM;
 }
 
 export class BaseListWithCodeQueryDto {
