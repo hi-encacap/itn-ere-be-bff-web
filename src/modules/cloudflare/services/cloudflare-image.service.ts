@@ -31,7 +31,7 @@ export class CloudflareImageService {
   }
 
   async uploadSingle(file: Express.Multer.File, user: UserEntity) {
-    const imageId = randomStringPrefix();
+    const imageId = randomStringPrefix(16);
 
     const record = await this.cloudflareImageRepository.save({
       id: imageId,

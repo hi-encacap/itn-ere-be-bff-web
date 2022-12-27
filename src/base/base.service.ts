@@ -1,3 +1,4 @@
+import { get } from 'lodash';
 import { parseBaseListQuery } from 'src/common/utils/request.util';
 import { IAlgoliaSearchFunction } from 'src/modules/algolia/interfaces/algolia.interface';
 import { FindOptionsWhere, SelectQueryBuilder } from 'typeorm';
@@ -21,7 +22,7 @@ export class BaseService {
     values: unknown[],
     ...fields: string[]
   ): SelectQueryBuilder<T> {
-    if (!fields.length || !values.length) {
+    if (!fields.length || !values?.length) {
       return queryBuilder;
     }
 
@@ -37,7 +38,7 @@ export class BaseService {
     query: FindOptionsWhere<BaseListQueryDto>,
     tableAlias: string,
   ): SelectQueryBuilder<T> {
-    const { orderBy = 'createdAt', orderDirection } = query;
+    const { orderBy = 'createdAt', orderDirection = ORDER_DIRECTION_ENUM.DESC } = query;
 
     if (orderBy) {
       queryBuilder.orderBy(`${tableAlias}.${orderBy}`, orderDirection as ORDER_DIRECTION_ENUM);
@@ -48,16 +49,20 @@ export class BaseService {
 
   setFilter<T = unknown>(
     queryBuilder: SelectQueryBuilder<T>,
-    query: FindOptionsWhere<BaseListQueryDto>,
+    query: FindOptionsWhere<BaseListQueryDto | unknown>,
     tableAlias: string,
     key: string,
     ...fields: string[]
   ) {
     let newQueryBuilder = queryBuilder;
+    const value = get(query, key, null);
+    const newFields = fields;
+
+    if (!fields.length) {
+      newFields.push(key);
+    }
 
     fields.forEach((field) => {
-      const value = query[key];
-
       if (Array.isArray(value)) {
         newQueryBuilder = this.setInOperator(queryBuilder, value, `${tableAlias}.${field}`);
       } else if (value) {
@@ -87,7 +92,7 @@ export class BaseService {
   generateGetAllResponse<T = unknown>(
     items: T[],
     totalItems: number,
-    query: FindOptionsWhere<BaseListQueryDto>,
+    query: FindOptionsWhere<BaseListQueryDto> = {},
   ) {
     const { page = 1, limit = 0 } = query;
     const totalPages = Math.ceil(totalItems / Number(limit));
