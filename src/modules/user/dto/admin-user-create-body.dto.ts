@@ -10,6 +10,8 @@ export class AdminUserCreateBodyDto extends UserCreateBodyDto {
   @IsNotEmpty()
   @Type(() => Number)
   @IsNumber({}, { each: true })
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    isArray: true,
+  })
   roleIds: number[];
 }
