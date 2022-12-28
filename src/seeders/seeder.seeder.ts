@@ -3,11 +3,13 @@ import { seeder } from 'nestjs-seeder';
 import { AppConfigModule } from 'src/configs/config.module';
 import { CategoryGroupWebsiteEntity } from 'src/modules/category/entities/category-group-website.entity';
 import { CategoryGroupEntity } from 'src/modules/category/entities/category-group.entity';
+import { CategoryPropertyEntity } from 'src/modules/category/entities/category-property.entity';
 import { CategoryEntity } from 'src/modules/category/entities/category.entity';
 import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
 import { CloudflareVariantWebsiteEntity } from 'src/modules/cloudflare/entities/cloudflare-variant-website.entity';
 import { CloudflareVariantEntity } from 'src/modules/cloudflare/entities/cloudflare-variant.entity';
 import { ContactEntity } from 'src/modules/contact/entities/contact.entity';
+import { EstateQuarterEntity } from 'src/modules/estate/entities/estate-quarter.entity';
 import { RoleEntity } from 'src/modules/user/entities/role.entity';
 import { UserRoleMappingEntity } from 'src/modules/user/entities/user-role-mapping.entity';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
@@ -16,6 +18,7 @@ import { PostgresDatabaseProviderModule } from 'src/providers/postgres/postgres.
 import { CategoryGroupWebsiteSeeder } from './category-group-website.seeder';
 import { CategoryGroupSeeder } from './category-group.seeder';
 import { CloudflareVariantSeeder } from './cloudflare-variant.seeder';
+import { EstateQuarterSeeder } from './estate-quarter.seeder';
 import { RoleSeeder } from './role.seeder';
 import { UserSeeder } from './user.seeder';
 import { WebsiteSeeder } from './website.seeder';
@@ -36,6 +39,8 @@ seeder({
       CategoryGroupEntity,
       CategoryGroupWebsiteEntity,
       CategoryEntity,
+      CategoryPropertyEntity,
+      EstateQuarterEntity,
     ]),
   ],
 }).run([
@@ -45,4 +50,5 @@ seeder({
   CloudflareVariantSeeder,
   CategoryGroupSeeder,
   CategoryGroupWebsiteSeeder,
+  EstateQuarterSeeder,
 ]);
