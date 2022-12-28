@@ -13,6 +13,8 @@ export class RootUserCreateBodyDto extends UserCreateBodyDto {
   @Type(() => Number)
   @IsNumber({}, { each: true })
   @Validate(RoleArrayNotExistsValidator, [ROLE_ENUM.ROOT, ROLE_ENUM.ADMIN, ROLE_ENUM.MANAGER])
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    isArray: true,
+  })
   roleIds: number[];
 }
