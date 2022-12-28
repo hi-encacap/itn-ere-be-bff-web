@@ -2,10 +2,22 @@
 
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsEmail, IsNotEmpty, IsNumber, IsString, Min, MinLength, Validate } from 'class-validator';
+import {
+  Allow,
+  IsDefined,
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsObject,
+  IsString,
+  Min,
+  MinLength,
+  Validate,
+} from 'class-validator';
 import { IWebsite } from 'src/modules/website/constants/website.interface';
 import { WebsiteNotExistsValidator } from 'src/modules/website/validators/website-not-exists.validator';
-import { IRole, IUser } from '../interfaces/user.interface';
+import { RoleEntity } from '../entities/role.entity';
+import { IUser } from '../interfaces/user.interface';
 import { EmailExistsValidator } from '../validators/email-exists.validator';
 import { UsernameExistsValidator } from '../validators/username-exists.validator';
 
@@ -46,7 +58,14 @@ export class UserCreateBodyDto implements IUser {
   @Validate(WebsiteNotExistsValidator)
   websiteId: number;
 
+  @Allow()
   id: number;
+
+  @Allow()
+  @IsObject()
   website: IWebsite;
-  roles: IRole[];
+
+  @IsDefined()
+  @Type(() => RoleEntity)
+  roles: RoleEntity[];
 }

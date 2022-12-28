@@ -12,7 +12,10 @@ export class RootCloudflareVariantCreateBodyDto {
   name: string;
 
   @IsEnum(CLOUDFLARE_VARIANT_FIT_ENUM)
-  @ApiProperty()
+  @ApiProperty({
+    enum: CLOUDFLARE_VARIANT_FIT_ENUM,
+    enumName: 'CLOUDFLARE_VARIANT_FIT_ENUM',
+  })
   fit: CLOUDFLARE_VARIANT_FIT_ENUM;
 
   @IsOptional()

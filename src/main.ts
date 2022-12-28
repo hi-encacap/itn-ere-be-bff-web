@@ -38,6 +38,7 @@ async function bootstrap() {
 
         return new UnprocessableEntityException(errorField);
       },
+      forbidUnknownValues: true,
     }),
   );
   app.useGlobalInterceptors(new ResponseInterceptor());

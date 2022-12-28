@@ -18,6 +18,14 @@ module.exports = {
     jest: true,
   },
   ignorePatterns: ['.eslintrc.js'],
+  overrides: [
+    {
+      files: ['**/seeders/**/*', '**/migrations/**/*'],
+      rules: {
+        '@darraghor/nestjs-typed/injectable-should-be-provided': 'off',
+      },
+    },
+  ],
   rules: {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
@@ -27,5 +35,6 @@ module.exports = {
     // Temporary disabled swagger rules
     '@darraghor/nestjs-typed/controllers-should-supply-api-tags': 'off',
     '@darraghor/nestjs-typed/api-method-should-specify-api-response': 'off',
+    '@darraghor/nestjs-typed/api-property-matches-property-optionality': 'off',
   },
 };
