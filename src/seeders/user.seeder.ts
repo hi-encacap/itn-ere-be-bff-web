@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { IUser } from 'encacap/dist/re';
 import { Seeder } from 'nestjs-seeder';
 import AppConfigService from 'src/configs/config.service';
 import { RoleEntity } from 'src/modules/user/entities/role.entity';
 import { UserRoleMappingEntity } from 'src/modules/user/entities/user-role-mapping.entity';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
-import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { Repository } from 'typeorm';
 import { roleItems } from './role.seeder';
 import { websiteItems } from './website.seeder';

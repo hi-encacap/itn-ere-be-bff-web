@@ -5,8 +5,3 @@ export enum CLOUDFLARE_VARIANT_FIT_ENUM {
   CROP = 'crop',
   PAD = 'pad',
 }
-
-export enum CLOUDFLARE_VARIANT_ENUM {
-  PUBLIC = 'public',
-  SMALL = 'small',
-}

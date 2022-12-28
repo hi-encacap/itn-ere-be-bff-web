@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { IUser } from 'encacap/dist/re';
 import { AddWebsiteIdToParam } from 'src/common/decorators/add-website-id-to-param.decorator';
 import { User } from 'src/common/decorators/user.decorator';
 import { AdminGuard } from 'src/common/guards/admin.guard';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
-import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { WardListQueryDto } from '../dtos/ward-list-query.dto';
 import { WardWebsiteCreateBodyDto } from '../dtos/ward-website-create-body.dto';
 import { WardWebsiteDeleteParamDto } from '../dtos/ward-website-delete-param.dto';

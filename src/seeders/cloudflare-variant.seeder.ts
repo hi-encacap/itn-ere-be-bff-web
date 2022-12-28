@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { DEFAULT_CLOUDFLARE_VARIANT_ENUM } from 'encacap/dist/re';
 import { Seeder } from 'nestjs-seeder';
-import {
-  CLOUDFLARE_VARIANT_ENUM,
-  CLOUDFLARE_VARIANT_FIT_ENUM,
-} from 'src/modules/cloudflare/constants/cloudflare-variant.constant';
+import { CLOUDFLARE_VARIANT_FIT_ENUM } from 'src/modules/cloudflare/constants/cloudflare-variant.constant';
 import { CloudflareVariantWebsiteEntity } from 'src/modules/cloudflare/entities/cloudflare-variant-website.entity';
 import { CloudflareVariantEntity } from 'src/modules/cloudflare/entities/cloudflare-variant.entity';
 import { ICloudflareVariant } from 'src/modules/cloudflare/interfaces/cloudflare-variant.interface';
@@ -13,14 +11,14 @@ import { Repository } from 'typeorm';
 
 const variantItems: ICloudflareVariant[] = [
   {
-    code: CLOUDFLARE_VARIANT_ENUM.PUBLIC,
+    code: DEFAULT_CLOUDFLARE_VARIANT_ENUM.PUBLIC,
     fit: CLOUDFLARE_VARIANT_FIT_ENUM.SCALE_DOWN,
     width: null,
     height: null,
     isDefault: true,
   },
   {
-    code: CLOUDFLARE_VARIANT_ENUM.SMALL,
+    code: DEFAULT_CLOUDFLARE_VARIANT_ENUM.SMALL,
     fit: CLOUDFLARE_VARIANT_FIT_ENUM.SCALE_DOWN,
     width: 96,
     height: null,

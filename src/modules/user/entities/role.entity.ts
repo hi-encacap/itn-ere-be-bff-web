@@ -1,6 +1,6 @@
+import { IRole } from 'encacap/dist/re';
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
-import { IRole } from '../interfaces/user.interface';
 import { UserRoleMappingEntity } from './user-role-mapping.entity';
 
 @Entity({ name: 'roles' })

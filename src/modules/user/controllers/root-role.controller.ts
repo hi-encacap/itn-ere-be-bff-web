@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { IRole } from '../interfaces/user.interface';
+import { IRole } from 'encacap/dist/re';
 import { RoleService } from '../services/role.service';
 
 @Controller('root/roles')

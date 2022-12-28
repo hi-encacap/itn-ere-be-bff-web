@@ -14,10 +14,9 @@ import {
   MinLength,
   Validate,
 } from 'class-validator';
-import { IWebsite } from 'src/modules/website/constants/website.interface';
+import { IUser, IWebsite } from 'encacap/dist/re';
 import { WebsiteNotExistsValidator } from 'src/modules/website/validators/website-not-exists.validator';
 import { RoleEntity } from '../entities/role.entity';
-import { IUser } from '../interfaces/user.interface';
 import { EmailExistsValidator } from '../validators/email-exists.validator';
 import { UsernameExistsValidator } from '../validators/username-exists.validator';
 

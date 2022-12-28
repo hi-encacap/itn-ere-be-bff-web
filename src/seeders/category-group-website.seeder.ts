@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { IUser } from 'encacap/dist/re';
 import { Seeder } from 'nestjs-seeder';
 import { CategoryGroupWebsiteEntity } from 'src/modules/category/entities/category-group-website.entity';
 import { CategoryGroupEntity } from 'src/modules/category/entities/category-group.entity';
-import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Repository } from 'typeorm';
 

@@ -1,8 +1,8 @@
-import { Inject, Injectable, UnprocessableEntityException, forwardRef } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { IUser } from 'encacap/dist/re';
 import { BaseService } from 'src/base/base.service';
 import { slugify } from 'src/common/utils/helpers.util';
-import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
 import { LOCATION_ERROR_CODE } from '../constants/location-error-code.constant';

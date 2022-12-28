@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { IRole } from 'encacap/dist/re';
 import { omit } from 'lodash';
 import { Seeder } from 'nestjs-seeder';
 import { ROLE_ENUM } from 'src/common/constants/role.constant';
 import { RoleEntity } from 'src/modules/user/entities/role.entity';
 import { UserRoleMappingEntity } from 'src/modules/user/entities/user-role-mapping.entity';
-import { IRole } from 'src/modules/user/interfaces/user.interface';
 import { Repository } from 'typeorm';
 
 export const roleItems: IRole[] = [

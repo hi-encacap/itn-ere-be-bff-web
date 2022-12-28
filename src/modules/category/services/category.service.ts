@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { IUser } from 'encacap/dist/re';
 import { BaseService } from 'src/base/base.service';
 import { slugify } from 'src/common/utils/helpers.util';
 import { AlgoliaCategoryService } from 'src/modules/algolia/services/algolia-category.service';
@@ -7,7 +8,6 @@ import { CloudflareVariantWebsiteEntity } from 'src/modules/cloudflare/entities/
 import { CloudflareVariantEntity } from 'src/modules/cloudflare/entities/cloudflare-variant.entity';
 import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
-import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { CategoryCreateBodyDto } from '../dto/category-create-body.dto';

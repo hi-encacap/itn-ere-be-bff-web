@@ -1,3 +1,4 @@
+import { ESTATE_STATUS_ENUM } from 'encacap/dist/re';
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
 import { CategoryEntity } from 'src/modules/category/entities/category.entity';
 import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
@@ -7,7 +8,6 @@ import { ProvinceEntity } from 'src/modules/location/entities/province.entity';
 import { WardEntity } from 'src/modules/location/entities/ward.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
-import { ESTATE_STATUS_ENUM } from '../constants/estate.constant';
 import { EstateImageEntity } from './estate-image.entity';
 import { EstatePropertyEntity } from './estate-property.entity';
 import { EstateQuarterEntity } from './estate-quarter.entity';

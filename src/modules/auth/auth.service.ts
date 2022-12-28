@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { IUser } from 'encacap/dist/re';
 import { omit } from 'lodash';
 import { TokenService } from '../token/services/token.service';
-import { IUser } from '../user/interfaces/user.interface';
 import { UserService } from '../user/services/user.service';
 import { IJwtPayload } from './interfaces/auth.interface';
 

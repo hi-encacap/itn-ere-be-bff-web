@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { IUser } from 'encacap/dist/re';
 import { BaseService } from 'src/base/base.service';
 import { AlgoliaContactService } from 'src/modules/algolia/services/algolia-contact.service';
 import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
 import { CloudflareVariantEntity } from 'src/modules/cloudflare/entities/cloudflare-variant.entity';
 import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
-import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
 import { ContactCreateBodyDto } from '../dto/contact-create-body.dto';

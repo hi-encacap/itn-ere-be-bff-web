@@ -1,8 +1,8 @@
 import { Controller, Delete, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { IUser } from 'encacap/dist/re';
 import { User } from 'src/common/decorators/user.decorator';
 import { AdminGuard } from 'src/common/guards/admin.guard';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
-import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { AddressBookDeleteParamDto } from '../dtos/address-book-delete-param.dto';
 import { AddressBookListQueryDto } from '../dtos/address-book-list-query.dto';
 import { AddressBookService } from '../services/address-book.service';
