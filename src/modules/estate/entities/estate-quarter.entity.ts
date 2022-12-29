@@ -1,4 +1,4 @@
-import { ESTATE_QUARTER_ENUM } from 'encacap/dist/re/estate';
+import { ESTATE_QUARTER_ENUM } from 'encacap/dist/re';
 import { BaseEntityWithPrimaryCodeColumn } from 'src/base/base.entity';
 import { Column, Entity } from 'typeorm';
 
