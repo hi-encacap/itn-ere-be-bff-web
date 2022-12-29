@@ -40,7 +40,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "dayjs": "^1.11.6",
-    "encacap": "^1.2.4",
+    "encacap": "^1.2.6",
     "form-data": "^4.0.0",
     "joi": "^17.6.4",
     "lodash": "^4.17.21",

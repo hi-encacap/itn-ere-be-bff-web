@@ -10,6 +10,7 @@ import { CloudflareVariantWebsiteEntity } from 'src/modules/cloudflare/entities/
 import { CloudflareVariantEntity } from 'src/modules/cloudflare/entities/cloudflare-variant.entity';
 import { ContactEntity } from 'src/modules/contact/entities/contact.entity';
 import { EstateQuarterEntity } from 'src/modules/estate/entities/estate-quarter.entity';
+import { UnitPriceEntity } from 'src/modules/unit-price/entities/unit-price.entity';
 import { RoleEntity } from 'src/modules/user/entities/role.entity';
 import { UserRoleMappingEntity } from 'src/modules/user/entities/user-role-mapping.entity';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
@@ -20,6 +21,7 @@ import { CategoryGroupSeeder } from './category-group.seeder';
 import { CloudflareVariantSeeder } from './cloudflare-variant.seeder';
 import { EstateQuarterSeeder } from './estate-quarter.seeder';
 import { RoleSeeder } from './role.seeder';
+import { UnitPriceSeeder } from './unit-price.seeder';
 import { UserSeeder } from './user.seeder';
 import { WebsiteSeeder } from './website.seeder';
 
@@ -41,6 +43,7 @@ seeder({
       CategoryEntity,
       CategoryPropertyEntity,
       EstateQuarterEntity,
+      UnitPriceEntity,
     ]),
   ],
 }).run([
@@ -51,4 +54,5 @@ seeder({
   CategoryGroupSeeder,
   CategoryGroupWebsiteSeeder,
   EstateQuarterSeeder,
+  UnitPriceSeeder,
 ]);
