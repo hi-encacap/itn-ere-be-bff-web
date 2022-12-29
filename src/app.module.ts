@@ -19,6 +19,7 @@ import { ContactModule } from './modules/contact/contact.module';
 import { EstateModule } from './modules/estate/estate.module';
 import { LocationModule } from './modules/location/location.module';
 import { TokenModule } from './modules/token/token.module';
+import { UnitPriceModule } from './modules/unit-price/unit-price.module';
 import { UserModule } from './modules/user/user.module';
 import { WebsiteModule } from './modules/website/website.module';
 import { PostgresDatabaseProviderModule } from './providers/postgres/postgres.module';
@@ -62,6 +63,7 @@ import { PostgresDatabaseProviderModule } from './providers/postgres/postgres.mo
     CategoryModule,
     LocationModule,
     EstateModule,
+    UnitPriceModule,
   ],
   controllers: [],
   providers: [JwtStrategy, JwtService],
