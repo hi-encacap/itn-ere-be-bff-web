@@ -24,8 +24,11 @@ import { ProvinceService } from './services/province.service';
 import { WardWebsiteService } from './services/ward-website.service';
 import { WardService } from './services/ward.service';
 import { AddressBookWebsiteExistsValidator } from './validators/address-book-exists.validator';
+import { DistrictExistsValidator } from './validators/district-exists.validator';
 import { DistrictWebsiteExistsValidator } from './validators/district-website-exists.validator';
+import { ProvinceExistsValidator } from './validators/province-exists.validator';
 import { ProvinceWebsiteExistsValidator } from './validators/province-website-exists.validator';
+import { WardExistsValidator } from './validators/ward-exists.validator';
 import { WardWebsiteExistsValidator } from './validators/ward-website-exists.validator';
 
 @Module({
@@ -70,7 +73,10 @@ import { WardWebsiteExistsValidator } from './validators/ward-website-exists.val
     DistrictWebsiteExistsValidator,
     WardWebsiteExistsValidator,
     AddressBookWebsiteExistsValidator,
+    ProvinceExistsValidator,
+    DistrictExistsValidator,
+    WardExistsValidator,
   ],
-  exports: [],
+  exports: [ProvinceExistsValidator, DistrictExistsValidator, WardExistsValidator],
 })
 export class LocationModule {}
