@@ -1,13 +1,25 @@
 import { Type } from 'class-transformer';
-import { IsEnum, IsLatitude, IsLongitude, IsNumber, IsOptional, IsString, Validate } from 'class-validator';
+import {
+  IsArray,
+  IsEnum,
+  IsLatitude,
+  IsLongitude,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Validate,
+} from 'class-validator';
 import { ESTATE_QUARTER_ENUM, ESTATE_STATUS_ENUM, UNIT_PRICE_TYPE_ENUM } from 'encacap/dist/re';
 import { EXIST_VALIDATOR_TYPE } from 'src/common/constants/validator.constant';
 import { CategoryExistsValidator } from 'src/modules/category/validators/category-exists.validator';
+import { CategoryPropertyExistsValidator } from 'src/modules/category/validators/category-property-exists.validator';
+import { CloudflareImageNotExistsValidator } from 'src/modules/cloudflare/validators/cloudflare-image-not-exists.validator';
 import { ContactExistsValidator } from 'src/modules/contact/validators/contact-exists.validator';
 import { DistrictExistsValidator } from 'src/modules/location/validators/district-exists.validator';
 import { ProvinceExistsValidator } from 'src/modules/location/validators/province-exists.validator';
 import { WardExistsValidator } from 'src/modules/location/validators/ward-exists.validator';
 import { UnitPriceExistsValidator } from 'src/modules/unit-price/validators/unit-price-exists.validator';
+import { IEstateProperty } from '../interfaces/estate-property.interface';
 
 export class EstateCreateBodyDto {
   @IsString()
@@ -91,4 +103,18 @@ export class EstateCreateBodyDto {
   @IsOptional()
   @IsEnum(ESTATE_STATUS_ENUM)
   status?: ESTATE_STATUS_ENUM;
+
+  @IsArray()
+  @Type(() => IEstateProperty)
+  @Validate(CategoryPropertyExistsValidator, [EXIST_VALIDATOR_TYPE.EXISTS, 'id'], {
+    each: true,
+  })
+  properties!: IEstateProperty[];
+
+  @IsArray()
+  @Type(() => String)
+  @Validate(CloudflareImageNotExistsValidator, [EXIST_VALIDATOR_TYPE.NOT_EXISTS], {
+    each: true,
+  })
+  imageIds!: string[];
 }
