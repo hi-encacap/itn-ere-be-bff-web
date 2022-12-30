@@ -2,7 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CategoryModule } from '../category/category.module';
 import { LocationModule } from '../location/location.module';
-import { EstateController } from './controllers/estate.controller';
+import { UnitPriceModule } from '../unit-price/unit-price.module';
+import { AdminEstateController } from './controllers/admin-estate.controller';
 import { EstateImageEntity } from './entities/estate-image.entity';
 import { EstatePropertyEntity } from './entities/estate-property.entity';
 import { EstateQuarterEntity } from './entities/estate-quarter.entity';
@@ -14,8 +15,9 @@ import { EstateService } from './services/estate.service';
     TypeOrmModule.forFeature([EstateQuarterEntity, EstateEntity, EstatePropertyEntity, EstateImageEntity]),
     LocationModule,
     CategoryModule,
+    UnitPriceModule,
   ],
-  controllers: [EstateController],
+  controllers: [AdminEstateController],
   providers: [EstateService],
 })
 export class EstateModule {}

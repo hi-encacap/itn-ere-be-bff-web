@@ -6,6 +6,7 @@ import { ContactEntity } from 'src/modules/contact/entities/contact.entity';
 import { DistrictEntity } from 'src/modules/location/entities/district.entity';
 import { ProvinceEntity } from 'src/modules/location/entities/province.entity';
 import { WardEntity } from 'src/modules/location/entities/ward.entity';
+import { UnitPriceEntity } from 'src/modules/unit-price/entities/unit-price.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { EstateImageEntity } from './estate-image.entity';
@@ -46,10 +47,16 @@ export class EstateEntity extends BaseEntityWithPrimaryGeneratedColumn {
   title: string;
 
   @Column({ name: 'square' })
-  square: number;
+  area: number;
+
+  @Column({ name: 'area_unit_id' })
+  areaUnitId: number;
 
   @Column({ name: 'price' })
   price: string;
+
+  @Column({ name: 'price_unit_id' })
+  priceUnitId: number;
 
   @Column({ name: 'custom_id' })
   customId: string;
@@ -110,6 +117,14 @@ export class EstateEntity extends BaseEntityWithPrimaryGeneratedColumn {
   @ManyToOne(() => WardEntity)
   @JoinColumn({ name: 'ward_code', referencedColumnName: 'code' })
   ward: WardEntity;
+
+  @ManyToOne(() => UnitPriceEntity)
+  @JoinColumn({ name: 'area_unit_id', referencedColumnName: 'id' })
+  areaUnit: UnitPriceEntity;
+
+  @ManyToOne(() => UnitPriceEntity)
+  @JoinColumn({ name: 'price_unit_id', referencedColumnName: 'id' })
+  priceUnit: UnitPriceEntity;
 
   @OneToMany(() => EstatePropertyEntity, (estateProperty) => estateProperty.estate)
   @JoinColumn({ name: 'id', referencedColumnName: 'estate_id' })

@@ -1,12 +1,13 @@
 import { Type } from 'class-transformer';
 import { IsEnum, IsLatitude, IsLongitude, IsNumber, IsOptional, IsString, Validate } from 'class-validator';
-import { ESTATE_QUARTER_ENUM, ESTATE_STATUS_ENUM } from 'encacap/dist/re';
+import { ESTATE_QUARTER_ENUM, ESTATE_STATUS_ENUM, UNIT_PRICE_TYPE_ENUM } from 'encacap/dist/re';
 import { EXIST_VALIDATOR_TYPE } from 'src/common/constants/validator.constant';
 import { CategoryExistsValidator } from 'src/modules/category/validators/category-exists.validator';
 import { ContactExistsValidator } from 'src/modules/contact/validators/contact-exists.validator';
 import { DistrictExistsValidator } from 'src/modules/location/validators/district-exists.validator';
 import { ProvinceExistsValidator } from 'src/modules/location/validators/province-exists.validator';
 import { WardExistsValidator } from 'src/modules/location/validators/ward-exists.validator';
+import { UnitPriceExistsValidator } from 'src/modules/unit-price/validators/unit-price-exists.validator';
 
 export class EstateCreateBodyDto {
   @IsString()
@@ -39,20 +40,20 @@ export class EstateCreateBodyDto {
 
   @IsNumber()
   @Type(() => Number)
-  square!: number;
+  area!: number;
 
-  // TODO: Add validator.
   @IsNumber()
   @Type(() => Number)
-  squareUnitId!: number;
+  @Validate(UnitPriceExistsValidator, [EXIST_VALIDATOR_TYPE.EXISTS, UNIT_PRICE_TYPE_ENUM.AREA])
+  areaUnitId!: number;
 
   @IsNumber()
   @Type(() => Number)
   price!: number;
 
-  // TODO: Add validator.
   @IsNumber()
   @Type(() => Number)
+  @Validate(UnitPriceExistsValidator, [EXIST_VALIDATOR_TYPE.EXISTS, UNIT_PRICE_TYPE_ENUM.PRICE])
   priceUnitId!: number;
 
   @IsOptional()
