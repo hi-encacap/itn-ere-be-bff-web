@@ -7,8 +7,6 @@ import { IAlgoliaEstate } from 'src/modules/algolia/interfaces/algolia.interface
 import { AlgoliaEstateService } from 'src/modules/algolia/services/algolia-estate.service';
 import { CategoryPropertyEntity } from 'src/modules/category/entities/category-property.entity';
 import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
-import { CloudflareVariantWebsiteEntity } from 'src/modules/cloudflare/entities/cloudflare-variant-website.entity';
-import { CloudflareVariantEntity } from 'src/modules/cloudflare/entities/cloudflare-variant.entity';
 import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { ESTATE_ERROR_CODE_ENUM } from '../constants/estate-error-code.constant';
@@ -66,10 +64,10 @@ export class EstateService extends BaseService {
 
     const [records, total] = await queryBuilder.getManyAndCount();
 
-    let formattedRecords = this.cloudflareImageService.mapVariantToImages(records, 'images');
-    formattedRecords = this.cloudflareImageService.mapVariantToImage(records, 'avatar');
+    await this.cloudflareImageService.mapVariantToImages(records, 'images');
+    await this.cloudflareImageService.mapVariantToImage(records, 'avatar');
 
-    return this.generateGetAllResponse(formattedRecords, total, query);
+    return this.generateGetAllResponse(records, total, query);
   }
 
   private get queryBuilder() {
@@ -91,17 +89,6 @@ export class EstateService extends BaseService {
           CloudflareImageEntity,
           'cloudflareImage',
           'cloudflareImage.id = image.imageId',
-        )
-        .leftJoin(
-          CloudflareVariantWebsiteEntity,
-          'variantWebsite',
-          'variantWebsite.websiteId = estate.websiteId',
-        )
-        .leftJoinAndMapMany(
-          'cloudflareImage.variants',
-          CloudflareVariantEntity,
-          'variant',
-          'variant.code = variantWebsite.variantCode',
         )
         // Locations
         .leftJoinAndSelect('estate.province', 'province')

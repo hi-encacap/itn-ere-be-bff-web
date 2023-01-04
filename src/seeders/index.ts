@@ -9,7 +9,13 @@ import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflar
 import { CloudflareVariantWebsiteEntity } from 'src/modules/cloudflare/entities/cloudflare-variant-website.entity';
 import { CloudflareVariantEntity } from 'src/modules/cloudflare/entities/cloudflare-variant.entity';
 import { ContactEntity } from 'src/modules/contact/entities/contact.entity';
+import { EstateImageEntity } from 'src/modules/estate/entities/estate-image.entity';
+import { EstatePropertyEntity } from 'src/modules/estate/entities/estate-property.entity';
 import { EstateQuarterEntity } from 'src/modules/estate/entities/estate-quarter.entity';
+import { EstateEntity } from 'src/modules/estate/entities/estate.entity';
+import { DistrictEntity } from 'src/modules/location/entities/district.entity';
+import { ProvinceEntity } from 'src/modules/location/entities/province.entity';
+import { WardEntity } from 'src/modules/location/entities/ward.entity';
 import { UnitPriceEntity } from 'src/modules/unit-price/entities/unit-price.entity';
 import { RoleEntity } from 'src/modules/user/entities/role.entity';
 import { UserRoleMappingEntity } from 'src/modules/user/entities/user-role-mapping.entity';
@@ -44,6 +50,12 @@ seeder({
       CategoryPropertyEntity,
       EstateQuarterEntity,
       UnitPriceEntity,
+      EstatePropertyEntity,
+      EstateImageEntity,
+      EstateEntity,
+      ProvinceEntity,
+      DistrictEntity,
+      WardEntity,
     ]),
   ],
 }).run([

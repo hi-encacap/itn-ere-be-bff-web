@@ -90,26 +90,23 @@ export class CloudflareImageService {
     });
   }
 
-  mapVariantToImage<T>(object: T, imagePath: string) {
+  async mapVariantToImage<T>(object: T, imagePath: string) {
     if (Array.isArray(object)) {
-      return object.map((item) => this.mapVariantToImage(item, imagePath));
+      return Promise.all(object.map((item) => this.mapVariantToImage(item, imagePath)));
     }
 
-    const variantPath = `${imagePath}.variants`;
-
     const image = get(object, imagePath);
-    const variants = get(object, variantPath);
 
-    if (!variants || !image || typeof object !== 'object') {
+    if (!image || typeof object !== 'object') {
       return object;
     }
 
-    return set(object, imagePath, this.transformImageToURL(image));
+    return set(object, imagePath, await this.transformImageToURL(image));
   }
 
-  mapVariantToImages<T>(object: T, imagePath: string) {
+  async mapVariantToImages<T>(object: T, imagePath: string) {
     if (Array.isArray(object)) {
-      return object.map((item) => this.mapVariantToImages(item, imagePath));
+      return Promise.all(object.map((item) => this.mapVariantToImages(item, imagePath)));
     }
 
     const images = get(object, imagePath);
@@ -118,17 +115,17 @@ export class CloudflareImageService {
       return object;
     }
 
-    return set(
-      object,
-      imagePath,
-      images.map((image: CloudflareImageEntity) => this.transformImageToURL(image)),
-    );
+    return set(object, imagePath, await Promise.all(images.map((image) => this.transformImageToURL(image))));
   }
 
-  private transformImageToURL(image: CloudflareImageEntity) {
-    const { id, variants } = image;
+  private async transformImageToURL(image: CloudflareImageEntity) {
+    const { id, websiteId } = image;
 
-    const newVariants = variants.reduce((acc, variant) => {
+    const imageVariants = await this.cloudflareVariantService.getAll({
+      websiteId,
+    });
+
+    const newVariants = imageVariants.reduce((acc, variant) => {
       return {
         ...acc,
         [variant.code]: `${this.imageURL}/${id}/${variant.code}`,

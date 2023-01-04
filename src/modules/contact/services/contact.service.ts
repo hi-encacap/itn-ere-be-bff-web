@@ -4,7 +4,6 @@ import { IUser } from 'encacap/dist/re';
 import { BaseService } from 'src/base/base.service';
 import { AlgoliaContactService } from 'src/modules/algolia/services/algolia-contact.service';
 import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
-import { CloudflareVariantEntity } from 'src/modules/cloudflare/entities/cloudflare-variant.entity';
 import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
@@ -57,7 +56,7 @@ export class ContactService extends BaseService {
 
     const [contacts, total] = await queryBuilder.getManyAndCount();
 
-    this.cloudflareImageService.mapVariantToImage(contacts, 'avatar');
+    await this.cloudflareImageService.mapVariantToImage(contacts, 'avatar');
 
     return this.generateGetAllResponse(contacts, total, query);
   }
@@ -77,7 +76,6 @@ export class ContactService extends BaseService {
       .leftJoin(UserEntity, 'user', 'user.id = contact.userId')
       .leftJoinAndMapOne('contact.website', WebsiteEntity, 'website', 'website.id = user.websiteId')
       .leftJoinAndMapOne('contact.avatar', CloudflareImageEntity, 'avatar', 'avatar.id = contact.avatarId')
-      .leftJoinAndMapMany('avatar.variants', CloudflareVariantEntity, 'variant', 'variant.isDefault IS TRUE')
       .orderBy('contact.id', 'DESC');
   }
 

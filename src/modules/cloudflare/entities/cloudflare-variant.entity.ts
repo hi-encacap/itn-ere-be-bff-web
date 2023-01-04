@@ -20,5 +20,6 @@ export class CloudflareVariantEntity extends BaseEntityWithPrimaryCodeColumn imp
   @Column({ default: false, name: 'is_default' })
   isDefault: boolean;
 
+  websiteId?: number;
   websites: WebsiteEntity[];
 }

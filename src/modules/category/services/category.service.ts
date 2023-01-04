@@ -4,8 +4,6 @@ import { IUser } from 'encacap/dist/re';
 import { BaseService } from 'src/base/base.service';
 import { slugify } from 'src/common/utils/helpers.util';
 import { AlgoliaCategoryService } from 'src/modules/algolia/services/algolia-category.service';
-import { CloudflareVariantWebsiteEntity } from 'src/modules/cloudflare/entities/cloudflare-variant-website.entity';
-import { CloudflareVariantEntity } from 'src/modules/cloudflare/entities/cloudflare-variant.entity';
 import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { FindOptionsWhere, Repository } from 'typeorm';
@@ -67,7 +65,7 @@ export class CategoryService extends BaseService {
 
     const [categories, items] = await queryBuilder.getManyAndCount();
 
-    this.cloudflareImageService.mapVariantToImage(categories, 'thumbnail');
+    await this.cloudflareImageService.mapVariantToImage(categories, 'thumbnail');
 
     return this.generateGetAllResponse(categories, items, query);
   }
@@ -118,18 +116,6 @@ export class CategoryService extends BaseService {
       .createQueryBuilder('category')
       .leftJoinAndSelect('category.thumbnail', 'thumbnail')
       .leftJoinAndMapOne('category.website', WebsiteEntity, 'website', 'website.id = category.websiteId')
-      .leftJoin(WebsiteEntity, 'thumbnailWebsite', 'thumbnailWebsite.id = thumbnail.websiteId')
-      .leftJoin(
-        CloudflareVariantWebsiteEntity,
-        'thumbnailVariantWebsite',
-        'thumbnailVariantWebsite.websiteId = thumbnailWebsite.id',
-      )
-      .leftJoinAndMapMany(
-        'thumbnail.variants',
-        CloudflareVariantEntity,
-        'thumbnailVariant',
-        'thumbnailVariant.code = thumbnailVariantWebsite.variantCode',
-      )
       .leftJoinAndSelect('category.categoryGroup', 'categoryGroup');
   }
 }

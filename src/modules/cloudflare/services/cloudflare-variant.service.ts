@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { pick } from 'lodash';
+import { omit, pick } from 'lodash';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { RootCloudflareVariantCreateBodyDto } from '../dto/root-cloudflare-variant-create-body.dto';
@@ -18,7 +18,13 @@ export class CloudflareVariantService {
   ) {}
 
   getAll(query: FindOptionsWhere<CloudflareVariantEntity>) {
-    return this.getQueryBuilder().where(query).getMany();
+    const queryBuilder = this.getQueryBuilder().where(omit(query, ['websiteId']));
+
+    if (query.websiteId) {
+      queryBuilder.andWhere('website.id = :websiteId', { websiteId: query.websiteId });
+    }
+
+    return queryBuilder.getMany();
   }
 
   getOne(query: FindOptionsWhere<CloudflareVariantEntity>) {
@@ -75,7 +81,7 @@ export class CloudflareVariantService {
   private getQueryBuilder() {
     return this.cloudflareVariantRepository
       .createQueryBuilder('variant')
-      .leftJoin(CloudflareVariantWebsiteEntity, 'variantWebsite', 'variantWebsite.variantId = variant.id')
+      .leftJoin(CloudflareVariantWebsiteEntity, 'variantWebsite', 'variantWebsite.variantCode = variant.code')
       .leftJoinAndMapMany(
         'variant.websites',
         WebsiteEntity,
