@@ -7,7 +7,6 @@ import { AlgoliaCategoryService } from 'src/modules/algolia/services/algolia-cat
 import { CloudflareVariantWebsiteEntity } from 'src/modules/cloudflare/entities/cloudflare-variant-website.entity';
 import { CloudflareVariantEntity } from 'src/modules/cloudflare/entities/cloudflare-variant.entity';
 import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
-import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { CategoryCreateBodyDto } from '../dto/category-create-body.dto';
@@ -119,12 +118,11 @@ export class CategoryService extends BaseService {
       .createQueryBuilder('category')
       .leftJoinAndSelect('category.thumbnail', 'thumbnail')
       .leftJoinAndMapOne('category.website', WebsiteEntity, 'website', 'website.id = category.websiteId')
-      .leftJoin(UserEntity, 'thumbnailUser', 'thumbnailUser.id = thumbnail.userId')
-      .leftJoin(WebsiteEntity, 'thumbnailUserWebsite', 'thumbnailUserWebsite.id = thumbnailUser.websiteId')
+      .leftJoin(WebsiteEntity, 'thumbnailWebsite', 'thumbnailWebsite.id = thumbnail.websiteId')
       .leftJoin(
         CloudflareVariantWebsiteEntity,
         'thumbnailVariantWebsite',
-        'thumbnailVariantWebsite.websiteId = thumbnailUserWebsite.id',
+        'thumbnailVariantWebsite.websiteId = thumbnailWebsite.id',
       )
       .leftJoinAndMapMany(
         'thumbnail.variants',

@@ -1,10 +1,15 @@
 import dayjs from 'dayjs';
 import { v4 as uuidv4 } from 'uuid';
 
-const randomStringPrefix = (length = 14) => {
+const randomStringPrefix = (length?: number) => {
   const dayPrefix = dayjs().format('YYMMDD');
   const uuidPrefix = uuidv4().replace(/-/g, '').toUpperCase();
   const resultLength = length;
+  const result = `${dayPrefix}${uuidPrefix}`;
+
+  if (!resultLength) {
+    return result;
+  }
 
   return `${dayPrefix}${uuidPrefix}`.slice(0, resultLength);
 };

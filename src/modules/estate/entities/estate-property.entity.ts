@@ -18,7 +18,9 @@ export class EstatePropertyEntity {
   @JoinColumn({ name: 'estate_id' })
   estate: EstateEntity;
 
-  @ManyToOne(() => CategoryPropertyEntity, (categoryProperty) => categoryProperty.estates)
+  @ManyToOne(() => CategoryPropertyEntity, (categoryProperty) => categoryProperty.estates, {
+    cascade: true,
+  })
   @JoinColumn({ name: 'category_property_id' })
   categoryProperty: CategoryPropertyEntity;
 }

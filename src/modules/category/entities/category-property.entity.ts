@@ -11,7 +11,7 @@ export class CategoryPropertyEntity extends BaseEntityWithPrimaryGeneratedColumn
   @Column({ name: 'category_id' })
   categoryId: number;
 
-  @ManyToOne(() => CategoryEntity, (category) => category.properties)
+  @ManyToOne(() => CategoryEntity)
   @JoinColumn({ name: 'category_id', referencedColumnName: 'id' })
   category: CategoryEntity;
 

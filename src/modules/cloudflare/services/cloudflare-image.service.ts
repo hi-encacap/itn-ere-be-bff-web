@@ -32,14 +32,14 @@ export class CloudflareImageService {
   }
 
   async uploadSingle(file: Express.Multer.File, user: UserEntity) {
-    const imageId = randomStringPrefix(16);
+    const imageId = randomStringPrefix();
 
     const record = await this.cloudflareImageRepository.save({
       id: imageId,
       status: CLOUDFLARE_IMAGE_STATUS_ENUM.PROCESSING,
       size: file.size,
       extension: file.mimetype,
-      userId: user.id,
+      websiteId: user.websiteId,
     });
 
     await this.uploadToCloudflare(imageId, file.mimetype, file.buffer);

@@ -5,7 +5,7 @@ import { CategoryGroupEntity } from 'src/modules/category/entities/category-grou
 import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
 import { ContactEntity } from 'src/modules/contact/entities/contact.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
-import { Column, Entity, JoinColumn, ManyToOne as OneToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, ManyToOne as OneToOne } from 'typeorm';
 import { UserRoleMappingEntity } from './user-role-mapping.entity';
 
 @Entity({ name: 'users' })
@@ -43,9 +43,6 @@ export class UserEntity extends BaseEntityWithPrimaryGeneratedColumn implements 
     cascade: ['remove', 'update'],
   })
   roles!: IRole[];
-
-  @OneToMany(() => CloudflareImageEntity, (cloudflareImage) => cloudflareImage.user)
-  cloudflareImages!: CloudflareImageEntity[];
 
   @OneToMany(() => ContactEntity, (contact) => contact.user)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
