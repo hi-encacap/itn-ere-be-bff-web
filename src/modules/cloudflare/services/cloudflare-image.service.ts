@@ -12,7 +12,7 @@ import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CLOUDFLARE_IMAGE_STATUS_ENUM } from '../constants/cloudflare-image-status.constant';
 import { CloudflareImageEntity } from '../entities/cloudflare-image.entity';
-import { CloudflareVariantEntity } from '../entities/cloudflare-variant.entity';
+import { CloudflareVariantService } from './cloudflare-variant.service';
 
 @Injectable()
 export class CloudflareImageService {
@@ -26,6 +26,7 @@ export class CloudflareImageService {
     // @InjectQueue('cloudflare-image')
     // private readonly cloudflareImageQueue: Queue,
     private readonly cloudflareConfigService: CloudflareConfigService,
+    private readonly cloudflareVariantService: CloudflareVariantService,
   ) {
     this.imageURL = this.cloudflareConfigService.images.delivery;
   }
@@ -89,31 +90,52 @@ export class CloudflareImageService {
     });
   }
 
-  getURLsFromVariants(imageId: string, variants: CloudflareVariantEntity[]) {
-    return variants.map((variant) => `${this.imageURL}/${imageId}/${variant.code}`);
-  }
-
-  mapVariantToImage<T>(object: T, imageKey: string) {
+  mapVariantToImage<T>(object: T, imagePath: string) {
     if (Array.isArray(object)) {
-      object.forEach((item) => this.mapVariantToImage(item, imageKey));
+      return object.map((item) => this.mapVariantToImage(item, imagePath));
     }
 
-    const variantKey = `${imageKey}.variants`;
+    const variantPath = `${imagePath}.variants`;
 
-    const variants = get(object, variantKey);
-    const image = get(object, imageKey);
+    const image = get(object, imagePath);
+    const variants = get(object, variantPath);
 
     if (!variants || !image || typeof object !== 'object') {
       return object;
     }
 
-    const { id } = image;
-    const imageVariantObject = variants.reduce((acc, variant: CloudflareVariantEntity) => {
-      acc[variant.code] = `${this.imageURL}/${id}/${variant.code}`;
-      return acc;
+    return set(object, imagePath, this.transformImageToURL(image));
+  }
+
+  mapVariantToImages<T>(object: T, imagePath: string) {
+    if (Array.isArray(object)) {
+      return object.map((item) => this.mapVariantToImages(item, imagePath));
+    }
+
+    const images = get(object, imagePath);
+
+    if (!images || typeof object !== 'object') {
+      return object;
+    }
+
+    return set(
+      object,
+      imagePath,
+      images.map((image: CloudflareImageEntity) => this.transformImageToURL(image)),
+    );
+  }
+
+  private transformImageToURL(image: CloudflareImageEntity) {
+    const { id, variants } = image;
+
+    const newVariants = variants.reduce((acc, variant) => {
+      return {
+        ...acc,
+        [variant.code]: `${this.imageURL}/${id}/${variant.code}`,
+      };
     }, {});
 
-    return set(object, variantKey, imageVariantObject);
+    return newVariants;
   }
 
   private getFileName(id: string, mimetype: string) {

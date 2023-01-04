@@ -53,12 +53,12 @@ export class EstateEntity extends BaseEntityWithPrimaryGeneratedColumn {
   areaUnitId: number;
 
   @Column({ name: 'price' })
-  price: string;
+  price: number;
 
   @Column({ name: 'price_unit_id' })
   priceUnitId: number;
 
-  @Column({ name: 'custom_id' })
+  @Column({ name: 'custom_id', nullable: true })
   customId: string;
 
   @Column({ name: 'description' })
@@ -71,12 +71,12 @@ export class EstateEntity extends BaseEntityWithPrimaryGeneratedColumn {
   contactId: number;
 
   @Column({ name: 'avatar_id', nullable: true })
-  avatarId: number;
+  avatarId: string;
 
-  @Column({ name: 'youtube_id' })
-  youtubeId: number;
+  @Column({ name: 'youtube_id', nullable: true })
+  youtubeId: string;
 
-  @Column({ name: 'quarter_code' })
+  @Column({ name: 'quarter_code', nullable: true })
   quarterCode: string;
 
   @Column({ name: 'website_id' })
@@ -126,11 +126,15 @@ export class EstateEntity extends BaseEntityWithPrimaryGeneratedColumn {
   @JoinColumn({ name: 'price_unit_id', referencedColumnName: 'id' })
   priceUnit: UnitPriceEntity;
 
-  @OneToMany(() => EstatePropertyEntity, (estateProperty) => estateProperty.estate)
+  @OneToMany(() => EstatePropertyEntity, (estateProperty) => estateProperty.estate, {
+    cascade: true,
+  })
   @JoinColumn({ name: 'id', referencedColumnName: 'estate_id' })
   properties: EstatePropertyEntity[];
 
-  @OneToMany(() => EstateImageEntity, (estateImage) => estateImage.estate)
+  @OneToMany(() => EstateImageEntity, (estateImage) => estateImage.estate, {
+    cascade: true,
+  })
   @JoinColumn({ name: 'id', referencedColumnName: 'estate_id' })
   images: EstateImageEntity[];
 }

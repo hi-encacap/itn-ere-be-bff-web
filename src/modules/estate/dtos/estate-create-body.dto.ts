@@ -14,7 +14,7 @@ import { EXIST_VALIDATOR_TYPE } from 'src/common/constants/validator.constant';
 import { CategoryExistsValidator } from 'src/modules/category/validators/category-exists.validator';
 import { CategoryPropertyExistsValidator } from 'src/modules/category/validators/category-property-exists.validator';
 import { CloudflareImageNotExistsValidator } from 'src/modules/cloudflare/validators/cloudflare-image-not-exists.validator';
-import { ContactExistsValidator } from 'src/modules/contact/validators/contact-exists.validator';
+import { ContactNotExistsValidator } from 'src/modules/contact/validators/contact-not-exists.validator';
 import { DistrictExistsValidator } from 'src/modules/location/validators/district-exists.validator';
 import { ProvinceExistsValidator } from 'src/modules/location/validators/province-exists.validator';
 import { WardExistsValidator } from 'src/modules/location/validators/ward-exists.validator';
@@ -82,7 +82,7 @@ export class EstateCreateBodyDto {
 
   @IsNumber()
   @Type(() => Number)
-  @Validate(ContactExistsValidator, [EXIST_VALIDATOR_TYPE.EXISTS])
+  @Validate(ContactNotExistsValidator, [EXIST_VALIDATOR_TYPE.EXISTS])
   contactId!: number;
 
   @IsString()
@@ -92,8 +92,9 @@ export class EstateCreateBodyDto {
   @IsString()
   youtubeId?: string;
 
+  @IsOptional()
   @IsEnum(ESTATE_QUARTER_ENUM)
-  quarterCode!: ESTATE_QUARTER_ENUM;
+  quarterCode?: ESTATE_QUARTER_ENUM;
 
   @IsOptional()
   @IsNumber()

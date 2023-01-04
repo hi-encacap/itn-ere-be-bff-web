@@ -5,3 +5,5 @@ export enum CLOUDFLARE_VARIANT_FIT_ENUM {
   CROP = 'crop',
   PAD = 'pad',
 }
+
+export const CLOUDFLARE_VARIANT_URL_PATH = 'url';

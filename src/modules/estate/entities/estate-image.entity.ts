@@ -8,7 +8,7 @@ export class EstateImageEntity {
   estateId: number;
 
   @PrimaryColumn({ name: 'image_id' })
-  imageId: number;
+  imageId: string;
 
   // Relations
   @ManyToOne(() => EstateEntity, (estate) => estate.images)
