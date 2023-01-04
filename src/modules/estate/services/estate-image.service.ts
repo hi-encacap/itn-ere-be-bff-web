@@ -14,12 +14,18 @@ export class EstateImageService {
     return this.estateImageRepository.save(estateImage);
   }
 
-  bulkSave(imageIds: string[], estateId: number) {
+  async bulkSave(imageIds: string[], estateId: number) {
+    await this.bulkDelete(estateId);
+
     const estateImagesToSave: DeepPartial<EstateImageEntity>[] = imageIds.map((imageId) => ({
       imageId,
       estateId,
     }));
 
     return this.estateImageRepository.save(estateImagesToSave);
+  }
+
+  bulkDelete(estateId: number) {
+    return this.estateImageRepository.delete({ estateId });
   }
 }

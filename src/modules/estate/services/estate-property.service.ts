@@ -11,7 +11,9 @@ export class EstatePropertyService {
     private readonly estatePropertyRepository: Repository<EstatePropertyEntity>,
   ) {}
 
-  bulkSave(estateProperties: Partial<IEstateProperty>[], estateId: number) {
+  async bulkSave(estateProperties: Partial<IEstateProperty>[], estateId: number) {
+    await this.bulkDelete(estateId);
+
     const estatePropertiesToSave: Partial<EstatePropertyEntity>[] = estateProperties.map(
       (estateProperty) => ({
         ...estateProperty,
@@ -21,5 +23,9 @@ export class EstatePropertyService {
     );
 
     return this.estatePropertyRepository.save(estatePropertiesToSave);
+  }
+
+  bulkDelete(estateId: number) {
+    return this.estatePropertyRepository.delete({ estateId });
   }
 }

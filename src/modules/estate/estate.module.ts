@@ -13,6 +13,7 @@ import { EstateEntity } from './entities/estate.entity';
 import { EstateImageService } from './services/estate-image.service';
 import { EstatePropertyService } from './services/estate-property.service';
 import { EstateService } from './services/estate.service';
+import { EstateExistsValidator } from './validators/estate-exists.validator';
 
 @Module({
   imports: [
@@ -24,6 +25,6 @@ import { EstateService } from './services/estate.service';
     AlgoliaModule,
   ],
   controllers: [AdminEstateController],
-  providers: [EstateService, EstateImageService, EstatePropertyService],
+  providers: [EstateService, EstateImageService, EstatePropertyService, EstateExistsValidator],
 })
 export class EstateModule {}

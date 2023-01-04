@@ -23,7 +23,7 @@ export class BaseService {
     ...fields: string[]
   ): SelectQueryBuilder<T> {
     if (!fields.length || !values?.length) {
-      return queryBuilder;
+      values = [null];
     }
 
     fields.forEach((field) => {

@@ -133,7 +133,7 @@ export class EstateEntity extends BaseEntityWithPrimaryGeneratedColumn {
   properties: EstatePropertyEntity[];
 
   @OneToMany(() => EstateImageEntity, (estateImage) => estateImage.estate, {
-    cascade: true,
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'id', referencedColumnName: 'estate_id' })
   images: EstateImageEntity[];
