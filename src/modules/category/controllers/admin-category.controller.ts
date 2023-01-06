@@ -29,13 +29,13 @@ export class AdminCategoryController {
     return this.categoryService.create(body, user);
   }
 
-  @Put(':code')
+  @Put(':id')
   update(@AddWebsiteIdToParam() @Param() param: CategoryUpdateParamDto, @Body() body: CategoryUpdateBodyDto) {
-    return this.categoryService.update(param.code, body);
+    return this.categoryService.update(param.id, body);
   }
 
-  @Delete(':code')
+  @Delete(':id')
   delete(@AddWebsiteIdToParam() @Param() param: CategoryDeleteParamDto) {
-    return this.categoryService.delete(param.code);
+    return this.categoryService.delete(param.id);
   }
 }

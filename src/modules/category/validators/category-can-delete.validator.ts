@@ -11,10 +11,10 @@ interface CategoryCanDeleteValidatorValidationArguments extends ValidationArgume
 export class CategoryCanDeleteValidator implements ValidatorConstraintInterface {
   constructor(private readonly categoryService: CategoryService) {}
 
-  async validate(value: string, validationArguments?: CategoryCanDeleteValidatorValidationArguments) {
+  async validate(id: number, validationArguments?: CategoryCanDeleteValidatorValidationArguments) {
     try {
       const category = await this.categoryService.getOne({
-        code: value,
+        id,
         websiteId: Number(validationArguments?.object.websiteId),
       });
       return Boolean(category);

@@ -26,7 +26,7 @@ export class CategoryPropertyService extends BaseService {
     return queryBuilder.getOne();
   }
 
-  getAll(query: CategoryPropertyListQueryDto) {
+  async getAll(query: CategoryPropertyListQueryDto) {
     let queryBuilder = this.queryBuilder;
 
     queryBuilder = this.setFilter(queryBuilder, query, 'categoryProperty', 'name');
@@ -34,6 +34,8 @@ export class CategoryPropertyService extends BaseService {
     queryBuilder = this.setInOperator(queryBuilder, query.categoryIds, 'category.id');
     queryBuilder = this.setPagination(queryBuilder, query);
     queryBuilder = this.setSorting(queryBuilder, query, 'categoryProperty');
+
+    console.log(await this.getManyAndCount(queryBuilder));
 
     return this.getManyAndCount(queryBuilder);
   }
