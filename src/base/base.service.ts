@@ -23,7 +23,7 @@ export class BaseService {
     ...fields: string[]
   ): SelectQueryBuilder<T> {
     if (!fields.length || !values?.length) {
-      values = [null];
+      return queryBuilder;
     }
 
     fields.forEach((field) => {
@@ -81,7 +81,7 @@ export class BaseService {
   ) {
     if (query.searchValue) {
       const { hits } = await searchSynonyms(query.searchValue as string, [query.searchBy as string]);
-      const matchedIdentities = hits.map((item) => item.objectID);
+      const matchedIdentities = hits.length ? hits.map((item) => item.objectID) : [null];
 
       return this.setInOperator(queryBuilder, matchedIdentities, ...columns);
     }

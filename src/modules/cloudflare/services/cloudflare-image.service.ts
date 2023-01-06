@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 // import { InjectQueue } from '@nestjs/bull';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 // import { Queue } from 'bull';
 import FormData from 'form-data';
@@ -10,6 +10,7 @@ import { randomStringPrefix } from 'src/common/utils/helpers.util';
 import { CloudflareConfigService } from 'src/configs/cloudflare/cloudflare-config.service';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { Repository } from 'typeorm';
+import { CLOUDFLARE_IMAGE_ERROR_CODE } from '../constants/cloudflare-error-code.constant';
 import { CLOUDFLARE_IMAGE_STATUS_ENUM } from '../constants/cloudflare-image-status.constant';
 import { CloudflareImageEntity } from '../entities/cloudflare-image.entity';
 import { CloudflareVariantService } from './cloudflare-variant.service';
@@ -81,6 +82,7 @@ export class CloudflareImageService {
         id: imageId,
         status: CLOUDFLARE_IMAGE_STATUS_ENUM.PROCESSING_ERROR,
       });
+      throw new UnprocessableEntityException(CLOUDFLARE_IMAGE_ERROR_CODE.IMAGE_FAILED_TO_PROCESS);
     }
   }
 

@@ -16,6 +16,17 @@ export class AlgoliaEstateService {
   ) {
     this.client = algoliasearch(this.algoliaConfigService.appID, this.algoliaConfigService.apiKey);
     this.index = this.client.initIndex(`${this.appConfigService.envAlias}_estate`);
+    this.index.setSettings({
+      searchableAttributes: [
+        'title',
+        'description',
+        'address',
+        'wardName',
+        'districtName',
+        'provinceName',
+        'customId',
+      ],
+    });
   }
 
   save(item: IAlgoliaEstate) {
