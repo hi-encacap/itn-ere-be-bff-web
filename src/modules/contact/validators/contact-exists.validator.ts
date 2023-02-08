@@ -1,6 +1,6 @@
 import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 import { CONTACT_ERROR_CODE } from 'src/common/constants/error.constant';
-import { ContactCreateBodyDto } from '../dto/contact-create-body.dto';
+import { ContactCreateBodyDto } from '../dtos/contact-create-body.dto';
 import { ContactService } from '../services/contact.service';
 
 interface ContactExistsValidatorValidationArguments extends ValidationArguments {

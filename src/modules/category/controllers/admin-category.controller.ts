@@ -4,11 +4,11 @@ import { User } from 'src/common/decorators/user.decorator';
 import { AdminGuard } from 'src/common/guards/admin.guard';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { IUser } from 'src/modules/user/interfaces/user.interface';
-import { CategoryCreateBodyDto } from '../dto/category-create-body.dto';
-import { CategoryDeleteParamDto } from '../dto/category-delete-param.dto';
-import { CategoryListQueryDto } from '../dto/category-list-query.dto';
-import { CategoryUpdateBodyDto } from '../dto/category-update-body.dto';
-import { CategoryUpdateParamDto } from '../dto/category-update-param.dto';
+import { CategoryCreateBodyDto } from '../dtos/category-create-body.dto';
+import { CategoryDeleteParamDto } from '../dtos/category-delete-param.dto';
+import { CategoryListQueryDto } from '../dtos/category-list-query.dto';
+import { CategoryUpdateBodyDto } from '../dtos/category-update-body.dto';
+import { CategoryUpdateParamDto } from '../dtos/category-update-param.dto';
 import { CategoryService } from '../services/category.service';
 
 @Controller('admin/categories')

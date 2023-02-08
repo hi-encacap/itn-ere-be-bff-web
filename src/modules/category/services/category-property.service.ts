@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/base/base.service';
 import { FindOptionsWhere, Repository } from 'typeorm';
-import { CategoryPropertyListQueryDto } from '../dto/category-property-list-query.dto';
-import { CategoryPropertyUpdateBodyDto } from '../dto/category-property-update-body.dto';
+import { CategoryPropertyListQueryDto } from '../dtos/category-property-list-query.dto';
+import { CategoryPropertyUpdateBodyDto } from '../dtos/category-property-update-body.dto';
 import { CategoryPropertyEntity } from '../entities/category-property.entity';
 import { CategoryService } from './category.service';
 

@@ -4,10 +4,10 @@ import { User } from 'src/common/decorators/user.decorator';
 import { AdminGuard } from 'src/common/guards/admin.guard';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { IUser } from 'src/modules/user/interfaces/user.interface';
-import { CategoryPropertyCreateBodyDto } from '../dto/category-property-create-body.dto';
-import { CategoryPropertyListQueryDto } from '../dto/category-property-list-query.dto';
-import { CategoryPropertyModifyParamDto } from '../dto/category-property-modify-param.dto';
-import { CategoryPropertyUpdateBodyDto } from '../dto/category-property-update-body.dto';
+import { CategoryPropertyCreateBodyDto } from '../dtos/category-property-create-body.dto';
+import { CategoryPropertyListQueryDto } from '../dtos/category-property-list-query.dto';
+import { CategoryPropertyModifyParamDto } from '../dtos/category-property-modify-param.dto';
+import { CategoryPropertyUpdateBodyDto } from '../dtos/category-property-update-body.dto';
 import { CategoryPropertyService } from '../services/category-property.service';
 
 @UseGuards(JwtAuthGuard, AdminGuard)

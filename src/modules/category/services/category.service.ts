@@ -10,9 +10,9 @@ import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { FindOptionsWhere, Repository } from 'typeorm';
-import { CategoryCreateBodyDto } from '../dto/category-create-body.dto';
-import { CategoryListQueryDto } from '../dto/category-list-query.dto';
-import { CategoryUpdateBodyDto } from '../dto/category-update-body.dto';
+import { CategoryCreateBodyDto } from '../dtos/category-create-body.dto';
+import { CategoryListQueryDto } from '../dtos/category-list-query.dto';
+import { CategoryUpdateBodyDto } from '../dtos/category-update-body.dto';
 import { CategoryEntity } from '../entities/category.entity';
 
 @Injectable()
