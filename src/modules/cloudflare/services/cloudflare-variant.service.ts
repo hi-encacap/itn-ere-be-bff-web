@@ -4,8 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { omit, pick } from 'lodash';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { FindOptionsWhere, Repository } from 'typeorm';
-import { RootCloudflareVariantCreateBodyDto } from '../dto/root-cloudflare-variant-create-body.dto';
-import { RootCloudflareVariantUpdateBodyDto } from '../dto/root-cloudflare-variant-update-body.dto';
+import { RootCloudflareVariantCreateBodyDto } from '../dtos/root-cloudflare-variant-create-body.dto';
+import { RootCloudflareVariantUpdateBodyDto } from '../dtos/root-cloudflare-variant-update-body.dto';
 import { CloudflareVariantWebsiteEntity } from '../entities/cloudflare-variant-website.entity';
 import { CloudflareVariantEntity } from '../entities/cloudflare-variant.entity';
 

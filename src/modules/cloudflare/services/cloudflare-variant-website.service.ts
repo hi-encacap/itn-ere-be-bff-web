@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, Repository } from 'typeorm';
-import { RootCloudflareVariantWebsiteCreateBodyDto } from '../dto/root-cloudflare-variant-website-create-body.dto';
+import { RootCloudflareVariantWebsiteCreateBodyDto } from '../dtos/root-cloudflare-variant-website-create-body.dto';
 import { CloudflareVariantWebsiteEntity } from '../entities/cloudflare-variant-website.entity';
 
 @Injectable()

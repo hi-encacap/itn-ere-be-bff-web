@@ -4,9 +4,25 @@
     "source.fixAll.eslint": true,
     "source.organizeImports": true
   },
-  "cSpell.words": ["IJWT", "upvoted"],
+  "cSpell.words": ["IJWT"],
   "workbench.colorCustomizations": {
-    "titleBar.activeBackground": "#0F4B0D",
-    "titleBar.activeForeground": "#F2FDF1"
-  }
+    "activityBar.activeBackground": "#2e796b",
+    "activityBar.background": "#2e796b",
+    "activityBar.foreground": "#e7e7e7",
+    "activityBar.inactiveForeground": "#e7e7e799",
+    "activityBarBadge.background": "#52235c",
+    "activityBarBadge.foreground": "#e7e7e7",
+    "commandCenter.border": "#e7e7e799",
+    "sash.hoverBorder": "#2e796b",
+    "statusBar.background": "#20544a",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBarItem.hoverBackground": "#2e796b",
+    "statusBarItem.remoteBackground": "#20544a",
+    "statusBarItem.remoteForeground": "#e7e7e7",
+    "titleBar.activeBackground": "#20544a",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveBackground": "#20544a99",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  },
+  "peacock.remoteColor": "#20544a"
 }

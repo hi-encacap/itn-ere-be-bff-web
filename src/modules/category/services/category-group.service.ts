@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CategoryGroupListQueryDto } from '../dto/category-group-list-query.dto';
+import { CategoryGroupListQueryDto } from '../dtos/category-group-list-query.dto';
 import { CategoryGroupWebsiteEntity } from '../entities/category-group-website.entity';
 import { CategoryGroupEntity } from '../entities/category-group.entity';
 

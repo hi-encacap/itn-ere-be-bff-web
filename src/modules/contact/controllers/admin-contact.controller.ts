@@ -2,11 +2,11 @@ import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, UseGuards 
 import { AddUserIdToParam } from 'src/common/decorators/add-user-id-to-param.decorator';
 import { AdminGuard } from 'src/common/guards/admin.guard';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
-import { ContactCreateBodyDto } from '../dto/contact-create-body.dto';
-import { ContactDeleteParamDto } from '../dto/contact-delete-param.dto';
-import { ContactListQueryDto } from '../dto/contact-list-query.dto';
-import { ContactUpdateBodyDto } from '../dto/contact-update-body.dto';
-import { ContactUpdateParamDto } from '../dto/contact-update-param.dto';
+import { ContactCreateBodyDto } from '../dtos/contact-create-body.dto';
+import { ContactDeleteParamDto } from '../dtos/contact-delete-param.dto';
+import { ContactListQueryDto } from '../dtos/contact-list-query.dto';
+import { ContactUpdateBodyDto } from '../dtos/contact-update-body.dto';
+import { ContactUpdateParamDto } from '../dtos/contact-update-param.dto';
 import { ContactService } from '../services/contact.service';
 
 @Controller('admin/contacts')

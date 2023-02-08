@@ -8,8 +8,8 @@ import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudfla
 import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
-import { ContactCreateBodyDto } from '../dto/contact-create-body.dto';
-import { ContactListQueryDto } from '../dto/contact-list-query.dto';
+import { ContactCreateBodyDto } from '../dtos/contact-create-body.dto';
+import { ContactListQueryDto } from '../dtos/contact-list-query.dto';
 import { ContactEntity } from '../entities/contact.entity';
 
 @Injectable()
