@@ -18,7 +18,8 @@ services:
     container_name: encacap-re-apis-dev
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
+      target: development
     ports:
       - 3000:3000
     command: yarn start:dev
