@@ -2,17 +2,17 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/base/base.service';
 import { slugify } from 'src/common/utils/helpers.util';
+import { AlgoliaCategoryService } from 'src/modules/algolia/services/algolia-category.service';
 import { CloudflareVariantWebsiteEntity } from 'src/modules/cloudflare/entities/cloudflare-variant-website.entity';
 import { CloudflareVariantEntity } from 'src/modules/cloudflare/entities/cloudflare-variant.entity';
 import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
-import { AlgoliaService } from 'src/providers/algolia/algolia.service';
 import { FindOptionsWhere, Repository } from 'typeorm';
-import { CreateCategoryDto } from '../dto/create-category.dto';
-import { QueryCategoryListDto } from '../dto/query-category-list.dto';
-import { UpdateCategoryBodyDto } from '../dto/update-category-body.dto';
+import { CategoryCreateBodyDto } from '../dtos/category-create-body.dto';
+import { CategoryListQueryDto } from '../dtos/category-list-query.dto';
+import { CategoryUpdateBodyDto } from '../dtos/category-update-body.dto';
 import { CategoryEntity } from '../entities/category.entity';
 
 @Injectable()
@@ -20,23 +20,13 @@ export class CategoryService extends BaseService {
   constructor(
     @InjectRepository(CategoryEntity) private categoryRepository: Repository<CategoryEntity>,
     private readonly cloudflareImageService: CloudflareImageService,
-    private readonly algoliaService: AlgoliaService,
+    private readonly algoliaService: AlgoliaCategoryService,
   ) {
     super();
   }
 
   async getOne(query: FindOptionsWhere<CategoryEntity>) {
-    const queryBuilder = this.getQueryBuilder();
-
-    if (query.code) {
-      queryBuilder.andWhere('category.code = :code', { code: query.code });
-    }
-
-    if (query.websiteId) {
-      queryBuilder.andWhere('user.websiteId = :websiteId', { websiteId: query.websiteId });
-    }
-
-    const record = await queryBuilder.getOne();
+    const record = await this.getQueryBuilder().where(query).getOne();
 
     if (!record) {
       throw new NotFoundException('CATEGORY_NOT_FOUND');
@@ -45,15 +35,11 @@ export class CategoryService extends BaseService {
     return record;
   }
 
-  async getAll(query: QueryCategoryListDto) {
+  async getAll(query: CategoryListQueryDto) {
     let queryBuilder = this.getQueryBuilder();
 
     if (query.websiteId) {
-      queryBuilder.andWhere('user.websiteId = :websiteId', { websiteId: query.websiteId });
-    }
-
-    if (query.userId) {
-      queryBuilder.andWhere('user.id = :userId', { userId: query.userId });
+      queryBuilder.andWhere('website.id = :websiteId', { websiteId: query.websiteId });
     }
 
     if (query.categoryGroupCodes) {
@@ -73,15 +59,12 @@ export class CategoryService extends BaseService {
 
     queryBuilder.orderBy(orderBy, orderDirection);
     queryBuilder = this.setPagination(queryBuilder, query);
-
-    if (query.searchValue) {
-      const { hits: matchedCategories } = await this.algoliaService.searchCategories(query.searchValue, [
-        query.searchBy,
-      ]);
-      const matchedCategoryCodes = matchedCategories.map((category) => category.objectID);
-
-      queryBuilder = this.setInOperator(queryBuilder, matchedCategoryCodes, 'category.code');
-    }
+    queryBuilder = await this.setAlgoliaSearch(
+      queryBuilder,
+      query,
+      this.algoliaService.search.bind(this.algoliaService),
+      'category.code',
+    );
 
     const [categories, items] = await queryBuilder.getManyAndCount();
 
@@ -90,7 +73,7 @@ export class CategoryService extends BaseService {
     return this.generateGetAllResponse(categories, items, query);
   }
 
-  async create(body: CreateCategoryDto, user: IUser) {
+  async create(body: CategoryCreateBodyDto, user: IUser) {
     const { code } = body;
 
     if (!code) {
@@ -99,11 +82,11 @@ export class CategoryService extends BaseService {
 
     const record = await this.categoryRepository.save({
       ...body,
-      userId: user.id,
+      websiteId: user.websiteId,
     });
     const category = await this.getOne({ code: record.code });
 
-    this.algoliaService.addCategory({
+    this.algoliaService.save({
       objectID: category.code,
       name: category.name,
       categoryGroupName: category.categoryGroup.name,
@@ -112,15 +95,12 @@ export class CategoryService extends BaseService {
     return category;
   }
 
-  async update(code: string, body: UpdateCategoryBodyDto, user: IUser) {
-    await this.categoryRepository.update(code, {
-      ...body,
-      userId: user.id,
-    });
+  async update(code: string, body: CategoryUpdateBodyDto) {
+    await this.categoryRepository.update(code, body);
 
     const category = await this.getOne({ code });
 
-    this.algoliaService.updateCategory({
+    this.algoliaService.update({
       objectID: category.code,
       name: category.name,
       categoryGroupName: category.categoryGroup.name,
@@ -130,15 +110,15 @@ export class CategoryService extends BaseService {
   }
 
   delete(code: string) {
-    this.algoliaService.removeCategory(code);
+    this.algoliaService.remove(code);
     return this.categoryRepository.delete(code);
   }
 
   private getQueryBuilder() {
     return this.categoryRepository
       .createQueryBuilder('category')
-      .leftJoinAndSelect('category.user', 'user')
       .leftJoinAndSelect('category.thumbnail', 'thumbnail')
+      .leftJoinAndMapOne('category.website', WebsiteEntity, 'website', 'website.id = category.websiteId')
       .leftJoin(UserEntity, 'thumbnailUser', 'thumbnailUser.id = thumbnail.userId')
       .leftJoin(WebsiteEntity, 'thumbnailUserWebsite', 'thumbnailUserWebsite.id = thumbnailUser.websiteId')
       .leftJoin(

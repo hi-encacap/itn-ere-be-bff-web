@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, Repository } from 'typeorm';
-import { RootCreateCloudflareVariantWebsiteDto } from '../dto/root-create-cloudflare-variant-website.dto';
+import { RootCloudflareVariantWebsiteCreateBodyDto } from '../dtos/root-cloudflare-variant-website-create-body.dto';
 import { CloudflareVariantWebsiteEntity } from '../entities/cloudflare-variant-website.entity';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class CloudflareVariantWebsiteService {
     private readonly cloudflareVariantWebsiteRepository: Repository<CloudflareVariantWebsiteEntity>,
   ) {}
 
-  createWebsiteVariant(variant: RootCreateCloudflareVariantWebsiteDto) {
+  createWebsiteVariant(variant: RootCloudflareVariantWebsiteCreateBodyDto) {
     return this.cloudflareVariantWebsiteRepository.save(variant);
   }
 

@@ -7,12 +7,12 @@ export class TokenEntity extends BaseEntityWithPrimaryGeneratedColumn {
   @Column()
   token: string;
 
-  @Column()
+  @Column({ name: 'user_id' })
   userId: number;
 
   @Column({ enum: TOKEN_TYPE_ENUM })
   type: TOKEN_TYPE_ENUM;
 
-  @Column({ nullable: true })
+  @Column({ name: 'expires_at', nullable: true })
   expiresAt: Date;
 }

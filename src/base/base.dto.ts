@@ -2,42 +2,42 @@ import { Transform, Type } from 'class-transformer';
 import { IsEnum, IsNumber, IsOptional, IsPositive, IsString } from 'class-validator';
 import { ORDER_DIRECTION_ENUM } from './base.constant';
 
-export class BaseQueryParamsDto {
+export class BaseListParamDto {
   @IsNumber()
   @Type(() => Number)
   id: number;
 }
 
-export class BaseQueryListParamsDto {
+export class BaseListQueryDto {
   @IsOptional()
   @IsPositive()
   @Type(() => Number)
-  page: number;
+  page?: number;
 
   @IsOptional()
   @IsPositive()
   @Type(() => Number)
-  limit: number;
+  limit?: number;
 
   @IsOptional()
   @IsString()
-  searchBy: string;
+  searchBy?: string;
 
   @IsOptional()
   @IsString()
-  searchValue: string;
+  searchValue?: string;
 
   @IsOptional()
   @IsString()
-  orderBy: string;
+  orderBy?: string;
 
   @IsOptional()
   @IsEnum(ORDER_DIRECTION_ENUM)
   @Transform(({ value }) => value.toUpperCase())
-  orderDirection: ORDER_DIRECTION_ENUM = ORDER_DIRECTION_ENUM.ASC;
+  orderDirection?: ORDER_DIRECTION_ENUM;
 }
 
-export class BaseQueryCodeParamsDto {
+export class BaseListWithCodeQueryDto {
   @IsString()
   code: string;
 }

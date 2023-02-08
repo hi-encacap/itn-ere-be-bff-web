@@ -8,7 +8,7 @@ import { IContact } from '../interfaces/contact.interface';
 @Entity({ name: 'contacts' })
 export class ContactEntity extends BaseEntityWithPrimaryGeneratedColumn implements IContact {
   @Column()
-  name: string;
+  name!: string;
 
   @Column({
     nullable: true,

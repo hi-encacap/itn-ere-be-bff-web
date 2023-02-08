@@ -4,8 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { pick } from 'lodash';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { FindOptionsWhere, Repository } from 'typeorm';
-import { RootCreateCloudflareVariantDto } from '../dto/root-create-cloudflare-variant.dto';
-import { RootUpdateCloudflareVariantDto } from '../dto/root-update-cloudflare-variant.dto';
+import { RootCloudflareVariantCreateBodyDto } from '../dtos/root-cloudflare-variant-create-body.dto';
+import { RootCloudflareVariantUpdateBodyDto } from '../dtos/root-cloudflare-variant-update-body.dto';
 import { CloudflareVariantWebsiteEntity } from '../entities/cloudflare-variant-website.entity';
 import { CloudflareVariantEntity } from '../entities/cloudflare-variant.entity';
 
@@ -25,7 +25,7 @@ export class CloudflareVariantService {
     return this.getQueryBuilder().where(query).getOne();
   }
 
-  async createVariant(variant: RootCreateCloudflareVariantDto) {
+  async createVariant(variant: RootCloudflareVariantCreateBodyDto) {
     try {
       await this.httpService.axiosRef.post('variants', {
         id: variant.name,
@@ -41,7 +41,7 @@ export class CloudflareVariantService {
     }
   }
 
-  async updateVariant(code: string, variant: RootUpdateCloudflareVariantDto) {
+  async updateVariant(code: string, variant: RootCloudflareVariantUpdateBodyDto) {
     const record = await this.getOne({ code });
 
     if (!record) {

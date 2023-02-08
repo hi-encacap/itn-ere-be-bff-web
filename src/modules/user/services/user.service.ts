@@ -5,8 +5,8 @@ import { BaseService } from 'src/base/base.service';
 import { CloudflareVariantEntity } from 'src/modules/cloudflare/entities/cloudflare-variant.entity';
 import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
 import { FindOptionsWhere, Repository } from 'typeorm';
-import { RootCreateUserDto } from '../dto/root-create-user.dto';
-import { RootUpdateUserDto } from '../dto/root-update-user.dto';
+import { RootUserCreateBodyDto } from '../dtos/root-user-create-body.dto';
+import { RootUserUpdateBodyDto } from '../dtos/root-user-update-body.dto';
 import { RoleEntity } from '../entities/role.entity';
 import { UserRoleMappingEntity } from '../entities/user-role-mapping.entity';
 import { UserEntity } from '../entities/user.entity';
@@ -60,7 +60,7 @@ export class UserService extends BaseService {
     return this.findOne({}, { email: usernameOrEmail, username: usernameOrEmail });
   }
 
-  async create(body: RootCreateUserDto) {
+  async create(body: RootUserCreateBodyDto) {
     const user = await this.userRepository.save({
       ...body,
       password: await UserEntity.hashPassword(body.password),
@@ -69,7 +69,7 @@ export class UserService extends BaseService {
     return _.omit(user, ['password']);
   }
 
-  async update(id: number, body: RootUpdateUserDto) {
+  async update(id: number, body: RootUserUpdateBodyDto) {
     const record = await this.findOneById(id);
 
     await this.userRepository

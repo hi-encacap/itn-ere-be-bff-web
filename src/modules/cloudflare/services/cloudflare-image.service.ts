@@ -10,7 +10,7 @@ import { randomStringPrefix } from 'src/common/utils/helpers.util';
 import { CloudflareConfigService } from 'src/configs/cloudflare/cloudflare-config.service';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { Repository } from 'typeorm';
-import { CloudflareImageStatusEnum } from '../constants/cloudflare-image-status.constant';
+import { CLOUDFLARE_IMAGE_STATUS_ENUM } from '../constants/cloudflare-image-status.constant';
 import { CloudflareImageEntity } from '../entities/cloudflare-image.entity';
 import { CloudflareVariantEntity } from '../entities/cloudflare-variant.entity';
 
@@ -31,11 +31,11 @@ export class CloudflareImageService {
   }
 
   async uploadSingle(file: Express.Multer.File, user: UserEntity) {
-    const imageId = randomStringPrefix();
+    const imageId = randomStringPrefix(16);
 
     const record = await this.cloudflareImageRepository.save({
       id: imageId,
-      status: CloudflareImageStatusEnum.PROCESSING,
+      status: CLOUDFLARE_IMAGE_STATUS_ENUM.PROCESSING,
       size: file.size,
       extension: file.mimetype,
       userId: user.id,
@@ -72,13 +72,13 @@ export class CloudflareImageService {
       });
       await this.cloudflareImageRepository.save({
         id: imageId,
-        status: CloudflareImageStatusEnum.READY,
+        status: CLOUDFLARE_IMAGE_STATUS_ENUM.READY,
       });
     } catch (error) {
       this.logger.error(error);
       await this.cloudflareImageRepository.save({
         id: imageId,
-        status: CloudflareImageStatusEnum.PROCESSING_ERROR,
+        status: CLOUDFLARE_IMAGE_STATUS_ENUM.PROCESSING_ERROR,
       });
     }
   }

@@ -12,8 +12,8 @@ import {
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { RootGuard } from 'src/common/guards/root.guard';
-import { RootCreateUserDto } from '../dto/root-create-user.dto';
-import { RootUpdateUserDto } from '../dto/root-update-user.dto';
+import { RootUserCreateBodyDto } from '../dtos/root-user-create-body.dto';
+import { RootUserUpdateBodyDto } from '../dtos/root-user-update-body.dto';
 import { UserService } from '../services/user.service';
 
 @UseGuards(JwtAuthGuard, RootGuard)
@@ -27,7 +27,7 @@ export class RootUserController {
   }
 
   @Post()
-  create(@Body() body: RootCreateUserDto) {
+  create(@Body() body: RootUserCreateBodyDto) {
     return this.userService.create(body);
   }
 
@@ -37,7 +37,7 @@ export class RootUserController {
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() body: RootUpdateUserDto) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() body: RootUserUpdateBodyDto) {
     return this.userService.update(id, body);
   }
 

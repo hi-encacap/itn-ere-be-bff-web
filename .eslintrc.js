@@ -6,18 +6,35 @@ module.exports = {
     sourceType: 'module',
     es2022: true,
   },
-  plugins: ['@typescript-eslint/eslint-plugin'],
-  extends: ['plugin:@typescript-eslint/recommended', 'plugin:prettier/recommended'],
+  plugins: ['@typescript-eslint/eslint-plugin', '@darraghor/nestjs-typed'],
+  extends: [
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
+    'plugin:@darraghor/nestjs-typed/recommended',
+  ],
   root: true,
   env: {
     node: true,
     jest: true,
   },
   ignorePatterns: ['.eslintrc.js'],
+  overrides: [
+    {
+      files: ['**/seeders/**/*', '**/migrations/**/*'],
+      rules: {
+        '@darraghor/nestjs-typed/injectable-should-be-provided': 'off',
+      },
+    },
+  ],
   rules: {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+
+    // Temporary disabled swagger rules
+    '@darraghor/nestjs-typed/controllers-should-supply-api-tags': 'off',
+    '@darraghor/nestjs-typed/api-method-should-specify-api-response': 'off',
+    '@darraghor/nestjs-typed/api-property-matches-property-optionality': 'off',
   },
 };

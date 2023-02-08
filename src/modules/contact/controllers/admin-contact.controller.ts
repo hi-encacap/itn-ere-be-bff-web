@@ -1,11 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
 import { AddUserIdToParam } from 'src/common/decorators/add-user-id-to-param.decorator';
 import { AdminGuard } from 'src/common/guards/admin.guard';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
-import { CreateContactDto } from '../dto/create-contact.dto';
-import { DeleteContactDto } from '../dto/delete-contact.dto';
-import { UpdateContactBodyDto } from '../dto/update-contact-body.dto';
-import { UpdateContactParamDto } from '../dto/update-contact-param.dto';
+import { ContactCreateBodyDto } from '../dtos/contact-create-body.dto';
+import { ContactDeleteParamDto } from '../dtos/contact-delete-param.dto';
+import { ContactListQueryDto } from '../dtos/contact-list-query.dto';
+import { ContactUpdateBodyDto } from '../dtos/contact-update-body.dto';
+import { ContactUpdateParamDto } from '../dtos/contact-update-param.dto';
 import { ContactService } from '../services/contact.service';
 
 @Controller('admin/contacts')
@@ -14,25 +15,25 @@ export class AdminContactController {
   constructor(private readonly contactService: ContactService) {}
 
   @Get()
-  findAll(@Req() { user }) {
-    return this.contactService.findAll({ websiteId: user.website.id });
+  findAll(@Req() { user }, @Query() query: ContactListQueryDto) {
+    return this.contactService.findAll({ ...query, websiteId: user.website.id });
   }
 
   @Post()
-  create(@Body() createContactDto: CreateContactDto, @Req() { user }) {
+  create(@Body() createContactDto: ContactCreateBodyDto, @Req() { user }) {
     return this.contactService.create(createContactDto, user);
   }
 
   @Put(':id')
   update(
-    @AddUserIdToParam() @Param() { id }: UpdateContactParamDto,
-    @Body() updateContactDto: UpdateContactBodyDto,
+    @AddUserIdToParam() @Param() { id }: ContactUpdateParamDto,
+    @Body() updateContactDto: ContactUpdateBodyDto,
   ) {
     return this.contactService.update(id, updateContactDto);
   }
 
   @Delete(':id')
-  delete(@AddUserIdToParam() @Param() { id }: DeleteContactDto) {
+  delete(@AddUserIdToParam() @Param() { id }: ContactDeleteParamDto) {
     return this.contactService.delete(id);
   }
 }
