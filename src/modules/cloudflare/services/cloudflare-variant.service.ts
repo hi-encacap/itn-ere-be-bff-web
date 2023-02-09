@@ -17,10 +17,10 @@ export class CloudflareVariantService {
     private readonly httpService: HttpService,
   ) {}
 
-  getAll(query: FindOptionsWhere<CloudflareVariantEntity>) {
+  getAll(query?: FindOptionsWhere<CloudflareVariantEntity>) {
     const queryBuilder = this.getQueryBuilder().where(omit(query, ['websiteId']));
 
-    if (query.websiteId) {
+    if (query?.websiteId) {
       queryBuilder.andWhere('website.id = :websiteId', { websiteId: query.websiteId });
     }
 

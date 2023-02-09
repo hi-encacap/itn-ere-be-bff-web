@@ -94,7 +94,7 @@ export class CategoryService extends BaseService {
   }
 
   async update(id: number, body: CategoryUpdateBodyDto) {
-    await this.categoryRepository.update({ id }, pick(body, ['name', 'categoryGroupId']));
+    await this.categoryRepository.update({ id }, pick(body, ['name', 'categoryGroupId', 'thumbnailId']));
 
     const category = await this.getOne({ id });
 

@@ -121,11 +121,13 @@ export class CloudflareImageService {
   }
 
   private async transformImageToURL(image: CloudflareImageEntity) {
-    const { id, websiteId } = image;
+    const { id } = image;
 
-    const imageVariants = await this.cloudflareVariantService.getAll({
-      websiteId,
-    });
+    const imageVariants = await this.cloudflareVariantService.getAll();
+
+    if (!imageVariants?.length) {
+      return null;
+    }
 
     const newVariants = imageVariants.reduce((acc, variant) => {
       return {
