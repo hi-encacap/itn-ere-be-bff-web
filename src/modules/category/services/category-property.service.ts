@@ -35,8 +35,6 @@ export class CategoryPropertyService extends BaseService {
     queryBuilder = this.setPagination(queryBuilder, query);
     queryBuilder = this.setSorting(queryBuilder, query, 'categoryProperty');
 
-    console.log(await this.getManyAndCount(queryBuilder));
-
     return this.getManyAndCount(queryBuilder);
   }
 
