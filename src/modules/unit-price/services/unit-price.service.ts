@@ -15,4 +15,22 @@ export class UnitPriceService extends BaseService {
   get(query: FindOptionsWhere<UnitPriceEntity>) {
     return this.unitPriceRepository.findOneBy(query);
   }
+
+  getAll(query: FindOptionsWhere<UnitPriceEntity>) {
+    const queryBuilder = this.queryBuilder;
+
+    if (query.websiteId) {
+      queryBuilder.andWhere('unitPrice.website_id = :websiteId', { websiteId: query.websiteId });
+    }
+
+    if (query.type) {
+      queryBuilder.andWhere('unitPrice.type = :type', { type: query.type });
+    }
+
+    return this.getManyAndCount(queryBuilder);
+  }
+
+  private get queryBuilder() {
+    return this.unitPriceRepository.createQueryBuilder('unitPrice');
+  }
 }
