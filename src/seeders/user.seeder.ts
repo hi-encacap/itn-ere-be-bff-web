@@ -53,7 +53,7 @@ export class UserSeeder implements Seeder {
       .where('user.email = :email', { email: item.email })
       .getOne();
 
-    const hashedPassword = await UserEntity.hashPassword(this.configService.rootPassword || item.password);
+    const hashedPassword = await UserEntity.hashPassword(item.password || this.configService.rootPassword);
 
     const newItem = {
       email: item.email,
