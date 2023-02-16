@@ -6,12 +6,14 @@ import { CloudflareModule } from '../cloudflare/cloudflare.module';
 import { LocationModule } from '../location/location.module';
 import { UnitPriceModule } from '../unit-price/unit-price.module';
 import { AdminEstateController } from './controllers/admin-estate.controller';
+import { EstateQuarterController } from './controllers/estate-quarter.controller';
 import { EstateImageEntity } from './entities/estate-image.entity';
 import { EstatePropertyEntity } from './entities/estate-property.entity';
 import { EstateQuarterEntity } from './entities/estate-quarter.entity';
 import { EstateEntity } from './entities/estate.entity';
 import { EstateImageService } from './services/estate-image.service';
 import { EstatePropertyService } from './services/estate-property.service';
+import { EstateQuarterService } from './services/estate-quarter.service';
 import { EstateService } from './services/estate.service';
 import { EstateExistsValidator } from './validators/estate-exists.validator';
 
@@ -24,7 +26,13 @@ import { EstateExistsValidator } from './validators/estate-exists.validator';
     CloudflareModule,
     AlgoliaModule,
   ],
-  controllers: [AdminEstateController],
-  providers: [EstateService, EstateImageService, EstatePropertyService, EstateExistsValidator],
+  controllers: [EstateQuarterController, AdminEstateController],
+  providers: [
+    EstateQuarterService,
+    EstateService,
+    EstateImageService,
+    EstatePropertyService,
+    EstateExistsValidator,
+  ],
 })
 export class EstateModule {}

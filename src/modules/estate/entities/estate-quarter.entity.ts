@@ -14,4 +14,10 @@ export class EstateQuarterEntity extends BaseEntityWithPrimaryCodeColumn {
     name: 'name',
   })
   name: string;
+
+  @Column({
+    name: 'order',
+    default: 0,
+  })
+  order: number;
 }
