@@ -21,6 +21,16 @@ const userItems: IUser[] = [
     website: websiteItems[0],
     roles: roleItems,
   },
+  {
+    id: 2,
+    email: 'admin@diaocbaoloc.com.vn',
+    username: 'diaocbaoloc_admin',
+    password: '123456',
+    firstName: 'Thanh Việt',
+    lastName: 'Nguyễn',
+    website: websiteItems[1],
+    roles: [roleItems[1]],
+  },
 ];
 
 @Injectable()

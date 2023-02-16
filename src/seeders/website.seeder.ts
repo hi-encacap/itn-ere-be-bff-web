@@ -12,6 +12,12 @@ export const websiteItems: IWebsite[] = [
     url: 'https://www.re.encacap.com',
     description: 'This is the supper root website. It can be used to manage all the websites.',
   },
+  {
+    id: 2,
+    name: 'BaolocRE - Bất động sản Bảo Lộc',
+    url: 'https://www.diaocbaoloc.com.vn',
+    description: 'This is the website for BaolocRE.',
+  },
 ];
 
 @Injectable()
