@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { IUser } from 'encacap/dist/re';
 import { AddWebsiteIdToParam } from 'src/common/decorators/add-website-id-to-param.decorator';
 import { User } from 'src/common/decorators/user.decorator';
 import { AdminGuard } from 'src/common/guards/admin.guard';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
-import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { CategoryCreateBodyDto } from '../dtos/category-create-body.dto';
 import { CategoryDeleteParamDto } from '../dtos/category-delete-param.dto';
 import { CategoryListQueryDto } from '../dtos/category-list-query.dto';
@@ -29,13 +29,13 @@ export class AdminCategoryController {
     return this.categoryService.create(body, user);
   }
 
-  @Put(':code')
+  @Put(':id')
   update(@AddWebsiteIdToParam() @Param() param: CategoryUpdateParamDto, @Body() body: CategoryUpdateBodyDto) {
-    return this.categoryService.update(param.code, body);
+    return this.categoryService.update(param.id, body);
   }
 
-  @Delete(':code')
+  @Delete(':id')
   delete(@AddWebsiteIdToParam() @Param() param: CategoryDeleteParamDto) {
-    return this.categoryService.delete(param.code);
+    return this.categoryService.delete(param.id);
   }
 }

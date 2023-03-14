@@ -12,7 +12,6 @@ services:
       - postgres:/var/lib/postgresql/data
     networks:
       - encacap-re-apis-network
-    restart: unless-stopped
 
   dev:
     container_name: encacap-re-apis-dev
@@ -34,7 +33,6 @@ services:
       - encacap-re-apis-network
     depends_on:
       - postgres
-    restart: unless-stopped
 
 networks:
   encacap-re-apis-network:

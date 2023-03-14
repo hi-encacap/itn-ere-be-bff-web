@@ -3,11 +3,10 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { Allow, IsEmail, IsNotEmpty, IsNumber, IsString, Min, MinLength, Validate } from 'class-validator';
-import { IWebsite } from 'src/modules/website/constants/website.interface';
+import { IUser, IWebsite } from 'encacap/dist/re';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { WebsiteNotExistsValidator } from 'src/modules/website/validators/website-not-exists.validator';
 import { RoleEntity } from '../entities/role.entity';
-import { IUser } from '../interfaces/user.interface';
 import { EmailExistsValidator } from '../validators/email-exists.validator';
 import { UsernameExistsValidator } from '../validators/username-exists.validator';
 

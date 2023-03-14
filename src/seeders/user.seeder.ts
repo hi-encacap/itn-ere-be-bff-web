@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { IUser } from 'encacap/dist/re';
 import { Seeder } from 'nestjs-seeder';
 import AppConfigService from 'src/configs/config.service';
 import { RoleEntity } from 'src/modules/user/entities/role.entity';
 import { UserRoleMappingEntity } from 'src/modules/user/entities/user-role-mapping.entity';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
-import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { Repository } from 'typeorm';
 import { roleItems } from './role.seeder';
 import { websiteItems } from './website.seeder';
@@ -20,6 +20,16 @@ const userItems: IUser[] = [
     lastName: 'Nguyen',
     website: websiteItems[0],
     roles: roleItems,
+  },
+  {
+    id: 2,
+    email: 'admin@diaocbaoloc.com.vn',
+    username: 'diaocbaoloc_admin',
+    password: '123456',
+    firstName: 'Thanh Việt',
+    lastName: 'Nguyễn',
+    website: websiteItems[1],
+    roles: [roleItems[1]],
   },
 ];
 
@@ -43,7 +53,7 @@ export class UserSeeder implements Seeder {
       .where('user.email = :email', { email: item.email })
       .getOne();
 
-    const hashedPassword = await UserEntity.hashPassword(this.configService.rootPassword || item.password);
+    const hashedPassword = await UserEntity.hashPassword(item.password || this.configService.rootPassword);
 
     const newItem = {
       email: item.email,

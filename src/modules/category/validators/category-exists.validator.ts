@@ -11,7 +11,7 @@ export class CategoryExistsValidator implements ValidatorConstraintInterface {
   constructor(private readonly categoryService: CategoryService) {}
 
   async validate(value: string, args: ExistsConstraintValidationArguments) {
-    const { constraints } = args;
+    const { constraints = [] } = args;
     const [type, key] = constraints;
 
     this.type = type;

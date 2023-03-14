@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { IUser } from 'encacap/dist/re';
 import { AddWebsiteIdToParam } from 'src/common/decorators/add-website-id-to-param.decorator';
 import { User } from 'src/common/decorators/user.decorator';
 import { AdminGuard } from 'src/common/guards/admin.guard';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
-import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { CategoryPropertyCreateBodyDto } from '../dtos/category-property-create-body.dto';
 import { CategoryPropertyListQueryDto } from '../dtos/category-property-list-query.dto';
 import { CategoryPropertyModifyParamDto } from '../dtos/category-property-modify-param.dto';

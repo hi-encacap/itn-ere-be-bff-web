@@ -1,12 +1,11 @@
 import { compare, hash } from 'bcrypt';
+import { IRole, IUser, IWebsite } from 'encacap/dist/re';
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
 import { CategoryGroupEntity } from 'src/modules/category/entities/category-group.entity';
 import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
 import { ContactEntity } from 'src/modules/contact/entities/contact.entity';
-import { IWebsite } from 'src/modules/website/constants/website.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Column, Entity, JoinColumn, OneToMany, ManyToOne as OneToOne } from 'typeorm';
-import { IRole, IUser } from '../interfaces/user.interface';
 import { UserRoleMappingEntity } from './user-role-mapping.entity';
 
 @Entity({ name: 'users' })
@@ -44,9 +43,6 @@ export class UserEntity extends BaseEntityWithPrimaryGeneratedColumn implements 
     cascade: ['remove', 'update'],
   })
   roles!: IRole[];
-
-  @OneToMany(() => CloudflareImageEntity, (cloudflareImage) => cloudflareImage.user)
-  cloudflareImages!: CloudflareImageEntity[];
 
   @OneToMany(() => ContactEntity, (contact) => contact.user)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })

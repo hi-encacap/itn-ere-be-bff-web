@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { IWebsite } from 'encacap/dist/re';
 import { Seeder } from 'nestjs-seeder';
-import { IWebsite } from 'src/modules/website/constants/website.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Repository } from 'typeorm';
 
@@ -11,6 +11,12 @@ export const websiteItems: IWebsite[] = [
     name: 'Encacap RE',
     url: 'https://www.re.encacap.com',
     description: 'This is the supper root website. It can be used to manage all the websites.',
+  },
+  {
+    id: 2,
+    name: 'BaolocRE - Bất động sản Bảo Lộc',
+    url: 'https://www.diaocbaoloc.com.vn',
+    description: 'This is the website for BaolocRE.',
   },
 ];
 

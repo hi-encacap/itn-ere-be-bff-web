@@ -1,7 +1,7 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { IUser } from 'encacap/dist/re';
 import { User } from 'src/common/decorators/user.decorator';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
-import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { GHNDistrictListQueryDto } from '../dtos/ghn-district-list-query.dto';
 import { GHNWardListQueryDto } from '../dtos/ghn-ward-list-query.dto';
 import { GHNService } from '../services/ghn.service';

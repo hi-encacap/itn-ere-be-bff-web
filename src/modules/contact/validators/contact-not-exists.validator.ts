@@ -1,4 +1,4 @@
-import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
+import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 import { CONTACT_ERROR_CODE } from 'src/common/constants/error.constant';
 import { ContactService } from '../services/contact.service';
 
@@ -6,10 +6,9 @@ import { ContactService } from '../services/contact.service';
 export class ContactNotExistsValidator implements ValidatorConstraintInterface {
   constructor(private readonly contactService: ContactService) {}
 
-  async validate(id: number, args: ValidationArguments) {
+  async validate(id: number) {
     const user = await this.contactService.findOne({
       id,
-      userId: args.object['userId'],
     });
 
     return Boolean(user);

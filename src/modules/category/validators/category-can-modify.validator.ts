@@ -11,10 +11,10 @@ interface CategoryCanModifyValidatorValidationArguments extends ValidationArgume
 export class CategoryCanModifyValidator implements ValidatorConstraintInterface {
   constructor(private readonly categoryService: CategoryService) {}
 
-  async validate(value: string, validationArguments?: CategoryCanModifyValidatorValidationArguments) {
+  async validate(id: number, validationArguments?: CategoryCanModifyValidatorValidationArguments) {
     try {
       const category = await this.categoryService.getOne({
-        code: value,
+        id,
         websiteId: Number(validationArguments?.object.websiteId),
       });
       return Boolean(category);

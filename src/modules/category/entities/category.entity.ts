@@ -1,10 +1,9 @@
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
 import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { CATEGORY_GROUP_ENUM } from '../constants/category-group.constant';
 import { CategoryGroupEntity } from './category-group.entity';
-import { CategoryPropertyEntity } from './category-property.entity';
 
 @Entity({ name: 'categories' })
 export class CategoryEntity extends BaseEntityWithPrimaryGeneratedColumn {
@@ -26,9 +25,6 @@ export class CategoryEntity extends BaseEntityWithPrimaryGeneratedColumn {
   @OneToOne(() => CloudflareImageEntity)
   @JoinColumn({ name: 'thumbnail_id', referencedColumnName: 'id' })
   thumbnail: CloudflareImageEntity;
-
-  @OneToMany(() => CategoryPropertyEntity, (categoryProperty) => categoryProperty.category)
-  properties: CategoryPropertyEntity[];
 
   @ManyToOne(() => CategoryGroupEntity, (categoryGroup) => categoryGroup.categories)
   @JoinColumn({ name: 'category_group_code', referencedColumnName: 'code' })

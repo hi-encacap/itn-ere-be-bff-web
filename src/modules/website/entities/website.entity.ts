@@ -1,7 +1,7 @@
+import { IWebsite } from 'encacap/dist/re';
 import { ContactEntity } from 'src/modules/contact/entities/contact.entity';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { IWebsite } from '../constants/website.interface';
 
 @Entity({ name: 'websites' })
 export class WebsiteEntity implements IWebsite {

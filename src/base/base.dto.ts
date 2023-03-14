@@ -8,6 +8,12 @@ export class BaseListParamDto {
   id: number;
 }
 
+export class BaseIdParamDto {
+  @IsNumber()
+  @Type(() => Number)
+  id: number;
+}
+
 export class BaseListQueryDto {
   @IsOptional()
   @IsPositive()

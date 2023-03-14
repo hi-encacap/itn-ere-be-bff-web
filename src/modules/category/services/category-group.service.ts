@@ -17,7 +17,7 @@ export class CategoryGroupService {
       .createQueryBuilder('categoryGroup')
       .leftJoinAndSelect('categoryGroup.user', 'user');
 
-    if (query.websiteId) {
+    if (query?.websiteId) {
       queryBuilder
         .leftJoin(
           CategoryGroupWebsiteEntity,

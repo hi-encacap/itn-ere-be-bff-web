@@ -30,7 +30,7 @@ export class GHNService {
         ['ghnRefId', 'name', 'countryId'],
       ).filter((province) => !existedProvinceGhnRefIds.includes(province.ghnRefId));
     } catch (error) {
-      throw new UnprocessableEntityException(error);
+      throw new UnprocessableEntityException(error.message);
     }
   }
 

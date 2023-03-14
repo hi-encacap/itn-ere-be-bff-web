@@ -4,5 +4,5 @@ import { CategoryCanDeleteValidator } from '../validators/category-can-delete.va
 export class CategoryDeleteParamDto {
   @IsString()
   @Validate(CategoryCanDeleteValidator)
-  code: string;
+  id: number;
 }

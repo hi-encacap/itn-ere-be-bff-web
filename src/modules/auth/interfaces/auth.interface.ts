@@ -1,5 +1,4 @@
-import { IRole } from 'src/modules/user/interfaces/user.interface';
-import { IWebsite } from 'src/modules/website/constants/website.interface';
+import { IRole, IWebsite } from 'encacap/dist/re';
 
 export interface IJwtPayload {
   id: number;
