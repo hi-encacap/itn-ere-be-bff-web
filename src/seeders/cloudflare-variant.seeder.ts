@@ -44,12 +44,12 @@ export class CloudflareVariantSeeder implements Seeder {
     });
   }
 
-  async seed() {
+  seed() {
     const tasks = variantItems.map((item) => this.upsertItem(item));
     return Promise.all(tasks);
   }
 
-  async drop() {
+  drop() {
     return this.cloudflareVariantRepository.delete({});
   }
 }

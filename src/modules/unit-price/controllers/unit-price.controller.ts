@@ -11,7 +11,7 @@ export class UnitPriceController {
   constructor(private readonly unitPriceService: UnitPriceService) {}
 
   @Get()
-  async getUnitPrices(@Query() query: UnitPriceListQueryDto, @User() user: IUser) {
+  getUnitPrices(@Query() query: UnitPriceListQueryDto, @User() user: IUser) {
     return this.unitPriceService.getAll({
       ...query,
       websiteId: user.websiteId,

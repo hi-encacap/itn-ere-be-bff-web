@@ -26,7 +26,7 @@ export class CategoryPropertyService extends BaseService {
     return queryBuilder.getOne();
   }
 
-  async getAll(query: CategoryPropertyListQueryDto) {
+  getAll(query: CategoryPropertyListQueryDto) {
     let queryBuilder = this.queryBuilder;
 
     queryBuilder = this.setFilter(queryBuilder, query, 'categoryProperty', 'name');

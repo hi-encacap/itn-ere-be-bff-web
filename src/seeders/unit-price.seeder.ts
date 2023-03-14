@@ -57,12 +57,10 @@ export class UnitPriceSeeder implements Seeder {
     const websites = await this.websiteRepository.find();
     const tasks = [];
 
-    websites.map((website) => {
-      const items = unitPriceItems.map((item) => {
-        return { ...item, websiteId: website.id };
-      });
+    websites.forEach((website) => {
+      const items = unitPriceItems.map((item) => ({ ...item, websiteId: website.id }));
 
-      return tasks.push(this.unitPriceRepository.save(items));
+      tasks.push(this.unitPriceRepository.save(items));
     });
 
     await Promise.all(tasks);

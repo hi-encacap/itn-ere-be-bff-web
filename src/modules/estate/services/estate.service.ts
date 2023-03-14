@@ -41,7 +41,7 @@ export class EstateService extends BaseService {
     await this.estatePropertyService.bulkSave(properties, estateId);
     await this.estateImageService.bulkSave(imageIds, estateId);
 
-    if (status == ESTATE_STATUS_ENUM.PUBLISHED) {
+    if (status === ESTATE_STATUS_ENUM.PUBLISHED) {
       await this.saveToAlgolia(estateId);
     }
 
@@ -61,7 +61,7 @@ export class EstateService extends BaseService {
     await this.estatePropertyService.bulkSave(properties, id);
     await this.estateImageService.bulkSave(imageIds, id);
 
-    if (status == ESTATE_STATUS_ENUM.PUBLISHED) {
+    if (status === ESTATE_STATUS_ENUM.PUBLISHED) {
       await this.saveToAlgolia(id);
     } else {
       this.algoliaEstateService.remove(String(id));
