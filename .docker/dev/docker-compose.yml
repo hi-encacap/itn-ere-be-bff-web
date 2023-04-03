@@ -1,0 +1,53 @@
+version: '3.9'
+
+services:
+  postgres:
+    container_name: encacap-re-api-postgres
+    image: postgres:13.2-alpine
+    ports:
+      - 5432:5432
+    env_file:
+      - ../../.env.development
+    volumes:
+      - ../../.postgres:/var/lib/postgresql/data
+    networks:
+      - encacap-re-api-network
+
+  redis:
+    container_name: encacap-re-api-redis
+    image: redis:7.2-rc1-alpine
+    ports:
+      - 6379:6379
+    networks:
+      - encacap-re-api-network
+    volumes:
+      - ../../.redis:/data
+
+  dev:
+    container_name: encacap-re-api-dev
+    build:
+      context: ../../.
+      dockerfile: ./.docker/dev/Dockerfile
+      target: development
+    image: encacapreapi_dev
+    ports:
+      - 3001:3000
+    command: yarn start:dev
+    volumes:
+      - ../../.:/usr/src/app
+    env_file:
+      - ../../.env.development
+    environment:
+      - DB_HOST=postgres
+      - REDIS_HOST=redis
+    networks:
+      - encacap-re-api-network
+    depends_on:
+      - postgres
+
+networks:
+  encacap-re-api-network:
+    driver: bridge
+
+volumes:
+  postgres:
