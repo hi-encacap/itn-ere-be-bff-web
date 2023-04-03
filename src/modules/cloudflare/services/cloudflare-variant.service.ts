@@ -6,7 +6,6 @@ import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { RootCloudflareVariantCreateBodyDto } from '../dtos/root-cloudflare-variant-create-body.dto';
 import { RootCloudflareVariantUpdateBodyDto } from '../dtos/root-cloudflare-variant-update-body.dto';
-import { CloudflareVariantWebsiteEntity } from '../entities/cloudflare-variant-website.entity';
 import { CloudflareVariantEntity } from '../entities/cloudflare-variant.entity';
 
 @Injectable()
@@ -81,7 +80,6 @@ export class CloudflareVariantService {
   private getQueryBuilder() {
     return this.cloudflareVariantRepository
       .createQueryBuilder('variant')
-      .leftJoin(CloudflareVariantWebsiteEntity, 'variantWebsite', 'variantWebsite.variantCode = variant.code')
       .leftJoinAndMapMany(
         'variant.websites',
         WebsiteEntity,

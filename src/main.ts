@@ -16,7 +16,7 @@ async function bootstrap() {
 
     useContainer(app.select(AppModule), { fallbackOnErrors: true });
     app.enableCors({
-      origin: ['https://dev.dashboard.baolocre.encacap.com:4002'],
+      origin: ['https://dev.dashboard.baolocre.encacap.com:3012'],
       credentials: true,
     });
 
