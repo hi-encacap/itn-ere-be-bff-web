@@ -7,19 +7,16 @@ import { ROLE_ENUM } from 'src/common/constants/role.constant';
 import { RoleEntity } from 'src/modules/user/entities/role.entity';
 import { Repository } from 'typeorm';
 
-export const roleItems: IRole[] = [
+export const roleItems: Array<Partial<IRole>> = [
   {
-    id: 1,
     name: 'Root',
     slug: ROLE_ENUM.ROOT,
   },
   {
-    id: 2,
     name: 'Admin',
     slug: ROLE_ENUM.ADMIN,
   },
   {
-    id: 3,
     name: 'Manager',
     slug: ROLE_ENUM.MANAGER,
   },
@@ -32,7 +29,7 @@ export class RoleSeeder implements Seeder {
     private readonly roleRepository: Repository<RoleEntity>,
   ) {}
 
-  async upsertItem(item: IRole) {
+  async upsertItem(item: Partial<IRole>) {
     const record = await this.roleRepository.findOneBy({ slug: item.slug });
 
     if (record) {
