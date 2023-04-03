@@ -2,7 +2,6 @@ import { HttpService } from '@nestjs/axios';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { omit, pick } from 'lodash';
-import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { RootCloudflareVariantCreateBodyDto } from '../dtos/root-cloudflare-variant-create-body.dto';
 import { RootCloudflareVariantUpdateBodyDto } from '../dtos/root-cloudflare-variant-update-body.dto';
@@ -78,13 +77,6 @@ export class CloudflareVariantService {
   }
 
   private getQueryBuilder() {
-    return this.cloudflareVariantRepository
-      .createQueryBuilder('variant')
-      .leftJoinAndMapMany(
-        'variant.websites',
-        WebsiteEntity,
-        'website',
-        'website.id = variantWebsite.websiteId',
-      );
+    return this.cloudflareVariantRepository.createQueryBuilder('variant');
   }
 }
