@@ -59,8 +59,8 @@ seeder({
     ]),
   ],
 }).run([
-  WebsiteSeeder,
   RoleSeeder,
+  WebsiteSeeder,
   UserSeeder,
   CloudflareVariantSeeder,
   CategoryGroupSeeder,

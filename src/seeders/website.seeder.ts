@@ -5,15 +5,13 @@ import { Seeder } from 'nestjs-seeder';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Repository } from 'typeorm';
 
-export const websiteItems: IWebsite[] = [
+export const websiteItems: Array<Partial<IWebsite>> = [
   {
-    id: 1,
     name: 'Encacap RE',
     url: 'https://www.re.encacap.com',
     description: 'This is the supper root website. It can be used to manage all the websites.',
   },
   {
-    id: 2,
     name: 'BaolocRE - Bất động sản Bảo Lộc',
     url: 'https://www.diaocbaoloc.com.vn',
     description: 'This is the website for BaolocRE.',
@@ -26,8 +24,8 @@ export class WebsiteSeeder implements Seeder {
     @InjectRepository(WebsiteEntity) private readonly websiteRepository: Repository<WebsiteEntity>,
   ) {}
 
-  async upsertItem(item: IWebsite) {
-    const record = await this.websiteRepository.findOneBy({ id: item.id });
+  async upsertItem(item: Partial<IWebsite>) {
+    const record = await this.websiteRepository.findOneBy({ url: item.url });
 
     if (record) {
       return this.websiteRepository.update(record.id, item);

@@ -6,13 +6,12 @@ import AppConfigService from 'src/configs/config.service';
 import { RoleEntity } from 'src/modules/user/entities/role.entity';
 import { UserRoleMappingEntity } from 'src/modules/user/entities/user-role-mapping.entity';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 import { roleItems } from './role.seeder';
 import { websiteItems } from './website.seeder';
 
-const userItems: IUser[] = [
+const userItems: Array<DeepPartial<IUser>> = [
   {
-    id: 1,
     email: 'encacap@re.encacap.com',
     username: 'encacap',
     password: '123456',
@@ -22,7 +21,6 @@ const userItems: IUser[] = [
     roles: roleItems,
   },
   {
-    id: 2,
     email: 'admin@diaocbaoloc.com.vn',
     username: 'diaocbaoloc_admin',
     password: '123456',
@@ -47,7 +45,7 @@ export class UserSeeder implements Seeder {
     private readonly configService: AppConfigService,
   ) {}
 
-  async upsertUserItem(item: IUser | UserEntity) {
+  async upsertUserItem(item: DeepPartial<IUser | UserEntity>) {
     let record = await this.userRepository
       .createQueryBuilder('user')
       .where('user.email = :email', { email: item.email })
