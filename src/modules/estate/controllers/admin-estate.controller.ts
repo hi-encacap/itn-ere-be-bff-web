@@ -34,6 +34,21 @@ export class AdminEstateController {
     return this.estateService.get({ id });
   }
 
+  @Post(':id/un-publish')
+  unPublish(@Param() { id }: BaseIdParamDto) {
+    return this.estateService.unPublishById(id);
+  }
+
+  @Post(':id/publish')
+  publish(@Param() { id }: BaseIdParamDto) {
+    return this.estateService.publishById(id);
+  }
+
+  @Post(':id/up-top')
+  upTop(@Param() { id }: BaseIdParamDto) {
+    return this.estateService.upTopById(id);
+  }
+
   @Put(':id')
   update(@AddWebsiteIdToParam() @Param() { id }: EstateModifyParamDto, @Body() body: EstateUpdateBodyDto) {
     return this.estateService.update(id, body);

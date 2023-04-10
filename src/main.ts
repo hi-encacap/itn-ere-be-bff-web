@@ -1,4 +1,4 @@
-import { UnprocessableEntityException, ValidationPipe } from '@nestjs/common';
+import { UnprocessableEntityException, ValidationPipe, VersioningType } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { useContainer } from 'class-validator';
@@ -51,6 +51,12 @@ async function bootstrap() {
       }),
     );
     app.useGlobalInterceptors(new ResponseInterceptor());
+
+    // Versioning
+    app.enableVersioning({
+      defaultVersion: '1',
+      type: VersioningType.URI,
+    });
 
     await app.listen(configService.port);
   } catch (error) {
