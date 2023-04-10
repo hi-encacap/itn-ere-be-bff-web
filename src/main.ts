@@ -12,8 +12,8 @@ import AppConfigService from './configs/config.service';
 async function bootstrap() {
   try {
     const httpsOptions = {
-      key: readFileSync(__dirname + '/../.certs/encacap.com.key'),
-      cert: readFileSync(__dirname + '/../.certs/encacap.com.crt'),
+      key: readFileSync(`${__dirname}/../.certs/encacap.com.key`),
+      cert: readFileSync(`${__dirname}/../.certs/encacap.com.crt`),
     };
 
     const app = await NestFactory.create<NestExpressApplication>(AppModule, {

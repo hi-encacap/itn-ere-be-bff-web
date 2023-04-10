@@ -28,8 +28,6 @@ export class GHNService {
 
       const response = await this.httpService.axiosRef.get('master-data/province');
 
-      console.log(response.data);
-
       return this.format<IProvince>(
         response.data.data,
         ['ProvinceID', 'ProvinceName', 'CountryID'],
