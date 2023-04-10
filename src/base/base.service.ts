@@ -37,8 +37,9 @@ export class BaseService {
     queryBuilder: SelectQueryBuilder<T>,
     query: FindOptionsWhere<BaseListQueryDto>,
     tableAlias: string,
+    defaultOrderBy = 'updatedAt',
   ): SelectQueryBuilder<T> {
-    const { orderBy = 'createdAt', orderDirection = ORDER_DIRECTION_ENUM.DESC } = query;
+    const { orderBy = defaultOrderBy, orderDirection = ORDER_DIRECTION_ENUM.DESC } = query;
 
     if (orderBy) {
       queryBuilder.orderBy(`${tableAlias}.${orderBy}`, orderDirection as ORDER_DIRECTION_ENUM);

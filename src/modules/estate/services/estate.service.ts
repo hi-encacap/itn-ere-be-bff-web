@@ -95,7 +95,7 @@ export class EstateService extends BaseService {
     queryBuilder = this.setFilter(queryBuilder, query, 'estate', 'districtCode');
     queryBuilder = this.setFilter(queryBuilder, query, 'estate', 'wardCode');
     queryBuilder = this.setPagination(queryBuilder, query);
-    queryBuilder = this.setSorting(queryBuilder, query, 'categoryProperty');
+    queryBuilder = this.setSorting(queryBuilder, query, 'estate', 'upvotedAt');
     queryBuilder = await this.setAlgoliaSearch(
       queryBuilder,
       query,
@@ -109,6 +109,20 @@ export class EstateService extends BaseService {
     await this.cloudflareImageService.mapVariantToImage(records, 'avatar');
 
     return this.generateGetAllResponse(records, total, query);
+  }
+
+  unPublishById(id: number) {
+    return this.estateRepository.update(id, { status: ESTATE_STATUS_ENUM.UNPUBLISHED });
+  }
+
+  publishById(id: number) {
+    return this.estateRepository.update(id, { status: ESTATE_STATUS_ENUM.PUBLISHED });
+  }
+
+  upTopById(id: number) {
+    return this.estateRepository.update(id, {
+      upvotedAt: new Date(),
+    });
   }
 
   private get queryBuilder() {

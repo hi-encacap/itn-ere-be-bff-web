@@ -1,7 +1,8 @@
-import { UnprocessableEntityException, ValidationPipe } from '@nestjs/common';
+import { UnprocessableEntityException, ValidationPipe, VersioningType } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { useContainer } from 'class-validator';
+import { readFileSync } from 'fs';
 import { AppModule } from './app.module';
 import { AllExceptionFilter } from './common/filters/all-exception.filter';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
@@ -10,13 +11,20 @@ import AppConfigService from './configs/config.service';
 
 async function bootstrap() {
   try {
-    const app = await NestFactory.create<NestExpressApplication>(AppModule);
+    const httpsOptions = {
+      key: readFileSync(`${__dirname}/../.certs/encacap.com.key`),
+      cert: readFileSync(`${__dirname}/../.certs/encacap.com.crt`),
+    };
+
+    const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+      httpsOptions,
+    });
     const httpAdapter = app.get(HttpAdapterHost);
     const configService = app.get(AppConfigService);
 
     useContainer(app.select(AppModule), { fallbackOnErrors: true });
     app.enableCors({
-      origin: ['https://dev.dashboard.baolocre.encacap.com:4002'],
+      origin: ['https://dev.dashboard.re.encacap.com:3012'],
       credentials: true,
     });
 
@@ -43,6 +51,12 @@ async function bootstrap() {
       }),
     );
     app.useGlobalInterceptors(new ResponseInterceptor());
+
+    // Versioning
+    app.enableVersioning({
+      defaultVersion: '1',
+      type: VersioningType.URI,
+    });
 
     await app.listen(configService.port);
   } catch (error) {

@@ -8,13 +8,10 @@ import { WebsiteNotExistsValidator } from '../website/validators/website-not-exi
 import { WebsiteModule } from '../website/website.module';
 import { CloudflareImageConsumer } from './consumers/cloudflare-image.consumer';
 import { AdminCloudflareImageController } from './controllers/admin-cloudflare-image.controller';
-import { RootCloudflareVariantWebsiteController } from './controllers/root-cloudflare-variant-website.controller';
 import { RootCloudflareVariantController } from './controllers/root-cloudflare-variant.controller';
 import { CloudflareImageEntity } from './entities/cloudflare-image.entity';
-import { CloudflareVariantWebsiteEntity } from './entities/cloudflare-variant-website.entity';
 import { CloudflareVariantEntity } from './entities/cloudflare-variant.entity';
 import { CloudflareImageService } from './services/cloudflare-image.service';
-import { CloudflareVariantWebsiteService } from './services/cloudflare-variant-website.service';
 import { CloudflareVariantService } from './services/cloudflare-variant.service';
 import { CloudflareImageNotExistsValidator } from './validators/cloudflare-image-not-exists.validator';
 import { CloudflareVariantCannotDeleteValidator } from './validators/cloudflare-variant-cannot-delete.validator';
@@ -23,11 +20,7 @@ import { CloudflareVariantNotExistsValidator } from './validators/cloudflare-var
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      CloudflareVariantEntity,
-      CloudflareVariantWebsiteEntity,
-      CloudflareImageEntity,
-    ]),
+    TypeOrmModule.forFeature([CloudflareVariantEntity, CloudflareImageEntity]),
     BullModule.registerQueue({
       name: 'cloudflare-image',
     }),
@@ -44,14 +37,9 @@ import { CloudflareVariantNotExistsValidator } from './validators/cloudflare-var
     WebsiteModule,
     CloudflareConfigModule,
   ],
-  controllers: [
-    RootCloudflareVariantController,
-    RootCloudflareVariantWebsiteController,
-    AdminCloudflareImageController,
-  ],
+  controllers: [RootCloudflareVariantController, AdminCloudflareImageController],
   providers: [
     CloudflareVariantService,
-    CloudflareVariantWebsiteService,
     CloudflareImageService,
 
     CloudflareImageConsumer,
@@ -63,11 +51,6 @@ import { CloudflareVariantNotExistsValidator } from './validators/cloudflare-var
 
     WebsiteNotExistsValidator,
   ],
-  exports: [
-    CloudflareVariantService,
-    CloudflareVariantWebsiteService,
-    CloudflareImageService,
-    CloudflareImageNotExistsValidator,
-  ],
+  exports: [CloudflareVariantService, CloudflareImageService, CloudflareImageNotExistsValidator],
 })
 export class CloudflareModule {}
