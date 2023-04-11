@@ -13,6 +13,7 @@ import appConfiguration from './configuration';
       validationSchema: Joi.object({
         NODE_ENV: Joi.string().valid('development', 'production', 'test', 'provision').default('development'),
         PORT: Joi.number().default(3000),
+        NAME: Joi.string().required(),
         SECRET_ROOT_PASSWORD: Joi.string().required(),
       }),
     }),

@@ -22,6 +22,7 @@ import { TokenModule } from './modules/token/token.module';
 import { UnitPriceModule } from './modules/unit-price/unit-price.module';
 import { UserModule } from './modules/user/user.module';
 import { WebsiteModule } from './modules/website/website.module';
+import { MemCachingProviderModule } from './providers/mem-caching/mem-caching.module';
 import { PostgresDatabaseProviderModule } from './providers/postgres/postgres.module';
 
 @Module({
@@ -33,6 +34,7 @@ import { PostgresDatabaseProviderModule } from './providers/postgres/postgres.mo
     GHNConfigModule,
 
     PostgresDatabaseProviderModule,
+    MemCachingProviderModule,
 
     LoggerModule,
 
