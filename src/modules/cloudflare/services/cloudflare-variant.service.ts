@@ -39,7 +39,7 @@ export class CloudflareVariantService {
     return data;
   }
 
-  async getAll(query?: FindOptionsWhere<CloudflareVariantEntity>) {
+  getAll(query?: FindOptionsWhere<CloudflareVariantEntity>) {
     const queryBuilder = this.getQueryBuilder().where(omit(query, ['websiteId']));
 
     if (query?.websiteId) {
