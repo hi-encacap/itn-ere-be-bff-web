@@ -4,6 +4,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CloudflareConfigModule } from 'src/configs/cloudflare/cloudflare-config.module';
 import { CloudflareConfigService } from 'src/configs/cloudflare/cloudflare-config.service';
+import { AppConfigModule } from 'src/configs/config.module';
+import { MemCachingProviderModule } from 'src/providers/mem-caching/mem-caching.module';
 import { WebsiteNotExistsValidator } from '../website/validators/website-not-exists.validator';
 import { WebsiteModule } from '../website/website.module';
 import { CloudflareImageConsumer } from './consumers/cloudflare-image.consumer';
@@ -34,6 +36,8 @@ import { CloudflareVariantNotExistsValidator } from './validators/cloudflare-var
       }),
       inject: [CloudflareConfigService],
     }),
+    AppConfigModule,
+    MemCachingProviderModule,
     WebsiteModule,
     CloudflareConfigModule,
   ],

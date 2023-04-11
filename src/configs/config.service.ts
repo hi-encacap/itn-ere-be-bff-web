@@ -5,6 +5,10 @@ import { ConfigService } from '@nestjs/config';
 export default class AppConfigService {
   constructor(private readonly configService: ConfigService) {}
 
+  get name() {
+    return this.configService.get<string>('name');
+  }
+
   get rootPassword() {
     return this.configService.get<string>('rootPassword');
   }

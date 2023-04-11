@@ -1,13 +1,12 @@
 import { HttpService } from '@nestjs/axios';
-// import { InjectQueue } from '@nestjs/bull';
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-// import { Queue } from 'bull';
 import FormData from 'form-data';
 import { get, set } from 'lodash';
 import { LoggerService } from 'src/common/modules/logger/logger.service';
 import { randomStringPrefix } from 'src/common/utils/helpers.util';
 import { CloudflareConfigService } from 'src/configs/cloudflare/cloudflare-config.service';
+import AppConfigService from 'src/configs/config.service';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CLOUDFLARE_IMAGE_ERROR_CODE } from '../constants/cloudflare-error-code.constant';
@@ -28,6 +27,7 @@ export class CloudflareImageService {
     // private readonly cloudflareImageQueue: Queue,
     private readonly cloudflareConfigService: CloudflareConfigService,
     private readonly cloudflareVariantService: CloudflareVariantService,
+    private readonly appConfigService: AppConfigService,
   ) {
     this.imageURL = this.cloudflareConfigService.images.delivery;
   }
@@ -123,7 +123,7 @@ export class CloudflareImageService {
   private async transformImageToURL(image: CloudflareImageEntity) {
     const { id } = image;
 
-    const imageVariants = await this.cloudflareVariantService.getAll();
+    const imageVariants = await this.cloudflareVariantService.getAllCached();
 
     if (!imageVariants?.length) {
       return null;
@@ -140,6 +140,6 @@ export class CloudflareImageService {
   }
 
   private getFileName(id: string, mimetype: string) {
-    return `ENCACAP_RE_${id}.${mimetype.split('/')[1]}`;
+    return `${this.appConfigService.name}_${id}.${mimetype.split('/')[1]}`;
   }
 }

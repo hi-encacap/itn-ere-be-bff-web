@@ -21,6 +21,8 @@ export default class DatabaseConfigService {
     return {
       host: this.configService.get<string>('redis.host'),
       port: this.configService.get<number>('redis.port'),
+      password: this.configService.get<string>('redis.password'),
+      database: this.configService.get<number>('redis.database'),
     };
   }
 }

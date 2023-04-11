@@ -2,6 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { omit, pick } from 'lodash';
+import { MemCachingService } from 'src/providers/mem-caching/mem-caching.service';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { RootCloudflareVariantCreateBodyDto } from '../dtos/root-cloudflare-variant-create-body.dto';
 import { RootCloudflareVariantUpdateBodyDto } from '../dtos/root-cloudflare-variant-update-body.dto';
@@ -13,7 +14,30 @@ export class CloudflareVariantService {
     @InjectRepository(CloudflareVariantEntity)
     private readonly cloudflareVariantRepository: Repository<CloudflareVariantEntity>,
     private readonly httpService: HttpService,
+    private readonly memCachingService: MemCachingService,
   ) {}
+
+  async getAllCached() {
+    const cachedData = await this.memCachingService.getCloudflareVariants();
+
+    if (cachedData !== null) {
+      return cachedData;
+    }
+
+    const data = await this.getAll();
+
+    await this.memCachingService.setCloudflareVariants(data);
+
+    return data;
+  }
+
+  async updateCache() {
+    const data = await this.getAll();
+
+    await this.memCachingService.setCloudflareVariants(data);
+
+    return data;
+  }
 
   getAll(query?: FindOptionsWhere<CloudflareVariantEntity>) {
     const queryBuilder = this.getQueryBuilder().where(omit(query, ['websiteId']));
@@ -36,10 +60,12 @@ export class CloudflareVariantService {
         options: pick(variant, ['fit', 'width', 'height']),
       });
 
-      return this.cloudflareVariantRepository.save({
+      await this.cloudflareVariantRepository.save({
         ...variant,
         id: variant.name,
       });
+
+      return this.updateCache();
     } catch (error) {
       throw new BadRequestException(error.response.data);
     }
@@ -60,7 +86,9 @@ export class CloudflareVariantService {
         options: updateBody,
       });
 
-      return this.cloudflareVariantRepository.update(code, updateBody);
+      await this.cloudflareVariantRepository.update(code, updateBody);
+
+      return this.updateCache();
     } catch (error) {
       throw new BadRequestException(error.response.data);
     }
@@ -70,7 +98,9 @@ export class CloudflareVariantService {
     try {
       await this.httpService.axiosRef.delete(`variants/${id}`);
 
-      return this.cloudflareVariantRepository.delete(id);
+      await this.cloudflareVariantRepository.delete(id);
+
+      return this.updateCache();
     } catch (error) {
       throw new BadRequestException(error.response.data);
     }
