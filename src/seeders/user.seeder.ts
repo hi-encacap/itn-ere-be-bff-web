@@ -1,6 +1,6 @@
+import { IREUser } from '@encacap-group/types/dist/re';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IUser } from 'encacap/dist/re';
 import { Seeder } from 'nestjs-seeder';
 import AppConfigService from 'src/configs/config.service';
 import { RoleEntity } from 'src/modules/user/entities/role.entity';
@@ -10,7 +10,7 @@ import { DeepPartial, Repository } from 'typeorm';
 import { roleItems } from './role.seeder';
 import { websiteItems } from './website.seeder';
 
-const userItems: Array<DeepPartial<IUser>> = [
+const userItems: Array<DeepPartial<IREUser>> = [
   {
     email: 'encacap@re.encacap.com',
     username: 'encacap',
@@ -45,7 +45,7 @@ export class UserSeeder implements Seeder {
     private readonly configService: AppConfigService,
   ) {}
 
-  async upsertUserItem(item: DeepPartial<IUser | UserEntity>) {
+  async upsertUserItem(item: DeepPartial<IREUser | UserEntity>) {
     let record = await this.userRepository
       .createQueryBuilder('user')
       .where('user.email = :email', { email: item.email })

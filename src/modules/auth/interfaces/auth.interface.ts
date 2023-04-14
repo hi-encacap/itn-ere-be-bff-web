@@ -1,4 +1,5 @@
-import { IRole, IWebsite } from 'encacap/dist/re';
+import { IRole } from '@encacap-group/types/dist/account';
+import { IWebsite } from '@encacap-group/types/dist/re';
 
 export interface IJwtPayload {
   id: number;

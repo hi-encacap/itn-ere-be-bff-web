@@ -1,6 +1,6 @@
+import { ESTATE_QUARTER_ENUM } from '@encacap-group/types/dist/re';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ESTATE_QUARTER_ENUM } from 'encacap/dist/re';
 import { EstateQuarterEntity } from 'src/modules/estate/entities/estate-quarter.entity';
 import { IEstateQuarter } from 'src/modules/estate/interfaces/estate-quarter.interface';
 import { Repository } from 'typeorm';

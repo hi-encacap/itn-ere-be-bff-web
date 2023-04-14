@@ -1,5 +1,5 @@
+import { IREUser } from '@encacap-group/types/dist/re';
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
-import { IUser } from 'encacap/dist/re';
 import { AddWebsiteIdToParam } from 'src/common/decorators/add-website-id-to-param.decorator';
 import { User } from 'src/common/decorators/user.decorator';
 import { AdminGuard } from 'src/common/guards/admin.guard';
@@ -17,7 +17,7 @@ export class AdminCategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Get()
-  getAll(@Query() query: CategoryListQueryDto, @User() user: IUser) {
+  getAll(@Query() query: CategoryListQueryDto, @User() user: IREUser) {
     return this.categoryService.getAll({
       ...query,
       websiteId: user.websiteId,
@@ -25,7 +25,7 @@ export class AdminCategoryController {
   }
 
   @Post()
-  create(@Body() body: CategoryCreateBodyDto, @User() user: IUser) {
+  create(@Body() body: CategoryCreateBodyDto, @User() user: IREUser) {
     return this.categoryService.create(body, user);
   }
 

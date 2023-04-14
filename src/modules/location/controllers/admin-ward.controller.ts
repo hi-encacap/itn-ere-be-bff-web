@@ -1,5 +1,5 @@
+import { IREUser } from '@encacap-group/types/dist/re';
 import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
-import { IUser } from 'encacap/dist/re';
 import { AddWebsiteIdToParam } from 'src/common/decorators/add-website-id-to-param.decorator';
 import { User } from 'src/common/decorators/user.decorator';
 import { AdminGuard } from 'src/common/guards/admin.guard';
@@ -19,7 +19,7 @@ export class AdminWardController {
   ) {}
 
   @Get()
-  getAll(@Query() query: WardListQueryDto, @User() user: IUser) {
+  getAll(@Query() query: WardListQueryDto, @User() user: IREUser) {
     return this.wardService.getAll({
       ...query,
       websiteId: user.websiteId,
@@ -27,12 +27,12 @@ export class AdminWardController {
   }
 
   @Post()
-  create(@Body() body: WardWebsiteCreateBodyDto, @User() user: IUser) {
+  create(@Body() body: WardWebsiteCreateBodyDto, @User() user: IREUser) {
     return this.wardService.create(body, user);
   }
 
   @Delete(':code')
-  delete(@AddWebsiteIdToParam() @Param() param: WardWebsiteDeleteParamDto, @User() user: IUser) {
+  delete(@AddWebsiteIdToParam() @Param() param: WardWebsiteDeleteParamDto, @User() user: IREUser) {
     return this.wardWebsiteService.delete(param.code, user.websiteId);
   }
 }

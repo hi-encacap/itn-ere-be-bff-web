@@ -1,5 +1,6 @@
+import { IRole } from '@encacap-group/types/dist/account';
+import { IREUser, IWebsite } from '@encacap-group/types/dist/re';
 import { compare, hash } from 'bcrypt';
-import { IRole, IUser, IWebsite } from 'encacap/dist/re';
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
 import { CategoryGroupEntity } from 'src/modules/category/entities/category-group.entity';
 import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
@@ -9,7 +10,7 @@ import { Column, Entity, JoinColumn, OneToMany, ManyToOne as OneToOne } from 'ty
 import { UserRoleMappingEntity } from './user-role-mapping.entity';
 
 @Entity({ name: 'users' })
-export class UserEntity extends BaseEntityWithPrimaryGeneratedColumn implements IUser {
+export class UserEntity extends BaseEntityWithPrimaryGeneratedColumn implements IREUser {
   @Column({
     unique: true,
   })

@@ -1,6 +1,6 @@
+import { IRole } from '@encacap-group/types/dist/account';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IRole } from 'encacap/dist/re';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { RoleEntity } from '../entities/role.entity';
 

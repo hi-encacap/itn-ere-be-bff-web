@@ -1,4 +1,4 @@
-import { IWebsite } from 'encacap/dist/re';
+import { IWebsite } from '@encacap-group/types/dist/re';
 import { ContactEntity } from 'src/modules/contact/entities/contact.entity';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';

@@ -1,6 +1,6 @@
+import { IREUser } from '@encacap-group/types/dist/re';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IUser } from 'encacap/dist/re';
 import { pick } from 'lodash';
 import { BaseService } from 'src/base/base.service';
 import { slugify } from 'src/common/utils/helpers.util';
@@ -71,7 +71,7 @@ export class CategoryService extends BaseService {
     return this.generateGetAllResponse(categories, items, query);
   }
 
-  async create(body: CategoryCreateBodyDto, user: IUser) {
+  async create(body: CategoryCreateBodyDto, user: IREUser) {
     const { code } = body;
 
     if (!code) {

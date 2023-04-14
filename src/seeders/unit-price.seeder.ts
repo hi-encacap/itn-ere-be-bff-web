@@ -1,6 +1,6 @@
+import { UNIT_PRICE_TYPE_ENUM } from '@encacap-group/types/dist/re';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UNIT_PRICE_TYPE_ENUM } from 'encacap/dist/re';
 import { Seeder } from 'nestjs-seeder';
 import { UnitPriceEntity } from 'src/modules/unit-price/entities/unit-price.entity';
 import { IUnitPrice } from 'src/modules/unit-price/interfaces/unit-price.interface';

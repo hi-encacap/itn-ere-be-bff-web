@@ -1,6 +1,6 @@
+import { ESTATE_STATUS_ENUM } from '@encacap-group/types/dist/re';
 import { Type } from 'class-transformer';
 import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
-import { ESTATE_STATUS_ENUM } from 'encacap/dist/re';
 import { BaseListQueryDto } from 'src/base/base.dto';
 
 export class EstateListQueryDto extends BaseListQueryDto {

@@ -1,6 +1,6 @@
+import { DEFAULT_CLOUDFLARE_VARIANT_ENUM } from '@encacap-group/types/dist/re';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DEFAULT_CLOUDFLARE_VARIANT_ENUM } from 'encacap/dist/re';
 import { Seeder } from 'nestjs-seeder';
 import { CLOUDFLARE_VARIANT_FIT_ENUM } from 'src/modules/cloudflare/constants/cloudflare-variant.constant';
 import { CloudflareVariantEntity } from 'src/modules/cloudflare/entities/cloudflare-variant.entity';

@@ -1,4 +1,4 @@
-import { IRole } from 'encacap/dist/re';
+import { IRole } from '@encacap-group/types/dist/account';
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { UserRoleMappingEntity } from './user-role-mapping.entity';

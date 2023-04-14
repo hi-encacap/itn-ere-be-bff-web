@@ -1,5 +1,5 @@
+import { IREUser } from '@encacap-group/types/dist/re';
 import { Controller, Delete, Get, Param, Query, UseGuards } from '@nestjs/common';
-import { IUser } from 'encacap/dist/re';
 import { User } from 'src/common/decorators/user.decorator';
 import { AdminGuard } from 'src/common/guards/admin.guard';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
@@ -13,7 +13,7 @@ export class AdminAddressBookController {
   constructor(private readonly addressBookService: AddressBookService) {}
 
   @Get()
-  index(@Query() query: AddressBookListQueryDto, @User() user: IUser) {
+  index(@Query() query: AddressBookListQueryDto, @User() user: IREUser) {
     return this.addressBookService.getAll({
       ...query,
       websiteId: user.websiteId,

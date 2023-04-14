@@ -1,4 +1,4 @@
-import { UNIT_PRICE_TYPE_ENUM } from 'encacap/dist/re';
+import { UNIT_PRICE_TYPE_ENUM } from '@encacap-group/types/dist/re';
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';

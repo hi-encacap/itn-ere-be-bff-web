@@ -1,5 +1,5 @@
+import { IREUser } from '@encacap-group/types/dist/re';
 import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
-import { IUser } from 'encacap/dist/re';
 import { AddWebsiteIdToParam } from 'src/common/decorators/add-website-id-to-param.decorator';
 import { User } from 'src/common/decorators/user.decorator';
 import { AdminGuard } from 'src/common/guards/admin.guard';
@@ -19,7 +19,7 @@ export class AdminProvinceController {
   ) {}
 
   @Get()
-  getAll(@Query() query: ProvinceListQueryDto, @User() user: IUser) {
+  getAll(@Query() query: ProvinceListQueryDto, @User() user: IREUser) {
     return this.provinceService.getAll({
       ...query,
       websiteId: user.websiteId,
@@ -27,12 +27,12 @@ export class AdminProvinceController {
   }
 
   @Post()
-  create(@Body() body: ProvinceWebsiteCreateBodyDto, @User() user: IUser) {
+  create(@Body() body: ProvinceWebsiteCreateBodyDto, @User() user: IREUser) {
     return this.provinceService.create(body, user);
   }
 
   @Delete(':code')
-  delete(@AddWebsiteIdToParam() @Param() param: ProvinceWebsiteDeleteParamDto, @User() user: IUser) {
+  delete(@AddWebsiteIdToParam() @Param() param: ProvinceWebsiteDeleteParamDto, @User() user: IREUser) {
     return this.provinceWebsiteService.delete(param.code, user.websiteId);
   }
 }

@@ -1,6 +1,6 @@
+import { IREUser } from '@encacap-group/types/dist/re';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IUser } from 'encacap/dist/re';
 import { BaseService } from 'src/base/base.service';
 import { AlgoliaContactService } from 'src/modules/algolia/services/algolia-contact.service';
 import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
@@ -22,7 +22,7 @@ export class ContactService extends BaseService {
     super();
   }
 
-  async create(createContactDto: ContactCreateBodyDto, user?: IUser) {
+  async create(createContactDto: ContactCreateBodyDto, user?: IREUser) {
     const contact = await this.contactRepository.save({
       ...createContactDto,
       userId: user?.id,

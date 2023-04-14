@@ -1,6 +1,6 @@
+import { IREUser } from '@encacap-group/types/dist/re';
 import { forwardRef, Inject, Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IUser } from 'encacap/dist/re';
 import { BaseService } from 'src/base/base.service';
 import { slugify } from 'src/common/utils/helpers.util';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
@@ -76,7 +76,7 @@ export class WardService extends BaseService {
     return this.getManyAndCount(queryBuilder, query);
   }
 
-  async create(data: WardWebsiteCreateBodyDto, user?: IUser) {
+  async create(data: WardWebsiteCreateBodyDto, user?: IREUser) {
     const existedRecord = await this.get({ ghnRefId: data.ghnRefId }, false);
 
     if (existedRecord) {

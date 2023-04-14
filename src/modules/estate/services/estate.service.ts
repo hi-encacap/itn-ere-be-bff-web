@@ -1,6 +1,6 @@
+import { ESTATE_STATUS_ENUM, IREUser } from '@encacap-group/types/dist/re';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ESTATE_STATUS_ENUM, IUser } from 'encacap/dist/re';
 import { isObject, pickBy } from 'lodash';
 import { BaseService } from 'src/base/base.service';
 import { IAlgoliaEstate } from 'src/modules/algolia/interfaces/algolia.interface';
@@ -30,7 +30,7 @@ export class EstateService extends BaseService {
     super();
   }
 
-  async create(body: EstateCreateBodyDto, user?: IUser) {
+  async create(body: EstateCreateBodyDto, user?: IREUser) {
     const { id: estateId, status } = await this.estateRepository.save({
       ...pickBy(body, (value) => !isObject(value)),
       websiteId: user?.websiteId,

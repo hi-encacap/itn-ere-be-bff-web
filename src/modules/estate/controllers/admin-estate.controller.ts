@@ -1,5 +1,5 @@
+import { IREUser } from '@encacap-group/types/dist/re';
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
-import { IUser } from 'encacap/dist/re';
 import { BaseIdParamDto } from 'src/base/base.dto';
 import { AddWebsiteIdToParam } from 'src/common/decorators/add-website-id-to-param.decorator';
 import { User } from 'src/common/decorators/user.decorator';
@@ -17,7 +17,7 @@ export class AdminEstateController {
   constructor(private readonly estateService: EstateService) {}
 
   @Get()
-  getAll(@Query() query: EstateListQueryDto, @User() user: IUser) {
+  getAll(@Query() query: EstateListQueryDto, @User() user: IREUser) {
     return this.estateService.getAll({
       ...query,
       websiteId: user.websiteId,
@@ -25,7 +25,7 @@ export class AdminEstateController {
   }
 
   @Post()
-  create(@Body() body: EstateCreateBodyDto, @User() user: IUser) {
+  create(@Body() body: EstateCreateBodyDto, @User() user: IREUser) {
     return this.estateService.create(body, user);
   }
 

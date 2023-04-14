@@ -23,6 +23,7 @@
     "seed:dev:refresh": "ts-node -r tsconfig-paths/register ./src/seeders/index.ts --refresh"
   },
   "dependencies": {
+    "@encacap-group/types": "^1.1.1",
     "@nestjs/axios": "^1.0.0",
     "@nestjs/bull": "^0.6.2",
     "@nestjs/cache-manager": "^1.0.0",
@@ -43,7 +44,6 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "dayjs": "^1.11.6",
-    "encacap": "^1.2.7",
     "form-data": "^4.0.0",
     "joi": "^17.6.4",
     "lodash": "^4.17.21",

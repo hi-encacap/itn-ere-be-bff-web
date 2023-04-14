@@ -1,3 +1,4 @@
+import { ESTATE_QUARTER_ENUM, ESTATE_STATUS_ENUM, UNIT_PRICE_TYPE_ENUM } from '@encacap-group/types/dist/re';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
@@ -10,7 +11,6 @@ import {
   IsString,
   Validate,
 } from 'class-validator';
-import { ESTATE_QUARTER_ENUM, ESTATE_STATUS_ENUM, UNIT_PRICE_TYPE_ENUM } from 'encacap/dist/re';
 import { EXIST_VALIDATOR_TYPE } from 'src/common/constants/validator.constant';
 import { CategoryExistsValidator } from 'src/modules/category/validators/category-exists.validator';
 import { CategoryPropertyExistsValidator } from 'src/modules/category/validators/category-property-exists.validator';
