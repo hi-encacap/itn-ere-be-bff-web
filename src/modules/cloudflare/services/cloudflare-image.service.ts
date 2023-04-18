@@ -8,7 +8,7 @@ import { randomStringPrefix } from 'src/common/utils/helpers.util';
 import { CloudflareConfigService } from 'src/configs/cloudflare/cloudflare-config.service';
 import AppConfigService from 'src/configs/config.service';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 import { CLOUDFLARE_IMAGE_ERROR_CODE } from '../constants/cloudflare-error-code.constant';
 import { CLOUDFLARE_IMAGE_STATUS_ENUM } from '../constants/cloudflare-image-status.constant';
 import { CloudflareImageEntity } from '../entities/cloudflare-image.entity';
@@ -86,10 +86,14 @@ export class CloudflareImageService {
     }
   }
 
-  getOne(imageId: string) {
+  get(imageId: string) {
     return this.cloudflareImageRepository.findOne({
       where: { id: imageId },
     });
+  }
+
+  getAll(query: FindManyOptions<CloudflareImageEntity>) {
+    return this.cloudflareImageRepository.find(query);
   }
 
   async mapVariantToImage<T>(object: T, imagePath: string) {

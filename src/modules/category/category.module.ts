@@ -44,6 +44,11 @@ import { CategoryPropertyExistsValidator } from './validators/category-property-
     CategoryCanDeleteValidator,
     CategoryPropertyExistsValidator,
   ],
-  exports: [CategoryExistsValidator],
+  exports: [
+    CategoryExistsValidator,
+    CategoryService,
+    CategoryPropertyExistsValidator,
+    CategoryPropertyService,
+  ],
 })
 export class CategoryModule {}

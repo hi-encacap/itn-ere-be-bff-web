@@ -30,10 +30,10 @@ export class EstateService extends BaseService {
     super();
   }
 
-  async create(body: EstateCreateBodyDto, user?: IREUser) {
+  async create(body: EstateCreateBodyDto, user: IREUser) {
     const { id: estateId, status } = await this.estateRepository.save({
       ...pickBy(body, (value) => !isObject(value)),
-      websiteId: user?.websiteId,
+      websiteId: user.websiteId,
       status: body.status ?? ESTATE_STATUS_ENUM.DRAFT,
     });
     const { properties, imageIds } = body;
