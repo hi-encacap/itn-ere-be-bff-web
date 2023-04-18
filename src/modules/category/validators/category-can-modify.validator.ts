@@ -13,7 +13,7 @@ export class CategoryCanModifyValidator implements ValidatorConstraintInterface 
 
   async validate(id: number, validationArguments?: CategoryCanModifyValidatorValidationArguments) {
     try {
-      const category = await this.categoryService.getOne({
+      const category = await this.categoryService.get({
         id,
         websiteId: Number(validationArguments?.object.websiteId),
       });

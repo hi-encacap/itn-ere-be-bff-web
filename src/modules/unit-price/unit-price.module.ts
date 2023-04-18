@@ -9,6 +9,6 @@ import { UnitPriceExistsValidator } from './validators/unit-price-exists.validat
   imports: [TypeOrmModule.forFeature([UnitPriceEntity])],
   controllers: [UnitPriceController],
   providers: [UnitPriceService, UnitPriceExistsValidator],
-  exports: [UnitPriceExistsValidator],
+  exports: [UnitPriceService, UnitPriceExistsValidator],
 })
 export class UnitPriceModule {}

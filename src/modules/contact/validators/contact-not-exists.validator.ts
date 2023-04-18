@@ -7,7 +7,7 @@ export class ContactNotExistsValidator implements ValidatorConstraintInterface {
   constructor(private readonly contactService: ContactService) {}
 
   async validate(id: number) {
-    const user = await this.contactService.findOne({
+    const user = await this.contactService.get({
       id,
     });
 

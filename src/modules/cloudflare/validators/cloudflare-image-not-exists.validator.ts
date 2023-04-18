@@ -7,7 +7,7 @@ export class CloudflareImageNotExistsValidator implements ValidatorConstraintInt
 
   async validate(imageId: string) {
     try {
-      const image = await this.cloudflareImageService.getOne(imageId);
+      const image = await this.cloudflareImageService.get(imageId);
       return Boolean(image);
     } catch (error) {
       return false;

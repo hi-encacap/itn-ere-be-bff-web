@@ -38,7 +38,7 @@ export class ContactService extends BaseService {
     return this.contactRepository.update(id, updateContactDto);
   }
 
-  async findAll(query: ContactListQueryDto) {
+  async getAll(query: ContactListQueryDto) {
     let queryBuilder = this.getQueryBuilder();
 
     if (query.websiteId) {
@@ -61,7 +61,7 @@ export class ContactService extends BaseService {
     return this.generateGetAllResponse(contacts, total, query);
   }
 
-  findOne(query: FindOptionsWhere<ContactEntity>) {
+  get(query: FindOptionsWhere<ContactEntity>) {
     return this.getQueryBuilder().where(query).getOne();
   }
 

@@ -13,7 +13,7 @@ export class CategoryCanDeleteValidator implements ValidatorConstraintInterface 
 
   async validate(id: number, validationArguments?: CategoryCanDeleteValidatorValidationArguments) {
     try {
-      const category = await this.categoryService.getOne({
+      const category = await this.categoryService.get({
         id,
         websiteId: Number(validationArguments?.object.websiteId),
       });

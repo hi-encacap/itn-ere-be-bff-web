@@ -77,6 +77,13 @@ import { WardWebsiteExistsValidator } from './validators/ward-website-exists.val
     DistrictExistsValidator,
     WardExistsValidator,
   ],
-  exports: [ProvinceExistsValidator, DistrictExistsValidator, WardExistsValidator],
+  exports: [
+    ProvinceExistsValidator,
+    DistrictExistsValidator,
+    WardExistsValidator,
+    ProvinceService,
+    DistrictService,
+    WardService,
+  ],
 })
 export class LocationModule {}

@@ -23,7 +23,7 @@ export class CategoryService extends BaseService {
     super();
   }
 
-  async getOne(query: FindOptionsWhere<CategoryEntity>) {
+  async get(query: FindOptionsWhere<CategoryEntity>) {
     const record = await this.getQueryBuilder().where(query).getOne();
 
     if (!record) {
@@ -82,7 +82,7 @@ export class CategoryService extends BaseService {
       ...body,
       websiteId: user.websiteId,
     });
-    const category = await this.getOne({ code: record.code });
+    const category = await this.get({ code: record.code });
 
     this.algoliaService.save({
       objectID: category.code,
@@ -96,7 +96,7 @@ export class CategoryService extends BaseService {
   async update(id: number, body: CategoryUpdateBodyDto) {
     await this.categoryRepository.update({ id }, pick(body, ['name', 'categoryGroupId', 'thumbnailId']));
 
-    const category = await this.getOne({ id });
+    const category = await this.get({ id });
 
     this.algoliaService.update({
       objectID: String(category.id),

@@ -1,4 +1,4 @@
-import { IREUser } from '@encacap-group/types/dist/re';
+import { ESTATE_STATUS_ENUM, IREUser } from '@encacap-group/types/dist/re';
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { BaseIdParamDto } from 'src/base/base.dto';
 import { AddWebsiteIdToParam } from 'src/common/decorators/add-website-id-to-param.decorator';
@@ -9,15 +9,26 @@ import { EstateCreateBodyDto } from '../dtos/estate-create-body.dto';
 import { EstateListQueryDto } from '../dtos/estate-list-query.dto';
 import { EstateModifyParamDto } from '../dtos/estate-modify-param.dto';
 import { EstateUpdateBodyDto } from '../dtos/estate-update-body.dto';
+import { EstateDraftService } from '../services/estate-draft.service';
 import { EstateService } from '../services/estate.service';
 
 @UseGuards(JwtAuthGuard, AdminGuard)
 @Controller('admin/estates')
 export class AdminEstateController {
-  constructor(private readonly estateService: EstateService) {}
+  constructor(
+    private readonly estateService: EstateService,
+    private readonly estateDraftService: EstateDraftService,
+  ) {}
 
   @Get()
   getAll(@Query() query: EstateListQueryDto, @User() user: IREUser) {
+    if (query.status === ESTATE_STATUS_ENUM.DRAFT) {
+      return this.estateDraftService.getAll({
+        ...query,
+        websiteId: user.websiteId,
+      });
+    }
+
     return this.estateService.getAll({
       ...query,
       websiteId: user.websiteId,

@@ -16,7 +16,7 @@ export class AdminContactController {
 
   @Get()
   findAll(@Req() { user }, @Query() query: ContactListQueryDto) {
-    return this.contactService.findAll({ ...query, websiteId: user.website.id });
+    return this.contactService.getAll({ ...query, websiteId: user.website.id });
   }
 
   @Post()

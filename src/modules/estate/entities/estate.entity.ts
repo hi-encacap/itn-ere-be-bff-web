@@ -7,6 +7,7 @@ import { DistrictEntity } from 'src/modules/location/entities/district.entity';
 import { ProvinceEntity } from 'src/modules/location/entities/province.entity';
 import { WardEntity } from 'src/modules/location/entities/ward.entity';
 import { UnitPriceEntity } from 'src/modules/unit-price/entities/unit-price.entity';
+import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { EstateImageEntity } from './estate-image.entity';
@@ -82,6 +83,9 @@ export class EstateEntity extends BaseEntityWithPrimaryGeneratedColumn {
   @Column({ name: 'website_id' })
   websiteId: number;
 
+  @Column({ name: 'user_id' })
+  userId: number;
+
   @Column({ name: 'status', type: 'enum', enum: ESTATE_STATUS_ENUM })
   status: ESTATE_STATUS_ENUM;
 
@@ -105,6 +109,10 @@ export class EstateEntity extends BaseEntityWithPrimaryGeneratedColumn {
   @ManyToOne(() => WebsiteEntity)
   @JoinColumn({ name: 'website_id', referencedColumnName: 'id' })
   website: WebsiteEntity;
+
+  @ManyToOne(() => UserEntity)
+  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
+  user: UserEntity;
 
   @ManyToOne(() => ProvinceEntity)
   @JoinColumn({ name: 'province_code', referencedColumnName: 'code' })
@@ -137,4 +145,6 @@ export class EstateEntity extends BaseEntityWithPrimaryGeneratedColumn {
   })
   @JoinColumn({ name: 'id', referencedColumnName: 'estate_id' })
   images: EstateImageEntity[];
+
+  imageIds: string[];
 }
