@@ -1,5 +1,5 @@
 import { ESTATE_STATUS_ENUM, IREUser } from '@encacap-group/types/dist/re';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/base/base.service';
 import { CategoryService } from 'src/modules/category/services/category.service';
@@ -9,7 +9,8 @@ import { DistrictService } from 'src/modules/location/services/district.service'
 import { ProvinceService } from 'src/modules/location/services/province.service';
 import { WardService } from 'src/modules/location/services/ward.service';
 import { UnitPriceService } from 'src/modules/unit-price/services/unit-price.service';
-import { In, Repository } from 'typeorm';
+import { FindOptionsWhere, In, Repository } from 'typeorm';
+import { ESTATE_ERROR_CODE } from '../constants/estate-error-code.constant';
 import { EstateDraftCreateBodyDto } from '../dtos/estate-draft-create-body.dto';
 import { EstateListQueryDto } from '../dtos/estate-list-query.dto';
 import { EstateDraftEntity } from '../entities/estate-draft.entity';
@@ -60,6 +61,25 @@ export class EstateDraftService extends BaseService {
     await this.cloudflareImageService.mapVariantToImage(parsedRecords, 'avatar');
 
     return this.generateGetAllResponse(parsedRecords, total, query);
+  }
+
+  async get(query: FindOptionsWhere<EstateDraftEntity>) {
+    const record = await this.estateDraftRepository.findOneBy(query);
+
+    if (!record) {
+      throw new NotFoundException(ESTATE_ERROR_CODE.ESTATE_NOT_EXISTS);
+    }
+
+    return this.mapRecordRelation({
+      ...record,
+      ...JSON.parse(record.data),
+    });
+  }
+
+  async delete(query: FindOptionsWhere<EstateDraftEntity>) {
+    const record = await this.get(query);
+
+    return this.estateDraftRepository.remove(record as unknown as EstateDraftEntity);
   }
 
   private async mapRecordRelation(record: EstateEntity) {
