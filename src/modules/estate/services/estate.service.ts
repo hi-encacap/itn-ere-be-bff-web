@@ -49,12 +49,10 @@ export class EstateService extends BaseService {
   }
 
   async update(id: number, body: EstateUpdateBodyDto) {
-    const estate = await await this.get({ id });
-
-    await this.estateRepository.update(id, {
-      ...estate,
-      ...pickBy(body, (value) => !isObject(value)),
-    });
+    await this.estateRepository.update(
+      id,
+      pickBy(body, (value) => !isObject(value)),
+    );
 
     const { properties = [], imageIds = [], status } = body;
 
@@ -82,7 +80,10 @@ export class EstateService extends BaseService {
       throw new NotFoundException(ESTATE_ERROR_CODE.ESTATE_NOT_EXISTS);
     }
 
-    return this.cloudflareImageService.mapVariantToImages(record, 'images');
+    await this.cloudflareImageService.mapVariantToImages(record, 'images');
+    await this.cloudflareImageService.mapVariantToImage(record, 'avatar');
+
+    return record;
   }
 
   async getAll(query: EstateListQueryDto) {
@@ -155,6 +156,8 @@ export class EstateService extends BaseService {
         .leftJoinAndSelect('estate.category', 'category')
         .leftJoinAndSelect('estate.avatar', 'avatar')
         .leftJoinAndSelect('estate.contact', 'contact')
+        .leftJoinAndSelect('estate.areaUnit', 'areaUnit')
+        .leftJoinAndSelect('estate.priceUnit', 'priceUnit')
     );
   }
 

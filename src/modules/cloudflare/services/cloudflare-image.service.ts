@@ -140,7 +140,10 @@ export class CloudflareImageService {
       };
     }, {});
 
-    return newVariants;
+    return {
+      ...image,
+      ...newVariants,
+    };
   }
 
   private getFileName(id: string, mimetype: string) {
