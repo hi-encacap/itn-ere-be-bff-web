@@ -35,6 +35,7 @@ export class EstateService extends BaseService {
       ...pickBy(body, (value) => !isObject(value)),
       websiteId: user.websiteId,
       status: body.status ?? ESTATE_STATUS_ENUM.DRAFT,
+      userId: user.id,
     });
     const { properties, imageIds } = body;
 
@@ -54,19 +55,24 @@ export class EstateService extends BaseService {
       pickBy(body, (value) => !isObject(value)),
     );
 
-    const { properties = [], imageIds = [] } = body;
+    const { properties, imageIds } = body;
 
-    await this.estatePropertyService.bulkSave(properties, id);
-    await this.estateImageService.bulkSave(imageIds, id);
+    if (properties) {
+      await this.estatePropertyService.bulkSave(properties, id);
+    }
+
+    if (imageIds) {
+      await this.estateImageService.bulkSave(imageIds, id);
+    }
 
     await this.saveToAlgolia(id);
 
     return this.get({ id });
   }
 
-  async delete(id: number) {
-    await this.estateRepository.softDelete(id);
+  delete(id: number) {
     this.algoliaEstateService.remove(String(id));
+    return this.estateRepository.softDelete(id);
   }
 
   async get(query: FindOptionsWhere<EstateEntity>) {
@@ -85,7 +91,21 @@ export class EstateService extends BaseService {
   async getAll(query: EstateListQueryDto) {
     let queryBuilder = this.queryBuilder;
 
-    queryBuilder = this.setFilter(queryBuilder, query, 'estate', 'status');
+    const { status } = query;
+    let { statuses } = query;
+
+    if (status && !statuses) {
+      statuses = [status];
+    }
+
+    if (status && statuses) {
+      statuses = [...statuses, status];
+    }
+
+    if (statuses?.length) {
+      queryBuilder = this.setInOperator(queryBuilder, statuses, 'estate.status');
+    }
+
     queryBuilder = this.setFilter(queryBuilder, query, 'estate', 'websiteId');
     queryBuilder = this.setFilter(queryBuilder, query, 'estate', 'categoryId');
     queryBuilder = this.setFilter(queryBuilder, query, 'estate', 'provinceCode');

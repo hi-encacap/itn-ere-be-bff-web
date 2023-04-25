@@ -53,6 +53,7 @@ export class EstateDraftService extends BaseService {
         this.mapRecordRelation({
           ...record,
           ...JSON.parse(record.data),
+          id: record.id,
         }),
       ),
     );
@@ -70,10 +71,28 @@ export class EstateDraftService extends BaseService {
       throw new NotFoundException(ESTATE_ERROR_CODE.ESTATE_NOT_EXISTS);
     }
 
-    return this.mapRecordRelation({
+    const mappedRecord = await this.mapRecordRelation({
       ...record,
       ...JSON.parse(record.data),
+      id: record.id,
     });
+
+    await this.cloudflareImageService.mapVariantToImage(mappedRecord, 'avatar');
+    await this.cloudflareImageService.mapVariantToImages(mappedRecord, 'images');
+
+    return mappedRecord;
+  }
+
+  update(id: number, body: EstateDraftCreateBodyDto, user: IREUser) {
+    return this.estateDraftRepository.update(
+      {
+        id,
+        websiteId: user.websiteId,
+      },
+      {
+        data: JSON.stringify(body),
+      },
+    );
   }
 
   async delete(query: FindOptionsWhere<EstateDraftEntity>) {

@@ -1,5 +1,5 @@
 import { IREUser } from '@encacap-group/types/dist/re';
-import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { BaseIdParamDto } from 'src/base/base.dto';
 import { User } from 'src/common/decorators/user.decorator';
 import { AdminGuard } from 'src/common/guards/admin.guard';
@@ -32,6 +32,11 @@ export class AdminEstateDraftController {
       id: param.id,
       websiteId: user.websiteId,
     });
+  }
+
+  @Put(':id')
+  update(@Param() param: BaseIdParamDto, @Body() body: EstateDraftCreateBodyDto, @User() user: IREUser) {
+    return this.estateDraftService.update(param.id, body, user);
   }
 
   @Delete(':id')
