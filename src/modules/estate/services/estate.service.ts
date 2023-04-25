@@ -54,16 +54,12 @@ export class EstateService extends BaseService {
       pickBy(body, (value) => !isObject(value)),
     );
 
-    const { properties = [], imageIds = [], status } = body;
+    const { properties = [], imageIds = [] } = body;
 
     await this.estatePropertyService.bulkSave(properties, id);
     await this.estateImageService.bulkSave(imageIds, id);
 
-    if (status === ESTATE_STATUS_ENUM.PUBLISHED) {
-      await this.saveToAlgolia(id);
-    } else {
-      this.algoliaEstateService.remove(String(id));
-    }
+    await this.saveToAlgolia(id);
 
     return this.get({ id });
   }
@@ -113,11 +109,11 @@ export class EstateService extends BaseService {
   }
 
   unPublishById(id: number) {
-    return this.estateRepository.update(id, { status: ESTATE_STATUS_ENUM.UNPUBLISHED });
+    return this.update(id, { status: ESTATE_STATUS_ENUM.UNPUBLISHED });
   }
 
   publishById(id: number) {
-    return this.estateRepository.update(id, { status: ESTATE_STATUS_ENUM.PUBLISHED });
+    return this.update(id, { status: ESTATE_STATUS_ENUM.PUBLISHED });
   }
 
   upTopById(id: number) {
