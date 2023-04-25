@@ -5,9 +5,12 @@ import { BaseListQueryDto } from 'src/base/base.dto';
 
 export class EstateListQueryDto extends BaseListQueryDto {
   @IsOptional()
-  @IsString()
   @IsEnum(ESTATE_STATUS_ENUM)
   status?: ESTATE_STATUS_ENUM;
+
+  @IsOptional()
+  @IsEnum(ESTATE_STATUS_ENUM, { each: true })
+  statuses?: ESTATE_STATUS_ENUM[];
 
   @IsOptional()
   @IsNumber()

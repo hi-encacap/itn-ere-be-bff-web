@@ -1,5 +1,5 @@
 import { IREUser } from '@encacap-group/types/dist/re';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/base/base.service';
 import { AlgoliaContactService } from 'src/modules/algolia/services/algolia-contact.service';
@@ -61,8 +61,16 @@ export class ContactService extends BaseService {
     return this.generateGetAllResponse(contacts, total, query);
   }
 
-  get(query: FindOptionsWhere<ContactEntity>) {
-    return this.getQueryBuilder().where(query).getOne();
+  async get(query: FindOptionsWhere<ContactEntity>) {
+    const data = await this.getQueryBuilder().where(query).getOne();
+
+    if (!data) {
+      throw new NotFoundException();
+    }
+
+    await this.cloudflareImageService.mapVariantToImage(data, 'avatar');
+
+    return data;
   }
 
   delete(id: number) {

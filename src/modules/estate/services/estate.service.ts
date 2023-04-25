@@ -35,6 +35,7 @@ export class EstateService extends BaseService {
       ...pickBy(body, (value) => !isObject(value)),
       websiteId: user.websiteId,
       status: body.status ?? ESTATE_STATUS_ENUM.DRAFT,
+      userId: user.id,
     });
     const { properties, imageIds } = body;
 
@@ -49,30 +50,29 @@ export class EstateService extends BaseService {
   }
 
   async update(id: number, body: EstateUpdateBodyDto) {
-    const estate = await await this.get({ id });
+    await this.estateRepository.update(
+      id,
+      pickBy(body, (value) => !isObject(value)),
+    );
 
-    await this.estateRepository.update(id, {
-      ...estate,
-      ...pickBy(body, (value) => !isObject(value)),
-    });
+    const { properties, imageIds } = body;
 
-    const { properties = [], imageIds = [], status } = body;
-
-    await this.estatePropertyService.bulkSave(properties, id);
-    await this.estateImageService.bulkSave(imageIds, id);
-
-    if (status === ESTATE_STATUS_ENUM.PUBLISHED) {
-      await this.saveToAlgolia(id);
-    } else {
-      this.algoliaEstateService.remove(String(id));
+    if (properties) {
+      await this.estatePropertyService.bulkSave(properties, id);
     }
+
+    if (imageIds) {
+      await this.estateImageService.bulkSave(imageIds, id);
+    }
+
+    await this.saveToAlgolia(id);
 
     return this.get({ id });
   }
 
-  async delete(id: number) {
-    await this.estateRepository.softDelete(id);
+  delete(id: number) {
     this.algoliaEstateService.remove(String(id));
+    return this.estateRepository.softDelete(id);
   }
 
   async get(query: FindOptionsWhere<EstateEntity>) {
@@ -82,13 +82,30 @@ export class EstateService extends BaseService {
       throw new NotFoundException(ESTATE_ERROR_CODE.ESTATE_NOT_EXISTS);
     }
 
-    return this.cloudflareImageService.mapVariantToImages(record, 'images');
+    await this.cloudflareImageService.mapVariantToImages(record, 'images');
+    await this.cloudflareImageService.mapVariantToImage(record, 'avatar');
+
+    return record;
   }
 
   async getAll(query: EstateListQueryDto) {
     let queryBuilder = this.queryBuilder;
 
-    queryBuilder = this.setFilter(queryBuilder, query, 'estate', 'status');
+    const { status } = query;
+    let { statuses } = query;
+
+    if (status && !statuses) {
+      statuses = [status];
+    }
+
+    if (status && statuses) {
+      statuses = [...statuses, status];
+    }
+
+    if (statuses?.length) {
+      queryBuilder = this.setInOperator(queryBuilder, statuses, 'estate.status');
+    }
+
     queryBuilder = this.setFilter(queryBuilder, query, 'estate', 'websiteId');
     queryBuilder = this.setFilter(queryBuilder, query, 'estate', 'categoryId');
     queryBuilder = this.setFilter(queryBuilder, query, 'estate', 'provinceCode');
@@ -112,11 +129,11 @@ export class EstateService extends BaseService {
   }
 
   unPublishById(id: number) {
-    return this.estateRepository.update(id, { status: ESTATE_STATUS_ENUM.UNPUBLISHED });
+    return this.update(id, { status: ESTATE_STATUS_ENUM.UNPUBLISHED });
   }
 
   publishById(id: number) {
-    return this.estateRepository.update(id, { status: ESTATE_STATUS_ENUM.PUBLISHED });
+    return this.update(id, { status: ESTATE_STATUS_ENUM.PUBLISHED });
   }
 
   upTopById(id: number) {
@@ -155,6 +172,8 @@ export class EstateService extends BaseService {
         .leftJoinAndSelect('estate.category', 'category')
         .leftJoinAndSelect('estate.avatar', 'avatar')
         .leftJoinAndSelect('estate.contact', 'contact')
+        .leftJoinAndSelect('estate.areaUnit', 'areaUnit')
+        .leftJoinAndSelect('estate.priceUnit', 'priceUnit')
     );
   }
 

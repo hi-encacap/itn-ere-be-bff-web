@@ -6,7 +6,7 @@ import { CloudflareVariantEntity } from 'src/modules/cloudflare/entities/cloudfl
 
 @Injectable()
 export class MemCachingService {
-  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
+  constructor(@Inject(CACHE_MANAGER) private readonly cacheManager: Cache) {}
 
   getCloudflareVariants(): Promise<CloudflareVariantEntity[] | null> {
     return this.cacheManager.get(MEM_CACHING_KEY_ENUM.CLOUDFLARE_VARIANTS);

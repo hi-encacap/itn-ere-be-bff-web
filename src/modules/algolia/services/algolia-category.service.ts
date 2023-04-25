@@ -7,7 +7,7 @@ import { IAlgoliaCategory } from '../interfaces/algolia.interface';
 @Injectable()
 export class AlgoliaCategoryService {
   private readonly client: SearchClient;
-  private index: SearchIndex;
+  private readonly index: SearchIndex;
 
   constructor(
     private readonly algoliaConfigService: AlgoliaConfigService,

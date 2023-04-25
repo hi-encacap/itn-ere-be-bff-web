@@ -16,7 +16,7 @@ import { CategoryEntity } from '../entities/category.entity';
 @Injectable()
 export class CategoryService extends BaseService {
   constructor(
-    @InjectRepository(CategoryEntity) private categoryRepository: Repository<CategoryEntity>,
+    @InjectRepository(CategoryEntity) private readonly categoryRepository: Repository<CategoryEntity>,
     private readonly cloudflareImageService: CloudflareImageService,
     private readonly algoliaService: AlgoliaCategoryService,
   ) {

@@ -4,5 +4,5 @@ import { EstateCreateBodyDto } from './estate-create-body.dto';
 
 export class EstateUpdateBodyDto extends PartialType(EstateCreateBodyDto) {
   @Exclude()
-  id: number;
+  id?: number;
 }
