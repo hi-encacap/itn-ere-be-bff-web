@@ -40,7 +40,7 @@ export class LoggerService extends NestConsoleLoggerService {
       return message.stack;
     }
 
-    if (stack) {
+    if (stack && typeof stack === 'object') {
       return stack.toString();
     }
 
