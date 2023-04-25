@@ -9,7 +9,7 @@ import { WardService } from './ward.service';
 
 @Injectable()
 export class GHNService {
-  private logger = new LoggerService(GHNService.name);
+  private readonly logger = new LoggerService(GHNService.name);
 
   constructor(
     @Inject(forwardRef(() => ProvinceService)) private readonly provinceService: ProvinceService,

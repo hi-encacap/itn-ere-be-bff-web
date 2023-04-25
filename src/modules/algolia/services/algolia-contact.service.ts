@@ -8,7 +8,7 @@ import { IAlgoliaContact } from '../interfaces/algolia.interface';
 @Injectable()
 export class AlgoliaContactService {
   private readonly client: SearchClient;
-  private index: SearchIndex;
+  private readonly index: SearchIndex;
 
   constructor(
     private readonly algoliaConfigService: AlgoliaConfigService,

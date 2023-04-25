@@ -9,8 +9,8 @@ import { IAlgoliaEstate } from '../interfaces/algolia.interface';
 @Injectable()
 export class AlgoliaEstateService {
   private readonly client: SearchClient;
-  private index: SearchIndex;
-  private logger = new LoggerService(AlgoliaEstateService.name);
+  private readonly index: SearchIndex;
+  private readonly logger = new LoggerService(AlgoliaEstateService.name);
 
   constructor(
     private readonly algoliaConfigService: AlgoliaConfigService,

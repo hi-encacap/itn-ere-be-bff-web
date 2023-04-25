@@ -16,8 +16,8 @@ import { CloudflareVariantService } from './cloudflare-variant.service';
 
 @Injectable()
 export class CloudflareImageService {
-  private logger = new LoggerService('CloudflareImageService');
-  private imageURL: string;
+  private readonly logger = new LoggerService('CloudflareImageService');
+  private readonly imageURL: string;
 
   constructor(
     @InjectRepository(CloudflareImageEntity)

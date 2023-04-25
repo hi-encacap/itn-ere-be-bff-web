@@ -59,13 +59,11 @@ export class CloudflareVariantService {
         id: variant.name,
         options: pick(variant, ['fit', 'width', 'height']),
       });
-
       await this.cloudflareVariantRepository.save({
         ...variant,
         id: variant.name,
       });
-
-      return this.updateCache();
+      await this.updateCache();
     } catch (error) {
       throw new BadRequestException(error.response.data);
     }
@@ -85,10 +83,8 @@ export class CloudflareVariantService {
         id: code,
         options: updateBody,
       });
-
       await this.cloudflareVariantRepository.update(code, updateBody);
-
-      return this.updateCache();
+      await this.updateCache();
     } catch (error) {
       throw new BadRequestException(error.response.data);
     }
@@ -97,10 +93,8 @@ export class CloudflareVariantService {
   async deleteVariant(id: string) {
     try {
       await this.httpService.axiosRef.delete(`variants/${id}`);
-
+      await this.updateCache();
       await this.cloudflareVariantRepository.delete(id);
-
-      return this.updateCache();
     } catch (error) {
       throw new BadRequestException(error.response.data);
     }
