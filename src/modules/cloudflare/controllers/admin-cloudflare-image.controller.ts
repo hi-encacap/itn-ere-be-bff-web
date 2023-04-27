@@ -9,14 +9,14 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { AdminGuard } from 'src/common/guards/admin.guard';
+import { AdminAuthGuard } from 'src/common/guards/admin-auth.guard';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { CloudflareImageValidationPipe } from '../pipes/cloudflare-image-validation.pipe';
 import { CloudflareImagesValidationPipe } from '../pipes/cloudflare-images-validation.pipe';
 import { CloudflareImageService } from '../services/cloudflare-image.service';
 
 @Controller('admin/cloudflare/images')
-@UseGuards(JwtAuthGuard, AdminGuard)
+@UseGuards(JwtAuthGuard, AdminAuthGuard)
 export class AdminCloudflareImageController {
   constructor(private readonly cloudflareImageService: CloudflareImageService) {}
 

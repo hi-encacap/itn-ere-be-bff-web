@@ -59,16 +59,11 @@ export class UserSeeder implements Seeder {
       password: hashedPassword,
       firstName: item.firstName,
       lastName: item.lastName,
-      website: item.website,
+      websiteId: item.website.id,
     };
 
     if (record) {
-      await this.userRepository
-        .createQueryBuilder()
-        .update()
-        .set(newItem)
-        .where('id = :id', { id: record.id })
-        .execute();
+      await this.userRepository.update({ id: record.id }, newItem);
     } else {
       record = await this.userRepository.save(newItem);
     }

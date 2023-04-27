@@ -3,7 +3,7 @@ import { IREUser } from '@encacap-group/types/dist/re';
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
 
 @Injectable()
-export class UserGuard implements CanActivate {
+export class RootAuthGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();
     const user: IREUser = request.user;
@@ -18,7 +18,7 @@ export class UserGuard implements CanActivate {
   }
 
   private matchRoles(userRoles: IRole[]): boolean {
-    const rootRoleSlug = 'user';
+    const rootRoleSlug = 'root';
 
     return userRoles.some((role) => role.slug === rootRoleSlug);
   }

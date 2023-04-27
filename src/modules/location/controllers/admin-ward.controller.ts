@@ -2,7 +2,7 @@ import { IREUser } from '@encacap-group/types/dist/re';
 import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { AddWebsiteIdToParam } from 'src/common/decorators/add-website-id-to-param.decorator';
 import { User } from 'src/common/decorators/user.decorator';
-import { AdminGuard } from 'src/common/guards/admin.guard';
+import { AdminAuthGuard } from 'src/common/guards/admin-auth.guard';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { WardListQueryDto } from '../dtos/ward-list-query.dto';
 import { WardWebsiteCreateBodyDto } from '../dtos/ward-website-create-body.dto';
@@ -10,7 +10,7 @@ import { WardWebsiteDeleteParamDto } from '../dtos/ward-website-delete-param.dto
 import { WardWebsiteService } from '../services/ward-website.service';
 import { WardService } from '../services/ward.service';
 
-@UseGuards(JwtAuthGuard, AdminGuard)
+@UseGuards(JwtAuthGuard, AdminAuthGuard)
 @Controller('admin/locations/wards')
 export class AdminWardController {
   constructor(

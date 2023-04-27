@@ -2,7 +2,7 @@ import { IREUser } from '@encacap-group/types/dist/re';
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { AddWebsiteIdToParam } from 'src/common/decorators/add-website-id-to-param.decorator';
 import { User } from 'src/common/decorators/user.decorator';
-import { AdminGuard } from 'src/common/guards/admin.guard';
+import { AdminAuthGuard } from 'src/common/guards/admin-auth.guard';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { CategoryCreateBodyDto } from '../dtos/category-create-body.dto';
 import { CategoryDeleteParamDto } from '../dtos/category-delete-param.dto';
@@ -12,7 +12,7 @@ import { CategoryUpdateParamDto } from '../dtos/category-update-param.dto';
 import { CategoryService } from '../services/category.service';
 
 @Controller('admin/categories')
-@UseGuards(JwtAuthGuard, AdminGuard)
+@UseGuards(JwtAuthGuard, AdminAuthGuard)
 export class AdminCategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
