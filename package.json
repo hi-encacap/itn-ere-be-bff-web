@@ -23,7 +23,7 @@
     "seed:refresh": "node ./dist/seeders/index.js --refresh"
   },
   "dependencies": {
-    "@encacap-group/types": "^1.4.2",
+    "@encacap-group/types": "^1.4.4",
     "@nestjs/axios": "^1.0.0",
     "@nestjs/bull": "^0.6.2",
     "@nestjs/cache-manager": "^1.0.0",
