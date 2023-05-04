@@ -19,11 +19,11 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "seed:dev": "ts-node -r tsconfig-paths/register ./src/seeders/index.ts",
-    "seed:dev:refresh": "ts-node -r tsconfig-paths/register ./src/seeders/index.ts --refresh"
+    "seed": "dotenv -e .env.development node ./dist/seeders/index.js",
+    "seed:refresh": "node ./dist/seeders/index.js --refresh"
   },
   "dependencies": {
-    "@encacap-group/types": "^1.1.1",
+    "@encacap-group/types": "^1.4.5",
     "@nestjs/axios": "^1.0.0",
     "@nestjs/bull": "^0.6.2",
     "@nestjs/cache-manager": "^1.0.0",
@@ -81,6 +81,7 @@
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
+    "dotenv-cli": "^7.2.1",
     "eslint": "^8.26.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",

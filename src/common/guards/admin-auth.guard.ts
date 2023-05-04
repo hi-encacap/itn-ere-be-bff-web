@@ -4,7 +4,7 @@ import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@
 import { ROLE_ENUM } from '../constants/role.constant';
 
 @Injectable()
-export class AdminGuard implements CanActivate {
+export class AdminAuthGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();
     const user: IREUser = request.user;

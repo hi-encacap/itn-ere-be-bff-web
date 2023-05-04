@@ -15,6 +15,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { JwtStrategy } from './modules/auth/strategies/jwt.strategy';
 import { CategoryModule } from './modules/category/category.module';
 import { CloudflareModule } from './modules/cloudflare/cloudflare.module';
+import { ConfigModule } from './modules/configs/config.module';
 import { ContactModule } from './modules/contact/contact.module';
 import { EstateModule } from './modules/estate/estate.module';
 import { LocationModule } from './modules/location/location.module';
@@ -66,6 +67,7 @@ import { PostgresDatabaseProviderModule } from './providers/postgres/postgres.mo
     LocationModule,
     EstateModule,
     UnitPriceModule,
+    ConfigModule,
   ],
   controllers: [],
   providers: [JwtStrategy, JwtService],

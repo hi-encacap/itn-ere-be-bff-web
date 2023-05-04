@@ -1,13 +1,13 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
-import { RootGuard } from 'src/common/guards/root.guard';
+import { RootAuthGuard } from 'src/common/guards/root-auth.guard';
 import { RootCloudflareVariantCreateBodyDto } from '../dtos/root-cloudflare-variant-create-body.dto';
 import { RootCloudflareVariantDeleteParamDto } from '../dtos/root-cloudflare-variant-delete-query.dto';
 import { RootCloudflareVariantUpdateBodyDto } from '../dtos/root-cloudflare-variant-update-body.dto';
 import { CloudflareVariantService } from '../services/cloudflare-variant.service';
 
 @Controller('root/cloudflare/variants')
-@UseGuards(JwtAuthGuard, RootGuard)
+@UseGuards(JwtAuthGuard, RootAuthGuard)
 export class RootCloudflareVariantController {
   constructor(private readonly cloudflareVariantService: CloudflareVariantService) {}
 

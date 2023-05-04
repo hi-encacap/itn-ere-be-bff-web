@@ -2,18 +2,19 @@ import { IWebsite } from '@encacap-group/types/dist/re';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Seeder } from 'nestjs-seeder';
+import { WEBSITE_DOMAIN_ENUM } from 'src/modules/website/constants/website-domain.constant';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Repository } from 'typeorm';
 
 export const websiteItems: Array<Partial<IWebsite>> = [
   {
     name: 'Encacap RE',
-    url: 'https://www.re.encacap.com',
+    url: WEBSITE_DOMAIN_ENUM.ENCACAP_RE_DEV,
     description: 'This is the supper root website. It can be used to manage all the websites.',
   },
   {
     name: 'BaolocRE - Bất động sản Bảo Lộc',
-    url: 'https://www.diaocbaoloc.com.vn',
+    url: WEBSITE_DOMAIN_ENUM.BAOLOCRE_DEV,
     description: 'This is the website for BaolocRE.',
   },
 ];
