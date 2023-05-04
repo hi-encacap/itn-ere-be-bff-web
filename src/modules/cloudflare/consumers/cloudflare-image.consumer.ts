@@ -10,12 +10,11 @@ export class CloudflareImageConsumer {
 
   @Process('upload')
   upload(job: Job) {
-    this.cloudflareImageService.uploadToCloudflare(
+    return this.cloudflareImageService.uploadToCloudflare(
       job.data.imageId,
       job.data.file.mimetype,
       Buffer.from(job.data.file.buffer),
     );
-    return true;
   }
 
   @OnQueueActive()

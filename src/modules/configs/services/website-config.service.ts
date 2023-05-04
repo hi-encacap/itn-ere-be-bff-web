@@ -23,7 +23,7 @@ export class WebsiteConfigService extends BaseService {
     }
 
     const [data, total] = await queryBuilder.getManyAndCount();
-    const normalizedData = data.map(this.normalizeData);
+    const normalizedData = data.map((item) => this.normalizeData(item));
 
     return this.generateGetAllResponse(normalizedData, total, query);
   }

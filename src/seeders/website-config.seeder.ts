@@ -82,7 +82,7 @@ export class WebsiteConfigSeeder implements Seeder {
     const website = await this.websiteRepository.findOneBy({ url: item.websiteDomain });
 
     if (!website) {
-      return;
+      return undefined;
     }
 
     const record = await this.websiteConfigRepository.findOneBy({
@@ -100,12 +100,12 @@ export class WebsiteConfigSeeder implements Seeder {
     });
   }
 
-  async seed() {
+  seed() {
     const seedTasks = websiteConfigItem.map((item) => this.upsertItem(item));
     return Promise.all(seedTasks);
   }
 
-  async drop() {
+  drop() {
     return this.websiteConfigRepository.delete({});
   }
 }

@@ -12,7 +12,7 @@ export class PublicWebsiteConfigController {
   constructor(private readonly configService: WebsiteConfigService) {}
 
   @Get()
-  async getConfigs(@Query() query: WebsiteConfigListQueryDto, @Website() website: IWebsite) {
+  getConfigs(@Query() query: WebsiteConfigListQueryDto, @Website() website: IWebsite) {
     return this.configService.getAll({
       ...query,
       websiteId: website.id,
@@ -20,7 +20,7 @@ export class PublicWebsiteConfigController {
   }
 
   @Get(':code')
-  async getConfig(@Website() website: IWebsite, @Param() param: BaseCodeParamDto) {
+  getConfig(@Website() website: IWebsite, @Param() param: BaseCodeParamDto) {
     return this.configService.get({
       code: param.code,
       websiteId: website.id,
