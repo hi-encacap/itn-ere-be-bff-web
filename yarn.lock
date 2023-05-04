@@ -621,10 +621,10 @@
     eslint-module-utils "2.7.4"
     reflect-metadata "0.1.13"
 
-"@encacap-group/types@^1.4.4":
-  version "1.4.4"
-  resolved "https://registry.yarnpkg.com/@encacap-group/types/-/types-1.4.4.tgz#e8f643b9870d252328cb5a0a1ef8571376d181f6"
-  integrity sha512-S7fJgC0rc5YxxLXXHyvQt+4YTa5J9Dqeu0iktCPIfTfGMdaghygdP9fWqRub0Yg/+n0hn7VccuHlsttAzlhFIA==
+"@encacap-group/types@^1.4.5":
+  version "1.4.5"
+  resolved "https://registry.yarnpkg.com/@encacap-group/types/-/types-1.4.5.tgz#71ced4794d309d85893577b46dccf6cda90ffbc4"
+  integrity sha512-Iez5uK5pYN1Wxxa3wQ1mew4Ck0p4f4CzWkGsDRvsiPjuY3sY9itWfecNUBlsXpV8KhRWb1eWNgT6TduJtpktQA==
 
 "@eslint/eslintrc@^1.4.0":
   version "1.4.0"

@@ -60,6 +60,13 @@ const websiteConfigItem: IConfigSeeder[] = [
     group: CONFIG_GROUP_ENUM.SITE,
     websiteDomain: WEBSITE_DOMAIN_ENUM.BAOLOCRE_DEV,
   },
+  {
+    code: BAOLOCRE_SITE_CONFIG_CODE_ENUM.HOMEPAGE_SLIDER_IMAGES,
+    value: JSON.stringify([]),
+    type: CONFIG_TYPE_ENUM.STRING,
+    group: CONFIG_GROUP_ENUM.SITE,
+    websiteDomain: WEBSITE_DOMAIN_ENUM.BAOLOCRE_DEV,
+  },
 ];
 
 @Injectable()

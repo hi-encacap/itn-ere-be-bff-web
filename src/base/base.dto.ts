@@ -14,6 +14,11 @@ export class BaseIdParamDto {
   id: number;
 }
 
+export class BaseCodeParamDto {
+  @IsString()
+  code: string;
+}
+
 export class BaseListQueryDto {
   @IsOptional()
   @IsPositive()
