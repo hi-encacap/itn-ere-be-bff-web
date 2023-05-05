@@ -1,7 +1,7 @@
+import { CATEGORY_GROUP_ENUM } from '@encacap-group/types/dist/re';
 import { Type } from 'class-transformer';
 import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 import { BaseListQueryDto } from 'src/base/base.dto';
-import { CATEGORY_GROUP_ENUM } from '../constants/category-group.constant';
 
 export class CategoryListQueryDto extends BaseListQueryDto {
   @IsOptional()

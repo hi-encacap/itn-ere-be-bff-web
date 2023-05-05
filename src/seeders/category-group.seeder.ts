@@ -1,9 +1,9 @@
+import { CATEGORY_GROUP_ENUM } from '@encacap-group/types/dist/re';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { capitalize, omit, values } from 'lodash';
 import { Seeder } from 'nestjs-seeder';
 import { ROLE_ENUM } from 'src/common/constants/role.constant';
-import { CATEGORY_GROUP_ENUM } from 'src/modules/category/constants/category-group.constant';
 import { CategoryGroupEntity } from 'src/modules/category/entities/category-group.entity';
 import { ICategoryGroup } from 'src/modules/category/interfaces/category-group.interface';
 import { RoleEntity } from 'src/modules/user/entities/role.entity';
