@@ -1,8 +1,7 @@
-import { IREUser } from '@encacap-group/types/dist/re';
-import { forwardRef, Inject, Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { IREUser, slugify } from '@encacap-group/types/dist/re';
+import { Inject, Injectable, UnprocessableEntityException, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/base/base.service';
-import { slugify } from 'src/common/utils/helpers.util';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
 import { LOCATION_ERROR_CODE } from '../constants/location-error-code.constant';

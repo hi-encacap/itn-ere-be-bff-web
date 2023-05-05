@@ -1,9 +1,8 @@
-import { IREUser } from '@encacap-group/types/dist/re';
+import { IREUser, slugify } from '@encacap-group/types/dist/re';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { pick } from 'lodash';
 import { BaseService } from 'src/base/base.service';
-import { slugify } from 'src/common/utils/helpers.util';
 import { AlgoliaCategoryService } from 'src/modules/algolia/services/algolia-category.service';
 import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';

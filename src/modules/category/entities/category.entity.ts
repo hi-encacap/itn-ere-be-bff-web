@@ -1,8 +1,8 @@
+import { CATEGORY_GROUP_ENUM } from '@encacap-group/types/dist/re';
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
 import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
-import { CATEGORY_GROUP_ENUM } from '../constants/category-group.constant';
 import { CategoryGroupEntity } from './category-group.entity';
 
 @Entity({ name: 'categories' })

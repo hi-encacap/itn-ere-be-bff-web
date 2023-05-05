@@ -9,6 +9,7 @@ import { UnitPriceModule } from '../unit-price/unit-price.module';
 import { AdminEstateDraftController } from './controllers/admin-estate-draft.controller';
 import { AdminEstateController } from './controllers/admin-estate.controller';
 import { EstateQuarterController } from './controllers/estate-quarter.controller';
+import { PublicEstateController } from './controllers/public-estate.controller';
 import { EstateDraftEntity } from './entities/estate-draft.entity';
 import { EstateImageEntity } from './entities/estate-image.entity';
 import { EstatePropertyEntity } from './entities/estate-property.entity';
@@ -39,7 +40,12 @@ import { EstateExistsValidator } from './validators/estate-exists.validator';
     UnitPriceModule,
     LocationModule,
   ],
-  controllers: [EstateQuarterController, AdminEstateDraftController, AdminEstateController],
+  controllers: [
+    EstateQuarterController,
+    AdminEstateDraftController,
+    AdminEstateController,
+    PublicEstateController,
+  ],
   providers: [
     EstateQuarterService,
     EstateService,

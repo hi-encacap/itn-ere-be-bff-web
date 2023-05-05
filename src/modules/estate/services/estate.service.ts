@@ -84,6 +84,7 @@ export class EstateService extends BaseService {
 
     await this.cloudflareImageService.mapVariantToImages(record, 'images');
     await this.cloudflareImageService.mapVariantToImage(record, 'avatar');
+    await this.cloudflareImageService.mapVariantToImage(record, 'contact.avatar');
 
     return record;
   }
@@ -119,6 +120,17 @@ export class EstateService extends BaseService {
       this.algoliaEstateService.search.bind(this.algoliaEstateService),
       'estate.id',
     );
+
+    const [records, total] = await queryBuilder.getManyAndCount();
+
+    await this.cloudflareImageService.mapVariantToImages(records, 'images');
+    await this.cloudflareImageService.mapVariantToImage(records, 'avatar');
+
+    return this.generateGetAllResponse(records, total, query);
+  }
+
+  async getRandom(query: EstateListQueryDto) {
+    const queryBuilder = this.queryBuilder.where(query).orderBy('RANDOM()');
 
     const [records, total] = await queryBuilder.getManyAndCount();
 
@@ -172,6 +184,12 @@ export class EstateService extends BaseService {
         .leftJoinAndSelect('estate.category', 'category')
         .leftJoinAndSelect('estate.avatar', 'avatar')
         .leftJoinAndSelect('estate.contact', 'contact')
+        .leftJoinAndMapOne(
+          'contact.avatar',
+          CloudflareImageEntity,
+          'contactAvatar',
+          'contactAvatar.id = contact.avatarId',
+        )
         .leftJoinAndSelect('estate.areaUnit', 'areaUnit')
         .leftJoinAndSelect('estate.priceUnit', 'priceUnit')
     );
