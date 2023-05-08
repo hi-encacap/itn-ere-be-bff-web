@@ -6,7 +6,7 @@ export class WebsiteNotExistsValidator implements ValidatorConstraintInterface {
   constructor(private readonly websiteService: WebsiteService) {}
 
   async validate(id: number) {
-    const website = await this.websiteService.findOne({ id });
+    const website = await this.websiteService.get({ id });
 
     return Boolean(website);
   }

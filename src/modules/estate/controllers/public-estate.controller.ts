@@ -1,7 +1,7 @@
 import { ESTATE_STATUS_ENUM, IWebsite } from '@encacap-group/types/dist/re';
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { BaseIdParamDto } from 'src/base/base.dto';
-import { Website } from 'src/common/decorators/website-id.decorator';
+import { Website } from 'src/common/decorators/website.decorator';
 import { WebsiteApiKeyGuard } from 'src/common/guards/website-api-key.guard';
 import { EstateListQueryDto } from '../dtos/estate-list-query.dto';
 import { EstateService } from '../services/estate.service';

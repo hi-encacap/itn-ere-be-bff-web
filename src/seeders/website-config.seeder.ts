@@ -1,15 +1,16 @@
 import {
+  ACBUILDING_SITE_CONFIG_CODE_ENUM,
   BAOLOCRE_SITE_CONFIG_CODE_ENUM,
   CONFIG_GROUP_ENUM,
   CONFIG_TYPE_ENUM,
   IConfig,
+  WEBSITE_DOMAIN_ENUM,
 } from '@encacap-group/types/dist/re';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { omit } from 'lodash';
 import { Seeder } from 'nestjs-seeder';
 import { WebsiteConfigEntity } from 'src/modules/configs/entities/website-config,entity';
-import { WEBSITE_DOMAIN_ENUM } from 'src/modules/website/constants/website-domain.constant';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Repository } from 'typeorm';
 
@@ -18,13 +19,7 @@ interface IConfigSeeder extends Partial<IConfig> {
 }
 
 const websiteConfigItem: IConfigSeeder[] = [
-  {
-    code: BAOLOCRE_SITE_CONFIG_CODE_ENUM.NAME,
-    value: 'DEV - Bất động sản nghỉ dưỡng Bảo Lộc',
-    type: CONFIG_TYPE_ENUM.STRING,
-    group: CONFIG_GROUP_ENUM.SITE,
-    websiteDomain: WEBSITE_DOMAIN_ENUM.BAOLOCRE_DEV,
-  },
+  // BaolocRE DEV
   {
     code: BAOLOCRE_SITE_CONFIG_CODE_ENUM.PHONE_NUMBER,
     value: '0123456789',
@@ -66,6 +61,42 @@ const websiteConfigItem: IConfigSeeder[] = [
     type: CONFIG_TYPE_ENUM.STRING,
     group: CONFIG_GROUP_ENUM.SITE,
     websiteDomain: WEBSITE_DOMAIN_ENUM.BAOLOCRE_DEV,
+  },
+  // ACBuilding DEV
+  {
+    code: ACBUILDING_SITE_CONFIG_CODE_ENUM.PHONE_NUMBER,
+    value: '0123456789',
+    type: CONFIG_TYPE_ENUM.STRING,
+    group: CONFIG_GROUP_ENUM.SITE,
+    websiteDomain: WEBSITE_DOMAIN_ENUM.ACBUILDING_DEV,
+  },
+  {
+    code: ACBUILDING_SITE_CONFIG_CODE_ENUM.ADDRESS,
+    value: 'Số 96 Nguyễn Bỉnh Khiêm, P. 2, TP. Bảo Lộc, T. Lâm Đồng',
+    type: CONFIG_TYPE_ENUM.STRING,
+    group: CONFIG_GROUP_ENUM.SITE,
+    websiteDomain: WEBSITE_DOMAIN_ENUM.ACBUILDING_DEV,
+  },
+  {
+    code: ACBUILDING_SITE_CONFIG_CODE_ENUM.EMAIL,
+    value: `hi@${WEBSITE_DOMAIN_ENUM.ACBUILDING_DEV}`,
+    type: CONFIG_TYPE_ENUM.STRING,
+    group: CONFIG_GROUP_ENUM.SITE,
+    websiteDomain: WEBSITE_DOMAIN_ENUM.ACBUILDING_DEV,
+  },
+  {
+    code: ACBUILDING_SITE_CONFIG_CODE_ENUM.FAX,
+    value: '5801475156',
+    type: CONFIG_TYPE_ENUM.STRING,
+    group: CONFIG_GROUP_ENUM.SITE,
+    websiteDomain: WEBSITE_DOMAIN_ENUM.ACBUILDING_DEV,
+  },
+  {
+    code: ACBUILDING_SITE_CONFIG_CODE_ENUM.BANK,
+    value: '64210000796779 - Ngân hàng BIDV - Chi nhánh Bảo Lộc',
+    type: CONFIG_TYPE_ENUM.STRING,
+    group: CONFIG_GROUP_ENUM.SITE,
+    websiteDomain: WEBSITE_DOMAIN_ENUM.ACBUILDING_DEV,
   },
 ];
 

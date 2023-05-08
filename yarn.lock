@@ -621,10 +621,10 @@
     eslint-module-utils "2.7.4"
     reflect-metadata "0.1.13"
 
-"@encacap-group/types@^1.6.5":
-  version "1.6.5"
-  resolved "https://registry.yarnpkg.com/@encacap-group/types/-/types-1.6.5.tgz#80874f62cf0ae550d45055fb394861eeeb38b202"
-  integrity sha512-KrzH89jfeVHzycWsoc8ra/701oDgsVsFnnFACWZaQCXVH7m5ayT3vx3Tn4jMWcqBfQhoWjOuDVIvLnaSpyCUPQ==
+"@encacap-group/types@^1.6.8":
+  version "1.6.8"
+  resolved "https://registry.yarnpkg.com/@encacap-group/types/-/types-1.6.8.tgz#9939536541edea25a993cf660608efe46ff3520d"
+  integrity sha512-YM7XhHpUVa1D4ackINeXo7l/cJSUv2QB8d6l2ICnxlDCKA6LiT6lXv2Iff4QwRR7q+92hNcrRglERZ6Koxnerg==
   dependencies:
     axios "^1.4.0"
     react-hook-form "^7.43.9"

@@ -1,4 +1,3 @@
-import { IRole } from '@encacap-group/types/dist/account';
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -20,11 +19,5 @@ export class WebsiteApiKeyGuard implements CanActivate {
     request.website = website;
 
     return true;
-  }
-
-  private matchRoles(userRoles: IRole[]): boolean {
-    const rootRoleSlug = 'user';
-
-    return userRoles.some((role) => role.slug === rootRoleSlug);
   }
 }

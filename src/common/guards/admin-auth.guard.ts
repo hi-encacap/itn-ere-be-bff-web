@@ -19,8 +19,6 @@ export class AdminAuthGuard implements CanActivate {
   }
 
   private matchRoles(userRoles: IRole[]): boolean {
-    const rootRoleSlug = ROLE_ENUM.ADMIN;
-
-    return userRoles.some((role) => role.slug === rootRoleSlug);
+    return userRoles.some((role) => role.slug === ROLE_ENUM.ADMIN);
   }
 }

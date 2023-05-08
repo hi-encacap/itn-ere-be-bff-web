@@ -1,6 +1,6 @@
 import { IWebsite } from '@encacap-group/types/dist/re';
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
-import { Website } from 'src/common/decorators/website-id.decorator';
+import { Website } from 'src/common/decorators/website.decorator';
 import { WebsiteApiKeyGuard } from 'src/common/guards/website-api-key.guard';
 import { CategoryListQueryDto } from '../dtos/category-list-query.dto';
 import { CategoryService } from '../services/category.service';
