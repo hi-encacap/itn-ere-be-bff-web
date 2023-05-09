@@ -11,6 +11,7 @@ import { WebsiteModule } from '../website/website.module';
 import { CloudflareImageConsumer } from './consumers/cloudflare-image.consumer';
 import { AdminCloudflareImageController } from './controllers/admin-cloudflare-image.controller';
 import { RootCloudflareVariantController } from './controllers/root-cloudflare-variant.controller';
+import { CloudflareImageController } from './controllers/user-cloudflare-image.controller';
 import { CloudflareImageEntity } from './entities/cloudflare-image.entity';
 import { CloudflareVariantEntity } from './entities/cloudflare-variant.entity';
 import { CloudflareImageService } from './services/cloudflare-image.service';
@@ -41,7 +42,7 @@ import { CloudflareVariantNotExistsValidator } from './validators/cloudflare-var
     WebsiteModule,
     CloudflareConfigModule,
   ],
-  controllers: [RootCloudflareVariantController, AdminCloudflareImageController],
+  controllers: [RootCloudflareVariantController, CloudflareImageController, AdminCloudflareImageController],
   providers: [
     CloudflareVariantService,
     CloudflareImageService,

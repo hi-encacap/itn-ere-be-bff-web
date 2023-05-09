@@ -1,24 +1,23 @@
-import { IRole } from '@encacap-group/types/dist/account';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { omit } from 'lodash';
 import { Seeder } from 'nestjs-seeder';
-import { ROLE_ENUM } from 'src/common/constants/role.constant';
+import { ROLE_SLUG_ENUM } from 'src/common/constants/role.constant';
 import { RoleEntity } from 'src/modules/user/entities/role.entity';
 import { Repository } from 'typeorm';
 
-export const roleItems: Array<Partial<IRole>> = [
+export const roleItems: Array<Partial<RoleEntity>> = [
   {
     name: 'Root',
-    slug: ROLE_ENUM.ROOT,
+    slug: ROLE_SLUG_ENUM.ROOT,
   },
   {
     name: 'Admin',
-    slug: ROLE_ENUM.ADMIN,
+    slug: ROLE_SLUG_ENUM.ADMIN,
   },
   {
     name: 'Manager',
-    slug: ROLE_ENUM.MANAGER,
+    slug: ROLE_SLUG_ENUM.MANAGER,
   },
 ];
 
@@ -29,7 +28,7 @@ export class RoleSeeder implements Seeder {
     private readonly roleRepository: Repository<RoleEntity>,
   ) {}
 
-  async upsertItem(item: Partial<IRole>) {
+  async upsertItem(item: Partial<RoleEntity>) {
     const record = await this.roleRepository.findOneBy({ slug: item.slug });
 
     if (record) {

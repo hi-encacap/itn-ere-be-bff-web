@@ -9,7 +9,7 @@ export class WebsiteConfigEntity extends BaseEntityWithPrimaryGeneratedColumn {
   code!: string;
 
   @Column({ name: 'value', type: String })
-  value!: string | number | boolean;
+  value!: string;
 
   @Column({ name: 'type', enum: CONFIG_TYPE_ENUM })
   type!: CONFIG_TYPE_ENUM;
