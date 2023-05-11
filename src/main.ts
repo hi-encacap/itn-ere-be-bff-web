@@ -1,4 +1,4 @@
-import { UnprocessableEntityException, ValidationPipe, VersioningType } from '@nestjs/common';
+import { Logger, UnprocessableEntityException, ValidationPipe, VersioningType } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { useContainer } from 'class-validator';
@@ -31,6 +31,7 @@ const bootstrap = async () => {
   });
   const httpAdapter = app.get(HttpAdapterHost);
   const configService = app.get(AppConfigService);
+  const loggerService = new Logger('NestApplication');
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
@@ -67,7 +68,8 @@ const bootstrap = async () => {
     type: VersioningType.URI,
   });
 
-  await app.listen(configService.port);
+  await app.listen(configService.port, configService.host);
+  loggerService.debug(`Application is running on: ${await app.getUrl()}`);
 };
 
 bootstrap();
