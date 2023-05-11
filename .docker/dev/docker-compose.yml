@@ -17,6 +17,8 @@ services:
   redis:
     container_name: encacap-re-api-redis
     image: redis:7.2-rc1-alpine
+    env_file:
+      - ../../.env.development
     ports:
       - 6379:6379
     networks:

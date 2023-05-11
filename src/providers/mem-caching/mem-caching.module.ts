@@ -17,6 +17,9 @@ import { MemCachingService } from './mem-caching.service';
             host: databaseConfigService.redis.host,
             port: databaseConfigService.redis.port,
           },
+          username: databaseConfigService.redis.username,
+          password: databaseConfigService.redis.password,
+          database: databaseConfigService.redis.database,
         });
 
         return {
