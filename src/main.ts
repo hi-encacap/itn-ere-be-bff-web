@@ -7,7 +7,6 @@ import path from 'path';
 import { AppModule } from './app.module';
 import { AllExceptionFilter } from './common/filters/all-exception.filter';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
-import { LoggerService } from './common/modules/logger/logger.service';
 import AppConfigService from './configs/app/config.service';
 
 const getHttpsOptions = () => {
@@ -32,7 +31,6 @@ const bootstrap = async () => {
   });
   const httpAdapter = app.get(HttpAdapterHost);
   const configService = app.get(AppConfigService);
-  const loggerService = app.get(LoggerService);
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
@@ -40,8 +38,6 @@ const bootstrap = async () => {
     origin: ['https://dev.dashboard.re.encacap.com:3012', 'https://dev.baolocre.encacap.com:3013'],
     credentials: true,
   });
-
-  app.useLogger(app.get(LoggerService));
 
   app.useGlobalFilters(new AllExceptionFilter(httpAdapter));
   app.useGlobalPipes(
@@ -72,7 +68,6 @@ const bootstrap = async () => {
   });
 
   await app.listen(configService.port);
-  loggerService.debug(`App listening on port :${configService.port}`, 'NestApplication');
 };
 
 bootstrap();

@@ -1,7 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
-import { LoggerModule } from './common/modules/logger/logger.module';
 import { AlgoliaConfigModule } from './configs/algolia/algolia-config.module';
 import { AppConfigModule } from './configs/app/config.module';
 import { CloudflareConfigModule } from './configs/cloudflare/cloudflare-config.module';
@@ -34,8 +33,6 @@ import { PostgresDatabaseProviderModule } from './providers/postgres/postgres.mo
     PostgresDatabaseProviderModule,
     MemCachingProviderModule,
     BullProviderModule,
-
-    LoggerModule,
 
     WebsiteModule,
     UserModule,

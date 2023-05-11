@@ -1,7 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import algoliasearch, { SearchClient, SearchIndex } from 'algoliasearch';
 import { isNil, omitBy } from 'lodash';
-import { LoggerService } from 'src/common/modules/logger/logger.service';
 import { AlgoliaConfigService } from 'src/configs/algolia/algolia-config.service';
 import AppConfigService from 'src/configs/app/config.service';
 import { IAlgoliaEstate } from '../interfaces/algolia.interface';
@@ -10,7 +9,7 @@ import { IAlgoliaEstate } from '../interfaces/algolia.interface';
 export class AlgoliaEstateService {
   private readonly client: SearchClient;
   private readonly index: SearchIndex;
-  private readonly logger = new LoggerService(AlgoliaEstateService.name);
+  private readonly logger = new Logger(AlgoliaEstateService.name);
 
   constructor(
     private readonly algoliaConfigService: AlgoliaConfigService,

@@ -1,9 +1,8 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable, Logger, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import FormData from 'form-data';
 import { get, set } from 'lodash';
-import { LoggerService } from 'src/common/modules/logger/logger.service';
 import { randomStringPrefix } from 'src/common/utils/helpers.util';
 import AppConfigService from 'src/configs/app/config.service';
 import { CloudflareConfigService } from 'src/configs/cloudflare/cloudflare-config.service';
@@ -16,7 +15,7 @@ import { CloudflareVariantService } from './cloudflare-variant.service';
 
 @Injectable()
 export class CloudflareImageService {
-  private readonly logger = new LoggerService('CloudflareImageService');
+  private readonly logger = new Logger('CloudflareImageService');
   private readonly imageURL: string;
 
   constructor(

@@ -1,11 +1,11 @@
 import { OnQueueActive, OnQueueCompleted, Process, Processor } from '@nestjs/bull';
+import { Logger } from '@nestjs/common';
 import { Job } from 'bull';
-import { LoggerService } from 'src/common/modules/logger/logger.service';
 import { CloudflareImageService } from '../services/cloudflare-image.service';
 
 @Processor('cloudflare-image')
 export class CloudflareImageConsumer {
-  private readonly logger = new LoggerService('CloudflareImageConsumer');
+  private readonly logger = new Logger(CloudflareImageConsumer.name);
   constructor(private readonly cloudflareImageService: CloudflareImageService) {}
 
   @Process('upload')

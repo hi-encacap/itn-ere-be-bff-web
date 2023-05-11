@@ -1,6 +1,5 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import type { Request, Response } from 'express';
-import { LoggerService } from '../modules/logger/logger.service';
 import { randomStringPrefix } from '../utils/helpers.util';
 
 @Injectable()
@@ -11,7 +10,7 @@ export class LoggerMiddleware implements NestMiddleware {
   // https://www.apollographql.com/docs/apollo-server/integrations/plugins/
   // https://github.com/nestjs/graphql/issues/923
 
-  private readonly loggerService: LoggerService = new LoggerService('LoggerMiddleware');
+  private readonly loggerService = new Logger('LoggerMiddleware');
 
   public use(req: Request, res: Response, next: () => void): void {
     if (this.passUrl.includes(req.originalUrl)) {
