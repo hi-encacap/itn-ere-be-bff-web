@@ -5,8 +5,8 @@ import FormData from 'form-data';
 import { get, set } from 'lodash';
 import { LoggerService } from 'src/common/modules/logger/logger.service';
 import { randomStringPrefix } from 'src/common/utils/helpers.util';
+import AppConfigService from 'src/configs/app/config.service';
 import { CloudflareConfigService } from 'src/configs/cloudflare/cloudflare-config.service';
-import AppConfigService from 'src/configs/config.service';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { FindManyOptions, Repository } from 'typeorm';
 import { CLOUDFLARE_IMAGE_ERROR_CODE } from '../constants/cloudflare-error-code.constant';
@@ -29,7 +29,7 @@ export class CloudflareImageService {
     private readonly cloudflareVariantService: CloudflareVariantService,
     private readonly appConfigService: AppConfigService,
   ) {
-    this.imageURL = this.cloudflareConfigService.images.delivery;
+    this.imageURL = this.cloudflareConfigService.image.delivery;
   }
 
   async uploadSingle(file: Express.Multer.File, user: UserEntity) {

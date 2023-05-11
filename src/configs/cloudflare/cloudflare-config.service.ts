@@ -5,11 +5,11 @@ import { ConfigService } from '@nestjs/config';
 export class CloudflareConfigService {
   constructor(private readonly configService: ConfigService) {}
 
-  get images() {
+  get image() {
     return {
-      token: this.configService.get<string>('token.images'),
-      url: this.configService.get<string>('url.images'),
-      delivery: this.configService.get<string>('url.deliveryImages'),
+      token: this.configService.get<string>('cloudflare.token.image'),
+      url: this.configService.get<string>('cloudflare.url.image'),
+      delivery: this.configService.get<string>('cloudflare.url.deliveryImage'),
     };
   }
 }

@@ -30,7 +30,7 @@ services:
       context: ../../.
       dockerfile: ./.docker/dev/Dockerfile
       target: development
-    image: encacapreapi-dev
+    image: encacap-re-api-dev
     ports:
       - 3011:3011
     command: yarn start:dev
@@ -39,8 +39,8 @@ services:
     env_file:
       - ../../.env.development
     environment:
-      - DB_HOST=postgres
-      - REDIS_HOST=redis
+      - DB_POSTGRES_HOST=postgres
+      - DB_REDIS_HOST=redis
     networks:
       encacap-re-network:
         aliases:
