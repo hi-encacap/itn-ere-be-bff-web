@@ -6,15 +6,15 @@ export default class AppConfigService {
   constructor(private readonly configService: ConfigService) {}
 
   get name() {
-    return this.configService.get<string>('name');
+    return this.configService.get<string>('app.name');
   }
 
   get rootPassword() {
-    return this.configService.get<string>('rootPassword');
+    return this.configService.get<string>('app.rootPassword');
   }
 
   get env() {
-    return this.configService.get<string>('env');
+    return this.configService.get<string>('app.env');
   }
 
   get envAlias() {
@@ -32,6 +32,6 @@ export default class AppConfigService {
   }
 
   get port() {
-    return this.configService.get<number>('port');
+    return this.configService.get<number>('app.port');
   }
 }

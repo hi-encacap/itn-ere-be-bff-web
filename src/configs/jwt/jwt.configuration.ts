@@ -1,9 +1,11 @@
-const jwtConfiguration = () => ({
-  secret: process.env.JWT_SECRET,
-  signOptions: {
-    authExpirationMinutes: process.env.JWT_EXPIRATION_MINUTES,
-    refreshExpirationDays: process.env.JWT_REFRESH_EXPIRATION_DAYS,
+import { registerAs } from '@nestjs/config';
+
+const jwtConfiguration = registerAs('jwt', () => ({
+  secret: process.env.APP_JWT_SECRET,
+  signOption: {
+    authExpirationMinutes: process.env.APP_JWT_EXPIRATION_MINUTES,
+    refreshExpirationDays: process.env.APP_JWT_REFRESH_EXPIRATION_DAYS,
   },
-});
+}));
 
 export default jwtConfiguration;

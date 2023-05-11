@@ -3,7 +3,7 @@ import algoliasearch, { SearchClient, SearchIndex } from 'algoliasearch';
 import { isNil, omitBy } from 'lodash';
 import { LoggerService } from 'src/common/modules/logger/logger.service';
 import { AlgoliaConfigService } from 'src/configs/algolia/algolia-config.service';
-import AppConfigService from 'src/configs/config.service';
+import AppConfigService from 'src/configs/app/config.service';
 import { IAlgoliaEstate } from '../interfaces/algolia.interface';
 
 @Injectable()

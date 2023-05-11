@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import algoliasearch, { SearchClient, SearchIndex } from 'algoliasearch';
 import { isNil, omitBy } from 'lodash';
 import { AlgoliaConfigService } from 'src/configs/algolia/algolia-config.service';
-import AppConfigService from 'src/configs/config.service';
+import AppConfigService from 'src/configs/app/config.service';
 import { IAlgoliaContact } from '../interfaces/algolia.interface';
 
 @Injectable()

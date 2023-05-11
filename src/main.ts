@@ -7,7 +7,7 @@ import { AppModule } from './app.module';
 import { AllExceptionFilter } from './common/filters/all-exception.filter';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { LoggerService } from './common/modules/logger/logger.service';
-import AppConfigService from './configs/config.service';
+import AppConfigService from './configs/app/config.service';
 
 async function bootstrap() {
   try {

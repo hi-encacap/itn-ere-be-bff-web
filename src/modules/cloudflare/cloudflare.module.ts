@@ -2,9 +2,9 @@ import { HttpModule } from '@nestjs/axios';
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AppConfigModule } from 'src/configs/app/config.module';
 import { CloudflareConfigModule } from 'src/configs/cloudflare/cloudflare-config.module';
 import { CloudflareConfigService } from 'src/configs/cloudflare/cloudflare-config.service';
-import { AppConfigModule } from 'src/configs/config.module';
 import { MemCachingProviderModule } from 'src/providers/mem-caching/mem-caching.module';
 import { WebsiteNotExistsValidator } from '../website/validators/website-not-exists.validator';
 import { WebsiteModule } from '../website/website.module';
@@ -30,9 +30,9 @@ import { CloudflareVariantNotExistsValidator } from './validators/cloudflare-var
     HttpModule.registerAsync({
       imports: [CloudflareConfigModule],
       useFactory: (cloudflareConfigService: CloudflareConfigService) => ({
-        baseURL: cloudflareConfigService.images.url,
+        baseURL: cloudflareConfigService.image.url,
         headers: {
-          Authorization: `Bearer ${cloudflareConfigService.images.token}`,
+          Authorization: `Bearer ${cloudflareConfigService.image.token}`,
         },
       }),
       inject: [CloudflareConfigService],

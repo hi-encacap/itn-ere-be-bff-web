@@ -1,16 +1,18 @@
-export default () => ({
+import { registerAs } from '@nestjs/config';
+
+export default registerAs('database', () => ({
+  type: process.env.DB_TYPE,
   postgres: {
-    type: process.env.DB_TYPE,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
+    host: process.env.DB_POSTGRES_HOST,
+    port: process.env.DB_POSTGRES_PORT,
+    username: process.env.DB_POSTGRES_USERNAME,
+    password: process.env.DB_POSTGRES_PASSWORD,
+    database: process.env.DB_POSTGRES_NAME,
   },
   redis: {
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT,
-    password: process.env.REDIS_PASSWORD,
-    database: process.env.REDIS_DATABASE,
+    host: process.env.DB_REDIS_HOST,
+    port: process.env.DB_REDIS_PORT,
+    password: process.env.DB_REDIS_PASSWORD,
+    database: process.env.DB_REDIS_DATABASE,
   },
-});
+}));
