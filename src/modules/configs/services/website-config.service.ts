@@ -1,8 +1,10 @@
-import { CONFIG_TYPE_ENUM } from '@encacap-group/types/dist/re';
+import { CONFIG_TYPE_ENUM, IConfig } from '@encacap-group/types/dist/re';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { set } from 'lodash';
 import { BaseService } from 'src/base/base.service';
-import { FindOptionsWhere, Repository } from 'typeorm';
+import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
+import { FindOptionsWhere, In, Repository } from 'typeorm';
 import { WebsiteConfigListQueryDto } from '../dtos/website-config-list-query.dto';
 import { WebsiteConfigEntity } from '../entities/website-config,entity';
 
@@ -11,6 +13,7 @@ export class WebsiteConfigService extends BaseService {
   constructor(
     @InjectRepository(WebsiteConfigEntity)
     private readonly websiteConfigRepository: Repository<WebsiteConfigEntity>,
+    private readonly cloudflareImageService: CloudflareImageService,
   ) {
     super();
   }
@@ -23,7 +26,7 @@ export class WebsiteConfigService extends BaseService {
     }
 
     const [data, total] = await queryBuilder.getManyAndCount();
-    const normalizedData = data.map((item) => this.normalizeData(item));
+    const normalizedData = await Promise.all(data.map((item) => this.normalizeData(item as IConfig)));
 
     return this.generateGetAllResponse(normalizedData, total, query);
   }
@@ -35,22 +38,23 @@ export class WebsiteConfigService extends BaseService {
       throw new NotFoundException();
     }
 
-    return this.normalizeData(data);
+    return this.normalizeData(data as IConfig);
   }
 
   private get queryBuilder() {
     return this.websiteConfigRepository.createQueryBuilder('websiteConfig');
   }
 
-  private normalizeData(data: WebsiteConfigEntity) {
-    const { type } = data;
+  private async normalizeData(data: IConfig) {
+    const { type, value } = data;
 
-    if (type === CONFIG_TYPE_ENUM.BOOLEAN) {
-      data.value = Boolean(data.value);
-    }
+    if (type === CONFIG_TYPE_ENUM.IMAGE_ARRAY) {
+      const imageIds = JSON.parse(value);
+      const images = await this.cloudflareImageService.getAll({ where: { id: In(imageIds) } });
 
-    if (type === CONFIG_TYPE_ENUM.NUMBER) {
-      data.value = Number(data.value);
+      set(data, 'value', images);
+
+      return this.cloudflareImageService.mapVariantToImages(data, 'value');
     }
 
     return data;

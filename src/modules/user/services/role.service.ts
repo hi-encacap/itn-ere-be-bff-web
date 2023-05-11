@@ -1,4 +1,3 @@
-import { IRole } from '@encacap-group/types/dist/account';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, Repository } from 'typeorm';
@@ -11,7 +10,7 @@ export class RoleService {
     private readonly roleRepository: Repository<RoleEntity>,
   ) {}
 
-  create(role: IRole) {
+  create(role: RoleEntity) {
     return this.roleRepository.save(role);
   }
 

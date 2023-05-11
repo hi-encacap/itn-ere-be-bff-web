@@ -1,7 +1,7 @@
 import { IRole } from '@encacap-group/types/dist/account';
 import { IREUser } from '@encacap-group/types/dist/re';
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
-import { ROLE_ENUM } from '../constants/role.constant';
+import { ROLE_SLUG_ENUM } from '../constants/role.constant';
 
 @Injectable()
 export class RootAuthGuard implements CanActivate {
@@ -19,6 +19,6 @@ export class RootAuthGuard implements CanActivate {
   }
 
   private matchRoles(userRoles: IRole[]): boolean {
-    return userRoles.some((role) => role.slug === ROLE_ENUM.ROOT);
+    return userRoles.some((role) => role.slug === ROLE_SLUG_ENUM.ROOT);
   }
 }

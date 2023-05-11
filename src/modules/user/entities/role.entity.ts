@@ -1,6 +1,6 @@
 import { IRole } from '@encacap-group/types/dist/account';
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
-import { ROLE_ENUM } from 'src/common/constants/role.constant';
+import { ROLE_SLUG_ENUM } from 'src/common/constants/role.constant';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { UserRoleMappingEntity } from './user-role-mapping.entity';
 
@@ -10,7 +10,7 @@ export class RoleEntity extends BaseEntityWithPrimaryGeneratedColumn implements 
   name!: string;
 
   @Column()
-  slug!: ROLE_ENUM;
+  slug!: ROLE_SLUG_ENUM;
 
   @OneToMany(() => UserRoleMappingEntity, (userRoleMapping) => userRoleMapping.roleId)
   users!: UserRoleMappingEntity[];

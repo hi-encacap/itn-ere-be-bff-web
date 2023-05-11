@@ -2,7 +2,7 @@ import { IREUser, WEBSITE_DOMAIN_ENUM } from '@encacap-group/types/dist/re';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Seeder } from 'nestjs-seeder';
-import { ROLE_ENUM } from 'src/common/constants/role.constant';
+import { ROLE_SLUG_ENUM } from 'src/common/constants/role.constant';
 import AppConfigService from 'src/configs/config.service';
 import { RoleEntity } from 'src/modules/user/entities/role.entity';
 import { UserRoleMappingEntity } from 'src/modules/user/entities/user-role-mapping.entity';
@@ -12,7 +12,7 @@ import { Repository } from 'typeorm';
 
 interface IREUserSeeder extends Partial<Omit<IREUser, 'website' | 'roles'>> {
   websiteDomain: string;
-  roleSlugs: ROLE_ENUM[];
+  roleSlugs: ROLE_SLUG_ENUM[];
 }
 
 const userItems: IREUserSeeder[] = [
@@ -23,7 +23,7 @@ const userItems: IREUserSeeder[] = [
     firstName: 'Khac Khanh',
     lastName: 'Nguyen',
     websiteDomain: WEBSITE_DOMAIN_ENUM.ENCACAP_RE_DEV,
-    roleSlugs: [ROLE_ENUM.ROOT, ROLE_ENUM.ADMIN],
+    roleSlugs: [ROLE_SLUG_ENUM.ROOT, ROLE_SLUG_ENUM.ADMIN],
   },
   {
     email: `admin@${WEBSITE_DOMAIN_ENUM.BAOLOCRE_DEV}`,
@@ -32,7 +32,7 @@ const userItems: IREUserSeeder[] = [
     firstName: 'Admin',
     lastName: 'Baoloc RE',
     websiteDomain: WEBSITE_DOMAIN_ENUM.BAOLOCRE_DEV,
-    roleSlugs: [ROLE_ENUM.ADMIN],
+    roleSlugs: [ROLE_SLUG_ENUM.ADMIN],
   },
   {
     email: `admin@${WEBSITE_DOMAIN_ENUM.ACBUILDING_DEV}`,
@@ -41,7 +41,7 @@ const userItems: IREUserSeeder[] = [
     firstName: 'Admin',
     lastName: 'AC Building',
     websiteDomain: WEBSITE_DOMAIN_ENUM.ACBUILDING_DEV,
-    roleSlugs: [ROLE_ENUM.ADMIN],
+    roleSlugs: [ROLE_SLUG_ENUM.ADMIN],
   },
 ];
 
