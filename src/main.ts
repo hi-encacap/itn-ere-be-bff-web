@@ -14,7 +14,7 @@ const getHttpsOptions = () => {
   const keyPath = path.resolve(__dirname, '..', '.certs/encacap.com.key');
 
   if (!existsSync(certPath) || !existsSync(keyPath)) {
-    return null;
+    return undefined;
   }
 
   return {
@@ -26,7 +26,7 @@ const getHttpsOptions = () => {
 const bootstrap = async () => {
   const httpsOptions = getHttpsOptions();
 
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, { httpsOptions });
   const httpAdapter = app.get(HttpAdapterHost);
   const configService = app.get(AppConfigService);
   const loggerService = new Logger('NestApplication');
