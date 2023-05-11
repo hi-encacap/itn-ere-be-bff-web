@@ -26,9 +26,7 @@ const getHttpsOptions = () => {
 const bootstrap = async () => {
   const httpsOptions = getHttpsOptions();
 
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    httpsOptions,
-  });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const httpAdapter = app.get(HttpAdapterHost);
   const configService = app.get(AppConfigService);
   const loggerService = new Logger('NestApplication');
