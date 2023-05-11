@@ -34,4 +34,8 @@ export default class AppConfigService {
   get port() {
     return this.configService.get<number>('app.port');
   }
+
+  get isProduction() {
+    return this.env === 'production';
+  }
 }
