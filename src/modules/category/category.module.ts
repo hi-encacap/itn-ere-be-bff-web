@@ -5,6 +5,7 @@ import { CloudflareModule } from '../cloudflare/cloudflare.module';
 import { AdminCategoryGroupController } from './controllers/admin-category-group.controller';
 import { AdminCategoryPropertyController } from './controllers/admin-category-property.controller';
 import { AdminCategoryController } from './controllers/admin-category.controller';
+import { PublicCategoryController } from './controllers/public-category.controller';
 import { RootCategoryGroupController } from './controllers/root-category-group.controller';
 import { CategoryGroupWebsiteEntity } from './entities/category-group-website.entity';
 import { CategoryGroupEntity } from './entities/category-group.entity';
@@ -34,6 +35,7 @@ import { CategoryPropertyExistsValidator } from './validators/category-property-
     AdminCategoryGroupController,
     AdminCategoryController,
     AdminCategoryPropertyController,
+    PublicCategoryController,
   ],
   providers: [
     CategoryGroupService,
@@ -43,6 +45,12 @@ import { CategoryPropertyExistsValidator } from './validators/category-property-
     CategoryCanModifyValidator,
     CategoryCanDeleteValidator,
     CategoryPropertyExistsValidator,
+  ],
+  exports: [
+    CategoryExistsValidator,
+    CategoryService,
+    CategoryPropertyExistsValidator,
+    CategoryPropertyService,
   ],
 })
 export class CategoryModule {}

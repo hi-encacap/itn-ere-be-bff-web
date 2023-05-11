@@ -1,48 +1,67 @@
-import { UnprocessableEntityException, ValidationPipe } from '@nestjs/common';
+import { UnprocessableEntityException, ValidationPipe, VersioningType } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { useContainer } from 'class-validator';
+import { readFileSync } from 'fs';
 import { AppModule } from './app.module';
 import { AllExceptionFilter } from './common/filters/all-exception.filter';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { LoggerService } from './common/modules/logger/logger.service';
-import AppConfigService from './configs/config.service';
+import AppConfigService from './configs/app/config.service';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  const httpAdapter = app.get(HttpAdapterHost);
-  const configService = app.get(AppConfigService);
+  try {
+    const httpsOptions = {
+      key: readFileSync(`${__dirname}/../.certs/encacap.com.key`),
+      cert: readFileSync(`${__dirname}/../.certs/encacap.com.crt`),
+    };
 
-  useContainer(app.select(AppModule), { fallbackOnErrors: true });
-  app.enableCors({
-    origin: ['https://dashboard.baolocre.encacap.dev:4002'],
-    credentials: true,
-  });
+    const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+      httpsOptions,
+    });
+    const httpAdapter = app.get(HttpAdapterHost);
+    const configService = app.get(AppConfigService);
 
-  app.useLogger(app.get(LoggerService));
+    useContainer(app.select(AppModule), { fallbackOnErrors: true });
+    app.enableCors({
+      origin: ['https://dev.dashboard.re.encacap.com:3012', 'https://dev.baolocre.encacap.com:3013'],
+      credentials: true,
+    });
 
-  app.useGlobalFilters(new AllExceptionFilter(httpAdapter));
-  app.useGlobalPipes(
-    new ValidationPipe({
-      transform: true,
-      exceptionFactory(errors) {
-        const errorField = errors.reduce((errorField, error) => {
-          const { property, constraints } = error;
-          const errorMessages = Object.values(constraints);
+    app.useLogger(app.get(LoggerService));
 
-          return {
-            ...errorField,
-            [property]: errorMessages,
-          };
-        }, {});
+    app.useGlobalFilters(new AllExceptionFilter(httpAdapter));
+    app.useGlobalPipes(
+      new ValidationPipe({
+        transform: true,
+        exceptionFactory(errors) {
+          const errorField = errors.reduce((errorField, error) => {
+            const { property, constraints } = error;
+            const errorMessages = Object.values(constraints);
 
-        return new UnprocessableEntityException(errorField);
-      },
-      forbidUnknownValues: true,
-    }),
-  );
-  app.useGlobalInterceptors(new ResponseInterceptor());
+            return {
+              ...errorField,
+              [property]: errorMessages,
+            };
+          }, {});
 
-  await app.listen(configService.port);
+          return new UnprocessableEntityException(errorField);
+        },
+        forbidUnknownValues: true,
+      }),
+    );
+    app.useGlobalInterceptors(new ResponseInterceptor());
+
+    // Versioning
+    app.enableVersioning({
+      defaultVersion: '1',
+      type: VersioningType.URI,
+    });
+
+    await app.listen(configService.port);
+  } catch (error) {
+    console.log(error);
+  }
 }
+
 bootstrap();

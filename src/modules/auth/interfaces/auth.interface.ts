@@ -1,5 +1,5 @@
-import { IRole } from 'src/modules/user/interfaces/user.interface';
-import { IWebsite } from 'src/modules/website/constants/website.interface';
+import { IRole } from '@encacap-group/types/dist/account';
+import { IWebsite } from '@encacap-group/types/dist/re';
 
 export interface IJwtPayload {
   id: number;

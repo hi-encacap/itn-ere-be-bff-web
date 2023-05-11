@@ -1,12 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { IREUser } from '@encacap-group/types/dist/re';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/base/base.service';
 import { AlgoliaContactService } from 'src/modules/algolia/services/algolia-contact.service';
 import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
-import { CloudflareVariantEntity } from 'src/modules/cloudflare/entities/cloudflare-variant.entity';
 import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
-import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
 import { ContactCreateBodyDto } from '../dtos/contact-create-body.dto';
@@ -23,7 +22,7 @@ export class ContactService extends BaseService {
     super();
   }
 
-  async create(createContactDto: ContactCreateBodyDto, user?: IUser) {
+  async create(createContactDto: ContactCreateBodyDto, user?: IREUser) {
     const contact = await this.contactRepository.save({
       ...createContactDto,
       userId: user?.id,
@@ -39,7 +38,7 @@ export class ContactService extends BaseService {
     return this.contactRepository.update(id, updateContactDto);
   }
 
-  async findAll(query: ContactListQueryDto) {
+  async getAll(query: ContactListQueryDto) {
     let queryBuilder = this.getQueryBuilder();
 
     if (query.websiteId) {
@@ -57,13 +56,21 @@ export class ContactService extends BaseService {
 
     const [contacts, total] = await queryBuilder.getManyAndCount();
 
-    this.cloudflareImageService.mapVariantToImage(contacts, 'avatar');
+    await this.cloudflareImageService.mapVariantToImage(contacts, 'avatar');
 
     return this.generateGetAllResponse(contacts, total, query);
   }
 
-  findOne(query: FindOptionsWhere<ContactEntity>) {
-    return this.getQueryBuilder().where(query).getOne();
+  async get(query: FindOptionsWhere<ContactEntity>) {
+    const data = await this.getQueryBuilder().where(query).getOne();
+
+    if (!data) {
+      throw new NotFoundException();
+    }
+
+    await this.cloudflareImageService.mapVariantToImage(data, 'avatar');
+
+    return data;
   }
 
   delete(id: number) {
@@ -77,7 +84,6 @@ export class ContactService extends BaseService {
       .leftJoin(UserEntity, 'user', 'user.id = contact.userId')
       .leftJoinAndMapOne('contact.website', WebsiteEntity, 'website', 'website.id = user.websiteId')
       .leftJoinAndMapOne('contact.avatar', CloudflareImageEntity, 'avatar', 'avatar.id = contact.avatarId')
-      .leftJoinAndMapMany('avatar.variants', CloudflareVariantEntity, 'variant', 'variant.isDefault IS TRUE')
       .orderBy('contact.id', 'DESC');
   }
 

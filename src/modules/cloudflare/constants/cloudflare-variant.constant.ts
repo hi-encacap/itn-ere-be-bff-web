@@ -6,7 +6,4 @@ export enum CLOUDFLARE_VARIANT_FIT_ENUM {
   PAD = 'pad',
 }
 
-export enum CLOUDFLARE_VARIANT_ENUM {
-  PUBLIC = 'public',
-  SMALL = 'small',
-}
+export const CLOUDFLARE_VARIANT_URL_PATH = 'url';

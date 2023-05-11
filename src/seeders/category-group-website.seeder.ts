@@ -3,14 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Seeder } from 'nestjs-seeder';
 import { CategoryGroupWebsiteEntity } from 'src/modules/category/entities/category-group-website.entity';
 import { CategoryGroupEntity } from 'src/modules/category/entities/category-group.entity';
-import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class CategoryGroupWebsiteSeeder implements Seeder {
-  private rootUser: IUser;
-
   constructor(
     @InjectRepository(CategoryGroupEntity)
     private readonly categoryGroupRepository: Repository<CategoryGroupEntity>,

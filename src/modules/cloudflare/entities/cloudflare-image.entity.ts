@@ -1,5 +1,6 @@
 import { BaseEntityWithPrimaryStringColumn } from 'src/base/base.entity';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
+import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { CLOUDFLARE_IMAGE_STATUS_ENUM } from '../constants/cloudflare-image-status.constant';
 import { CloudflareVariantEntity } from './cloudflare-variant.entity';
@@ -19,12 +20,12 @@ export class CloudflareImageEntity extends BaseEntityWithPrimaryStringColumn {
   @Column({ name: 'extension', nullable: true })
   extension: string;
 
-  @Column({ name: 'user_id' })
-  userId: number;
+  @Column({ name: 'website_id' })
+  websiteId: number;
 
-  @ManyToOne(() => UserEntity, (user) => user.cloudflareImages)
-  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
-  user: UserEntity;
+  @ManyToOne(() => WebsiteEntity)
+  @JoinColumn({ name: 'website_id', referencedColumnName: 'id' })
+  website: WebsiteEntity;
 
   @OneToMany(() => UserEntity, (user) => user.avatar)
   users: UserEntity[];

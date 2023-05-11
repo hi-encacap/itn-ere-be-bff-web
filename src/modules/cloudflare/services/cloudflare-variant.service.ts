@@ -1,12 +1,11 @@
 import { HttpService } from '@nestjs/axios';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { pick } from 'lodash';
-import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
+import { omit, pick } from 'lodash';
+import { MemCachingService } from 'src/providers/mem-caching/mem-caching.service';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { RootCloudflareVariantCreateBodyDto } from '../dtos/root-cloudflare-variant-create-body.dto';
 import { RootCloudflareVariantUpdateBodyDto } from '../dtos/root-cloudflare-variant-update-body.dto';
-import { CloudflareVariantWebsiteEntity } from '../entities/cloudflare-variant-website.entity';
 import { CloudflareVariantEntity } from '../entities/cloudflare-variant.entity';
 
 @Injectable()
@@ -15,10 +14,39 @@ export class CloudflareVariantService {
     @InjectRepository(CloudflareVariantEntity)
     private readonly cloudflareVariantRepository: Repository<CloudflareVariantEntity>,
     private readonly httpService: HttpService,
+    private readonly memCachingService: MemCachingService,
   ) {}
 
-  getAll(query: FindOptionsWhere<CloudflareVariantEntity>) {
-    return this.getQueryBuilder().where(query).getMany();
+  async getAllCached() {
+    const cachedData = await this.memCachingService.getCloudflareVariants();
+
+    if (cachedData !== null) {
+      return cachedData;
+    }
+
+    const data = await this.getAll();
+
+    await this.memCachingService.setCloudflareVariants(data);
+
+    return data;
+  }
+
+  async updateCache() {
+    const data = await this.getAll();
+
+    await this.memCachingService.setCloudflareVariants(data);
+
+    return data;
+  }
+
+  getAll(query?: FindOptionsWhere<CloudflareVariantEntity>) {
+    const queryBuilder = this.getQueryBuilder().where(omit(query, ['websiteId']));
+
+    if (query?.websiteId) {
+      queryBuilder.andWhere('website.id = :websiteId', { websiteId: query.websiteId });
+    }
+
+    return queryBuilder.getMany();
   }
 
   getOne(query: FindOptionsWhere<CloudflareVariantEntity>) {
@@ -31,11 +59,11 @@ export class CloudflareVariantService {
         id: variant.name,
         options: pick(variant, ['fit', 'width', 'height']),
       });
-
-      return this.cloudflareVariantRepository.save({
+      await this.cloudflareVariantRepository.save({
         ...variant,
         id: variant.name,
       });
+      await this.updateCache();
     } catch (error) {
       throw new BadRequestException(error.response.data);
     }
@@ -55,8 +83,8 @@ export class CloudflareVariantService {
         id: code,
         options: updateBody,
       });
-
-      return this.cloudflareVariantRepository.update(code, updateBody);
+      await this.cloudflareVariantRepository.update(code, updateBody);
+      await this.updateCache();
     } catch (error) {
       throw new BadRequestException(error.response.data);
     }
@@ -65,22 +93,14 @@ export class CloudflareVariantService {
   async deleteVariant(id: string) {
     try {
       await this.httpService.axiosRef.delete(`variants/${id}`);
-
-      return this.cloudflareVariantRepository.delete(id);
+      await this.updateCache();
+      await this.cloudflareVariantRepository.delete(id);
     } catch (error) {
       throw new BadRequestException(error.response.data);
     }
   }
 
   private getQueryBuilder() {
-    return this.cloudflareVariantRepository
-      .createQueryBuilder('variant')
-      .leftJoin(CloudflareVariantWebsiteEntity, 'variantWebsite', 'variantWebsite.variantId = variant.id')
-      .leftJoinAndMapMany(
-        'variant.websites',
-        WebsiteEntity,
-        'website',
-        'website.id = variantWebsite.websiteId',
-      );
+    return this.cloudflareVariantRepository.createQueryBuilder('variant');
   }
 }

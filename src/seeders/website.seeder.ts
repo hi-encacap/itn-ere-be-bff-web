@@ -1,16 +1,26 @@
+import { IWebsite, WEBSITE_DOMAIN_ENUM } from '@encacap-group/types/dist/re';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Seeder } from 'nestjs-seeder';
-import { IWebsite } from 'src/modules/website/constants/website.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Repository } from 'typeorm';
 
-export const websiteItems: IWebsite[] = [
+export const websiteItems: Array<Partial<IWebsite>> = [
   {
-    id: 1,
     name: 'Encacap RE',
-    url: 'https://www.re.encacap.com',
+    url: WEBSITE_DOMAIN_ENUM.ENCACAP_RE_DEV,
     description: 'This is the supper root website. It can be used to manage all the websites.',
+  },
+  {
+    name: 'BaolocRE - Bất động sản Bảo Lộc',
+    url: WEBSITE_DOMAIN_ENUM.BAOLOCRE_DEV,
+    description: 'This is the website for BaolocRE.',
+  },
+  {
+    name: 'DEV - Công ty TNHH xây dựng An Cường',
+    url: WEBSITE_DOMAIN_ENUM.ACBUILDING_DEV,
+    description:
+      'Chuyên thi công xây dựng nhà dân dụng, nhà tiền chế, kinh doanh vật liệu gỗ, nhựa, sắt, thép...',
   },
 ];
 
@@ -20,8 +30,8 @@ export class WebsiteSeeder implements Seeder {
     @InjectRepository(WebsiteEntity) private readonly websiteRepository: Repository<WebsiteEntity>,
   ) {}
 
-  async upsertItem(item: IWebsite) {
-    const record = await this.websiteRepository.findOneBy({ id: item.id });
+  async upsertItem(item: Partial<IWebsite>) {
+    const record = await this.websiteRepository.findOneBy({ url: item.url });
 
     if (record) {
       return this.websiteRepository.update(record.id, item);

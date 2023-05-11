@@ -1,7 +1,7 @@
+import { IREUser } from '@encacap-group/types/dist/re';
 import { Injectable } from '@nestjs/common';
 import { omit } from 'lodash';
 import { TokenService } from '../token/services/token.service';
-import { IUser } from '../user/interfaces/user.interface';
 import { UserService } from '../user/services/user.service';
 import { IJwtPayload } from './interfaces/auth.interface';
 
@@ -9,7 +9,7 @@ import { IJwtPayload } from './interfaces/auth.interface';
 export class AuthService {
   constructor(private readonly userService: UserService, private readonly tokenService: TokenService) {}
 
-  async validateUser(email: string, password: string): Promise<Omit<IUser, 'password'> | null> {
+  async validateUser(email: string, password: string): Promise<Omit<IREUser, 'password'> | null> {
     const user = await this.userService.findOne({
       email,
     });
@@ -27,7 +27,7 @@ export class AuthService {
     return omit(user, ['password']);
   }
 
-  async generateAuthToken(user: IUser) {
+  async generateAuthToken(user: IREUser) {
     const payload: IJwtPayload = user;
 
     const accessToken = this.tokenService.generateAccessToken(payload);

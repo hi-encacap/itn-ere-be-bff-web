@@ -1,13 +1,10 @@
+import { IREUser, slugify } from '@encacap-group/types/dist/re';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { pick } from 'lodash';
 import { BaseService } from 'src/base/base.service';
-import { slugify } from 'src/common/utils/helpers.util';
 import { AlgoliaCategoryService } from 'src/modules/algolia/services/algolia-category.service';
-import { CloudflareVariantWebsiteEntity } from 'src/modules/cloudflare/entities/cloudflare-variant-website.entity';
-import { CloudflareVariantEntity } from 'src/modules/cloudflare/entities/cloudflare-variant.entity';
 import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
-import { UserEntity } from 'src/modules/user/entities/user.entity';
-import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { CategoryCreateBodyDto } from '../dtos/category-create-body.dto';
@@ -18,14 +15,14 @@ import { CategoryEntity } from '../entities/category.entity';
 @Injectable()
 export class CategoryService extends BaseService {
   constructor(
-    @InjectRepository(CategoryEntity) private categoryRepository: Repository<CategoryEntity>,
+    @InjectRepository(CategoryEntity) private readonly categoryRepository: Repository<CategoryEntity>,
     private readonly cloudflareImageService: CloudflareImageService,
     private readonly algoliaService: AlgoliaCategoryService,
   ) {
     super();
   }
 
-  async getOne(query: FindOptionsWhere<CategoryEntity>) {
+  async get(query: FindOptionsWhere<CategoryEntity>) {
     const record = await this.getQueryBuilder().where(query).getOne();
 
     if (!record) {
@@ -68,12 +65,12 @@ export class CategoryService extends BaseService {
 
     const [categories, items] = await queryBuilder.getManyAndCount();
 
-    this.cloudflareImageService.mapVariantToImage(categories, 'thumbnail');
+    await this.cloudflareImageService.mapVariantToImage(categories, 'thumbnail');
 
     return this.generateGetAllResponse(categories, items, query);
   }
 
-  async create(body: CategoryCreateBodyDto, user: IUser) {
+  async create(body: CategoryCreateBodyDto, user: IREUser) {
     const { code } = body;
 
     if (!code) {
@@ -84,7 +81,7 @@ export class CategoryService extends BaseService {
       ...body,
       websiteId: user.websiteId,
     });
-    const category = await this.getOne({ code: record.code });
+    const category = await this.get({ code: record.code });
 
     this.algoliaService.save({
       objectID: category.code,
@@ -95,13 +92,13 @@ export class CategoryService extends BaseService {
     return category;
   }
 
-  async update(code: string, body: CategoryUpdateBodyDto) {
-    await this.categoryRepository.update(code, body);
+  async update(id: number, body: CategoryUpdateBodyDto) {
+    await this.categoryRepository.update({ id }, pick(body, ['name', 'categoryGroupId', 'thumbnailId']));
 
-    const category = await this.getOne({ code });
+    const category = await this.get({ id });
 
     this.algoliaService.update({
-      objectID: category.code,
+      objectID: String(category.id),
       name: category.name,
       categoryGroupName: category.categoryGroup.name,
     });
@@ -109,9 +106,9 @@ export class CategoryService extends BaseService {
     return category;
   }
 
-  delete(code: string) {
-    this.algoliaService.remove(code);
-    return this.categoryRepository.delete(code);
+  delete(id: number) {
+    this.algoliaService.remove(String(id));
+    return this.categoryRepository.delete({ id });
   }
 
   private getQueryBuilder() {
@@ -119,19 +116,6 @@ export class CategoryService extends BaseService {
       .createQueryBuilder('category')
       .leftJoinAndSelect('category.thumbnail', 'thumbnail')
       .leftJoinAndMapOne('category.website', WebsiteEntity, 'website', 'website.id = category.websiteId')
-      .leftJoin(UserEntity, 'thumbnailUser', 'thumbnailUser.id = thumbnail.userId')
-      .leftJoin(WebsiteEntity, 'thumbnailUserWebsite', 'thumbnailUserWebsite.id = thumbnailUser.websiteId')
-      .leftJoin(
-        CloudflareVariantWebsiteEntity,
-        'thumbnailVariantWebsite',
-        'thumbnailVariantWebsite.websiteId = thumbnailUserWebsite.id',
-      )
-      .leftJoinAndMapMany(
-        'thumbnail.variants',
-        CloudflareVariantEntity,
-        'thumbnailVariant',
-        'thumbnailVariant.code = thumbnailVariantWebsite.variantCode',
-      )
       .leftJoinAndSelect('category.categoryGroup', 'categoryGroup');
   }
 }

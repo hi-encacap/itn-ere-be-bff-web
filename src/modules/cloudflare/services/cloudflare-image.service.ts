@@ -1,23 +1,23 @@
 import { HttpService } from '@nestjs/axios';
-// import { InjectQueue } from '@nestjs/bull';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-// import { Queue } from 'bull';
 import FormData from 'form-data';
 import { get, set } from 'lodash';
 import { LoggerService } from 'src/common/modules/logger/logger.service';
 import { randomStringPrefix } from 'src/common/utils/helpers.util';
+import AppConfigService from 'src/configs/app/config.service';
 import { CloudflareConfigService } from 'src/configs/cloudflare/cloudflare-config.service';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
+import { CLOUDFLARE_IMAGE_ERROR_CODE } from '../constants/cloudflare-error-code.constant';
 import { CLOUDFLARE_IMAGE_STATUS_ENUM } from '../constants/cloudflare-image-status.constant';
 import { CloudflareImageEntity } from '../entities/cloudflare-image.entity';
-import { CloudflareVariantEntity } from '../entities/cloudflare-variant.entity';
+import { CloudflareVariantService } from './cloudflare-variant.service';
 
 @Injectable()
 export class CloudflareImageService {
-  private logger = new LoggerService('CloudflareImageService');
-  private imageURL: string;
+  private readonly logger = new LoggerService('CloudflareImageService');
+  private readonly imageURL: string;
 
   constructor(
     @InjectRepository(CloudflareImageEntity)
@@ -26,19 +26,21 @@ export class CloudflareImageService {
     // @InjectQueue('cloudflare-image')
     // private readonly cloudflareImageQueue: Queue,
     private readonly cloudflareConfigService: CloudflareConfigService,
+    private readonly cloudflareVariantService: CloudflareVariantService,
+    private readonly appConfigService: AppConfigService,
   ) {
-    this.imageURL = this.cloudflareConfigService.images.delivery;
+    this.imageURL = this.cloudflareConfigService.image.delivery;
   }
 
   async uploadSingle(file: Express.Multer.File, user: UserEntity) {
-    const imageId = randomStringPrefix(16);
+    const imageId = randomStringPrefix();
 
     const record = await this.cloudflareImageRepository.save({
       id: imageId,
       status: CLOUDFLARE_IMAGE_STATUS_ENUM.PROCESSING,
       size: file.size,
       extension: file.mimetype,
-      userId: user.id,
+      websiteId: user.websiteId,
     });
 
     await this.uploadToCloudflare(imageId, file.mimetype, file.buffer);
@@ -80,43 +82,71 @@ export class CloudflareImageService {
         id: imageId,
         status: CLOUDFLARE_IMAGE_STATUS_ENUM.PROCESSING_ERROR,
       });
+      throw new UnprocessableEntityException(CLOUDFLARE_IMAGE_ERROR_CODE.IMAGE_FAILED_TO_PROCESS);
     }
   }
 
-  getOne(imageId: string) {
+  get(imageId: string) {
     return this.cloudflareImageRepository.findOne({
       where: { id: imageId },
     });
   }
 
-  getURLsFromVariants(imageId: string, variants: CloudflareVariantEntity[]) {
-    return variants.map((variant) => `${this.imageURL}/${imageId}/${variant.code}`);
+  getAll(query: FindManyOptions<CloudflareImageEntity>) {
+    return this.cloudflareImageRepository.find(query);
   }
 
-  mapVariantToImage<T>(object: T, imageKey: string) {
+  async mapVariantToImage<T>(object: T, imagePath: string) {
     if (Array.isArray(object)) {
-      object.forEach((item) => this.mapVariantToImage(item, imageKey));
+      return Promise.all(object.map((item) => this.mapVariantToImage(item, imagePath)));
     }
 
-    const variantKey = `${imageKey}.variants`;
+    const image = get(object, imagePath);
 
-    const variants = get(object, variantKey);
-    const image = get(object, imageKey);
-
-    if (!variants || !image || typeof object !== 'object') {
+    if (!image || typeof object !== 'object') {
       return object;
     }
 
+    return set(object, imagePath, await this.transformImageToURL(image));
+  }
+
+  async mapVariantToImages<T>(object: T, imagePath: string) {
+    if (Array.isArray(object)) {
+      return Promise.all(object.map((item) => this.mapVariantToImages(item, imagePath)));
+    }
+
+    const images = get(object, imagePath);
+
+    if (!images || typeof object !== 'object') {
+      return object;
+    }
+
+    return set(object, imagePath, await Promise.all(images.map((image) => this.transformImageToURL(image))));
+  }
+
+  private async transformImageToURL(image: CloudflareImageEntity) {
     const { id } = image;
-    const imageVariantObject = variants.reduce((acc, variant: CloudflareVariantEntity) => {
-      acc[variant.code] = `${this.imageURL}/${id}/${variant.code}`;
-      return acc;
+
+    const imageVariants = await this.cloudflareVariantService.getAllCached();
+
+    if (!imageVariants?.length) {
+      return null;
+    }
+
+    const newVariants = imageVariants.reduce((acc, variant) => {
+      return {
+        ...acc,
+        [variant.code]: `${this.imageURL}/${id}/${variant.code}`,
+      };
     }, {});
 
-    return set(object, variantKey, imageVariantObject);
+    return {
+      ...image,
+      ...newVariants,
+    };
   }
 
   private getFileName(id: string, mimetype: string) {
-    return `ENCACAP_RE_${id}.${mimetype.split('/')[1]}`;
+    return `${this.appConfigService.name}_${id}.${mimetype.split('/')[1]}`;
   }
 }

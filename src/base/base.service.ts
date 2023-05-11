@@ -37,8 +37,9 @@ export class BaseService {
     queryBuilder: SelectQueryBuilder<T>,
     query: FindOptionsWhere<BaseListQueryDto>,
     tableAlias: string,
+    defaultOrderBy = 'updatedAt',
   ): SelectQueryBuilder<T> {
-    const { orderBy = 'createdAt', orderDirection = ORDER_DIRECTION_ENUM.DESC } = query;
+    const { orderBy = defaultOrderBy, orderDirection = ORDER_DIRECTION_ENUM.DESC } = query;
 
     if (orderBy) {
       queryBuilder.orderBy(`${tableAlias}.${orderBy}`, orderDirection as ORDER_DIRECTION_ENUM);
@@ -81,7 +82,7 @@ export class BaseService {
   ) {
     if (query.searchValue) {
       const { hits } = await searchSynonyms(query.searchValue as string, [query.searchBy as string]);
-      const matchedIdentities = hits.map((item) => item.objectID);
+      const matchedIdentities = hits.length ? hits.map((item) => item.objectID) : [null];
 
       return this.setInOperator(queryBuilder, matchedIdentities, ...columns);
     }

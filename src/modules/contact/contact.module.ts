@@ -12,6 +12,6 @@ import { ContactNotExistsValidator } from './validators/contact-not-exists.valid
   imports: [TypeOrmModule.forFeature([ContactEntity]), CloudflareModule, AlgoliaModule],
   controllers: [AdminContactController],
   providers: [ContactService, ContactExistsValidator, ContactNotExistsValidator],
-  exports: [ContactExistsValidator, ContactNotExistsValidator],
+  exports: [ContactExistsValidator, ContactNotExistsValidator, ContactService],
 })
 export class ContactModule {}

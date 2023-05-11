@@ -6,10 +6,10 @@ export class AlgoliaConfigService {
   constructor(private readonly configService: ConfigService) {}
 
   get appID(): string {
-    return this.configService.get('appID');
+    return this.configService.get('algolia.appID');
   }
 
   get apiKey(): string {
-    return this.configService.get('apiKey');
+    return this.configService.get('algolia.apiKey');
   }
 }

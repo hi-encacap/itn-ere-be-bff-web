@@ -14,7 +14,7 @@ export class ContactExistsValidator implements ValidatorConstraintInterface {
   async validate(_, args: ContactExistsValidatorValidationArguments) {
     const { object: body } = args;
 
-    const user = await this.contactService.findOne({
+    const user = await this.contactService.get({
       name: body.name,
       phone: body.phone,
     });

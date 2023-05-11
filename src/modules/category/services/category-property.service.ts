@@ -39,7 +39,7 @@ export class CategoryPropertyService extends BaseService {
   }
 
   async create(body: CategoryPropertyListQueryDto) {
-    const category = await this.categoryService.getOne({
+    const category = await this.categoryService.get({
       id: body.categoryId,
       websiteId: body.websiteId,
     });

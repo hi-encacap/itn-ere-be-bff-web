@@ -1,9 +1,10 @@
+import { UNIT_PRICE_TYPE_ENUM } from '@encacap-group/types/dist/re';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UNIT_PRICE_TYPE_ENUM } from 'encacap/dist/re';
 import { Seeder } from 'nestjs-seeder';
 import { UnitPriceEntity } from 'src/modules/unit-price/entities/unit-price.entity';
 import { IUnitPrice } from 'src/modules/unit-price/interfaces/unit-price.interface';
+import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Repository } from 'typeorm';
 
 const unitPriceItems: Partial<IUnitPrice>[] = [
@@ -29,6 +30,7 @@ const unitPriceItems: Partial<IUnitPrice>[] = [
 export class UnitPriceSeeder implements Seeder {
   constructor(
     @InjectRepository(UnitPriceEntity) private readonly unitPriceRepository: Repository<UnitPriceEntity>,
+    @InjectRepository(WebsiteEntity) private readonly websiteRepository: Repository<WebsiteEntity>,
   ) {}
 
   async upsertItem(item: Partial<IUnitPrice>) {
@@ -52,7 +54,15 @@ export class UnitPriceSeeder implements Seeder {
   }
 
   async seed() {
-    const tasks = unitPriceItems.map((item) => this.upsertItem(item));
+    const websites = await this.websiteRepository.find();
+    const tasks = [];
+
+    websites.forEach((website) => {
+      const items = unitPriceItems.map((item) => ({ ...item, websiteId: website.id }));
+
+      tasks.push(this.unitPriceRepository.save(items));
+    });
+
     await Promise.all(tasks);
   }
 

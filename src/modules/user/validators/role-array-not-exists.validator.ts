@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { map } from 'bluebird';
 import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
-import { ROLE_ENUM } from 'src/common/constants/role.constant';
+import { ROLE_SLUG_ENUM } from 'src/common/constants/role.constant';
 import { RoleService } from '../services/role.service';
 
 interface RoleArrayNotExistsValidatorValidationArguments extends ValidationArguments {
-  constraints: ROLE_ENUM[];
+  constraints: ROLE_SLUG_ENUM[];
 }
 
 @ValidatorConstraint({ name: 'RoleArrayNotExistsValidator', async: true })
@@ -26,7 +26,7 @@ export class RoleArrayNotExistsValidator implements ValidatorConstraintInterface
       try {
         const role = await this.roleService.findOne({ id: roleId });
 
-        if (!validRoles.includes(role.slug as ROLE_ENUM)) {
+        if (!validRoles.includes(role.slug as ROLE_SLUG_ENUM)) {
           this.invalidRoleIds.push(roleId);
         }
       } catch (error) {

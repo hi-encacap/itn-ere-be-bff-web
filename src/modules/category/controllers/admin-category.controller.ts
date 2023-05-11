@@ -1,9 +1,9 @@
+import { IREUser } from '@encacap-group/types/dist/re';
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { AddWebsiteIdToParam } from 'src/common/decorators/add-website-id-to-param.decorator';
 import { User } from 'src/common/decorators/user.decorator';
-import { AdminGuard } from 'src/common/guards/admin.guard';
+import { AdminAuthGuard } from 'src/common/guards/admin-auth.guard';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
-import { IUser } from 'src/modules/user/interfaces/user.interface';
 import { CategoryCreateBodyDto } from '../dtos/category-create-body.dto';
 import { CategoryDeleteParamDto } from '../dtos/category-delete-param.dto';
 import { CategoryListQueryDto } from '../dtos/category-list-query.dto';
@@ -12,12 +12,12 @@ import { CategoryUpdateParamDto } from '../dtos/category-update-param.dto';
 import { CategoryService } from '../services/category.service';
 
 @Controller('admin/categories')
-@UseGuards(JwtAuthGuard, AdminGuard)
+@UseGuards(JwtAuthGuard, AdminAuthGuard)
 export class AdminCategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Get()
-  getAll(@Query() query: CategoryListQueryDto, @User() user: IUser) {
+  getAll(@Query() query: CategoryListQueryDto, @User() user: IREUser) {
     return this.categoryService.getAll({
       ...query,
       websiteId: user.websiteId,
@@ -25,17 +25,17 @@ export class AdminCategoryController {
   }
 
   @Post()
-  create(@Body() body: CategoryCreateBodyDto, @User() user: IUser) {
+  create(@Body() body: CategoryCreateBodyDto, @User() user: IREUser) {
     return this.categoryService.create(body, user);
   }
 
-  @Put(':code')
+  @Put(':id')
   update(@AddWebsiteIdToParam() @Param() param: CategoryUpdateParamDto, @Body() body: CategoryUpdateBodyDto) {
-    return this.categoryService.update(param.code, body);
+    return this.categoryService.update(param.id, body);
   }
 
-  @Delete(':code')
+  @Delete(':id')
   delete(@AddWebsiteIdToParam() @Param() param: CategoryDeleteParamDto) {
-    return this.categoryService.delete(param.code);
+    return this.categoryService.delete(param.id);
   }
 }

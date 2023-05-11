@@ -1,7 +1,8 @@
+import { IWebsite } from '@encacap-group/types/dist/re';
+import { WebsiteConfigEntity } from 'src/modules/configs/entities/website-config,entity';
 import { ContactEntity } from 'src/modules/contact/entities/contact.entity';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { IWebsite } from '../constants/website.interface';
 
 @Entity({ name: 'websites' })
 export class WebsiteEntity implements IWebsite {
@@ -22,4 +23,7 @@ export class WebsiteEntity implements IWebsite {
 
   @OneToMany(() => ContactEntity, (contact) => contact.website)
   contacts: ContactEntity[];
+
+  @OneToMany(() => WebsiteConfigEntity, (websiteConfig) => websiteConfig.website)
+  websiteConfigs: WebsiteConfigEntity[];
 }

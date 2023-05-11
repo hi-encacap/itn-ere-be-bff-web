@@ -1,27 +1,16 @@
 /* eslint max-classes-per-file: ["error", 2] */
 
+import { IREUser, IWebsite } from '@encacap-group/types/dist/re';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import {
-  Allow,
-  IsDefined,
-  IsEmail,
-  IsNotEmpty,
-  IsNumber,
-  IsObject,
-  IsString,
-  Min,
-  MinLength,
-  Validate,
-} from 'class-validator';
-import { IWebsite } from 'src/modules/website/constants/website.interface';
+import { Allow, IsEmail, IsNotEmpty, IsNumber, IsString, Min, MinLength, Validate } from 'class-validator';
+import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { WebsiteNotExistsValidator } from 'src/modules/website/validators/website-not-exists.validator';
 import { RoleEntity } from '../entities/role.entity';
-import { IUser } from '../interfaces/user.interface';
 import { EmailExistsValidator } from '../validators/email-exists.validator';
 import { UsernameExistsValidator } from '../validators/username-exists.validator';
 
-export class UserCreateBodyDto implements IUser {
+export class UserCreateBodyDto implements IREUser {
   @IsString()
   @IsNotEmpty()
   @ApiPropertyOptional()
@@ -62,10 +51,10 @@ export class UserCreateBodyDto implements IUser {
   id: number;
 
   @Allow()
-  @IsObject()
+  @Type(() => WebsiteEntity)
   website: IWebsite;
 
-  @IsDefined()
+  @Allow()
   @Type(() => RoleEntity)
   roles: RoleEntity[];
 }

@@ -4,9 +4,7 @@
     "source.fixAll.eslint": true,
     "source.organizeImports": true
   },
-  "cSpell.words": [
-    "IJWT"
-  ],
+  "cSpell.words": ["IJWT"],
   "workbench.colorCustomizations": {
     "activityBar.activeBackground": "#2e796b",
     "activityBar.background": "#2e796b",
