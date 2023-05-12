@@ -4,7 +4,7 @@ import { HttpAdapterHost } from '@nestjs/core';
 
 @Catch()
 export class AllExceptionFilter {
-  private readonly logger = new Logger(AllExceptionFilter.name);
+  private readonly logger = new Logger();
 
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
@@ -17,7 +17,9 @@ export class AllExceptionFilter {
 
     const responseBody = this.getResponseBody(exception, ctx);
 
-    if (exception instanceof Error) {
+    if (exception instanceof HttpException) {
+      this.logger.error(exception.message, errorTrackingCode);
+    } else if (exception instanceof Error) {
       this.logger.error(exception.message, exception.stack);
     }
 

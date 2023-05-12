@@ -10,7 +10,7 @@ export class LoggerMiddleware implements NestMiddleware {
   // https://www.apollographql.com/docs/apollo-server/integrations/plugins/
   // https://github.com/nestjs/graphql/issues/923
 
-  private readonly loggerService = new Logger('LoggerMiddleware');
+  private readonly loggerService = new Logger();
 
   public use(req: Request, res: Response, next: () => void): void {
     if (this.passUrl.includes(req.originalUrl)) {
@@ -20,9 +20,7 @@ export class LoggerMiddleware implements NestMiddleware {
     const requestId = req.headers['x-request-id'] || randomStringPrefix();
     res.setHeader('x-request-id', requestId);
 
-    this.loggerService.log(
-      `[${requestId}] ${req.method} ${req.originalUrl} - ${req.ip.replace('::ffff:', '')}`,
-    );
+    this.loggerService.log(`${req.method} ${req.originalUrl} - ${req.ip.replace('::ffff:', '')}`, requestId);
 
     return next();
   }
