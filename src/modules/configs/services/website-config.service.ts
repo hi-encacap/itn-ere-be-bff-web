@@ -41,6 +41,12 @@ export class WebsiteConfigService extends BaseService {
     return this.normalizeData(data as IConfig);
   }
 
+  async update(query: FindOptionsWhere<WebsiteConfigEntity>, data: Partial<IConfig>) {
+    const record = await this.get(query);
+
+    return this.websiteConfigRepository.update(record.id, data);
+  }
+
   private get queryBuilder() {
     return this.websiteConfigRepository.createQueryBuilder('websiteConfig');
   }
