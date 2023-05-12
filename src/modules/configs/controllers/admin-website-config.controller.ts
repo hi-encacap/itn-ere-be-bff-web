@@ -13,7 +13,7 @@ export class AdminWebsiteConfigController {
   constructor(private readonly websiteConfigService: WebsiteConfigService) {}
 
   @Put(':code')
-  async updateWebsiteConfig(
+  updateWebsiteConfig(
     @User() user: IREUser,
     @Body() body: ConfigUpdateBodyDto,
     @Param() param: BaseCodeParamDto,
