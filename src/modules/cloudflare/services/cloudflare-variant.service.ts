@@ -20,7 +20,7 @@ export class CloudflareVariantService {
   async getAllCached() {
     const cachedData = await this.memCachingService.getCloudflareVariants();
 
-    if (cachedData !== null) {
+    if (cachedData) {
       return cachedData;
     }
 
