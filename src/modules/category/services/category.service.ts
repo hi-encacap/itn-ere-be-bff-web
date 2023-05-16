@@ -6,7 +6,7 @@ import { BaseService } from 'src/base/base.service';
 import { AlgoliaCategoryService } from 'src/modules/algolia/services/algolia-category.service';
 import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
-import { FindOptionsWhere, Repository } from 'typeorm';
+import { FindOptionsWhere, IsNull, Repository } from 'typeorm';
 import { CategoryCreateBodyDto } from '../dtos/category-create-body.dto';
 import { CategoryListQueryDto } from '../dtos/category-list-query.dto';
 import { CategoryUpdateBodyDto } from '../dtos/category-update-body.dto';
@@ -29,7 +29,7 @@ export class CategoryService extends BaseService {
       throw new NotFoundException('CATEGORY_NOT_FOUND');
     }
 
-    return record;
+    return this.cloudflareImageService.mapVariantToImage(record, 'thumbnail');
   }
 
   async getAll(query: CategoryListQueryDto) {
@@ -43,6 +43,16 @@ export class CategoryService extends BaseService {
       queryBuilder.andWhere('categoryGroup.code IN (:...categoryGroup)', {
         categoryGroup: query.categoryGroupCodes,
       });
+    }
+
+    if (query.parentId !== undefined) {
+      queryBuilder.andWhere({
+        parentId: isNaN(query.parentId) ? IsNull() : query.parentId,
+      });
+    }
+
+    if (query.parentCode) {
+      queryBuilder = this.setFilterV2(queryBuilder, query.parentCode, 'parent.code');
     }
 
     const { orderDirection } = query;
@@ -114,6 +124,8 @@ export class CategoryService extends BaseService {
   private getQueryBuilder() {
     return this.categoryRepository
       .createQueryBuilder('category')
+      .leftJoinAndMapOne('category.parent', CategoryEntity, 'parent', 'parent.id = category.parentId')
+      .leftJoinAndMapMany('category.children', CategoryEntity, 'children', 'children.parentId = category.id')
       .leftJoinAndSelect('category.thumbnail', 'thumbnail')
       .leftJoinAndMapOne('category.website', WebsiteEntity, 'website', 'website.id = category.websiteId')
       .leftJoinAndSelect('category.categoryGroup', 'categoryGroup');

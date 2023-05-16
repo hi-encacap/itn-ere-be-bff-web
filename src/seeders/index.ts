@@ -22,7 +22,9 @@ import { UserRoleMappingEntity } from 'src/modules/user/entities/user-role-mappi
 import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { PostgresDatabaseProviderModule } from 'src/providers/postgres/postgres.module';
+import { CategoryGroupWebsiteSeeder } from './category-group-website.seeder';
 import { CategoryGroupSeeder } from './category-group.seeder';
+import { CategorySeeder } from './category.seeder';
 import { CloudflareVariantSeeder } from './cloudflare-variant.seeder';
 import { EstateQuarterSeeder } from './estate-quarter.seeder';
 import { RoleSeeder } from './role.seeder';
@@ -64,6 +66,8 @@ seeder({
   UserSeeder,
   CloudflareVariantSeeder,
   CategoryGroupSeeder,
+  CategoryGroupWebsiteSeeder,
+  CategorySeeder,
   EstateQuarterSeeder,
   UnitPriceSeeder,
   WebsiteConfigSeeder,

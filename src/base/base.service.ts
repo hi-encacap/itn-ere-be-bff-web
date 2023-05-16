@@ -74,6 +74,24 @@ export class BaseService {
     return queryBuilder;
   }
 
+  setFilterV2<T = unknown>(queryBuilder: SelectQueryBuilder<T>, value: unknown, ...fields: string[]) {
+    let newQueryBuilder = queryBuilder;
+
+    if (!fields.length) {
+      return queryBuilder;
+    }
+
+    fields.forEach((field) => {
+      if (Array.isArray(value)) {
+        newQueryBuilder = this.setInOperator(queryBuilder, value, field);
+      } else if (value) {
+        newQueryBuilder.andWhere(`${field} = :${field}`, { [field]: value });
+      }
+    });
+
+    return queryBuilder;
+  }
+
   async setAlgoliaSearch<T = unknown>(
     queryBuilder: SelectQueryBuilder<T>,
     query: FindOptionsWhere<BaseListQueryDto>,
