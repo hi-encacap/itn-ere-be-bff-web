@@ -60,7 +60,7 @@ export class CategorySeeder implements Seeder {
     return this.categoryRepository.save(updatedItem);
   }
 
-  async seed() {
+  seed() {
     const tasks = items.map((item) => this.upsertItem(item));
     return Promise.all(tasks);
   }
