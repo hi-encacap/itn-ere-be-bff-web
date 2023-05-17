@@ -5,10 +5,11 @@ import { AdminWebsiteConfigController } from './controllers/admin-website-config
 import { PublicWebsiteConfigController } from './controllers/public-website-config.controller';
 import { WebsiteConfigEntity } from './entities/website-config,entity';
 import { WebsiteConfigService } from './services/website-config.service';
+import { WebsiteConfigExistsValidator } from './validators/website-config-exists.validator';
 
 @Module({
   imports: [TypeOrmModule.forFeature([WebsiteConfigEntity]), CloudflareModule],
   controllers: [PublicWebsiteConfigController, AdminWebsiteConfigController],
-  providers: [WebsiteConfigService],
+  providers: [WebsiteConfigService, WebsiteConfigExistsValidator],
 })
 export class ConfigModule {}

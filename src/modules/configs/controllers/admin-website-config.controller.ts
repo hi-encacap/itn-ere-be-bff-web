@@ -1,9 +1,11 @@
 import { IREUser } from '@encacap-group/types/dist/re';
-import { Body, Controller, Param, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { BaseCodeParamDto } from 'src/base/base.dto';
+import { AddWebsiteIdToBody } from 'src/common/decorators/add-website-id-to-body.decorator';
 import { User } from 'src/common/decorators/user.decorator';
 import { AdminAuthGuard } from 'src/common/guards/admin-auth.guard';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { ConfigCreateBodyDto } from '../dtos/config-create-body.dto';
 import { ConfigUpdateBodyDto } from '../dtos/config-update-body.dto';
 import { WebsiteConfigService } from '../services/website-config.service';
 
@@ -11,6 +13,11 @@ import { WebsiteConfigService } from '../services/website-config.service';
 @Controller('admin/website-configs')
 export class AdminWebsiteConfigController {
   constructor(private readonly websiteConfigService: WebsiteConfigService) {}
+
+  @Post()
+  createWebsiteConfig(@User() user: IREUser, @AddWebsiteIdToBody() @Body() body: ConfigCreateBodyDto) {
+    return this.websiteConfigService.create(body, user);
+  }
 
   @Put(':code')
   updateWebsiteConfig(

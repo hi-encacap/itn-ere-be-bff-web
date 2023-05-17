@@ -1,10 +1,11 @@
-import { CONFIG_TYPE_ENUM, IConfig } from '@encacap-group/types/dist/re';
+import { CONFIG_TYPE_ENUM, IConfig, IREUser } from '@encacap-group/types/dist/re';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { set } from 'lodash';
 import { BaseService } from 'src/base/base.service';
 import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
 import { FindOptionsWhere, In, Repository } from 'typeorm';
+import { ConfigCreateBodyDto } from '../dtos/config-create-body.dto';
 import { WebsiteConfigListQueryDto } from '../dtos/website-config-list-query.dto';
 import { WebsiteConfigEntity } from '../entities/website-config,entity';
 
@@ -45,6 +46,14 @@ export class WebsiteConfigService extends BaseService {
     const record = await this.get(query);
 
     return this.websiteConfigRepository.update(record.id, data);
+  }
+
+  async create(data: ConfigCreateBodyDto, user: IREUser) {
+    return this.websiteConfigRepository.save({
+      ...data,
+      websiteId: user.websiteId,
+      userId: user.id,
+    });
   }
 
   private get queryBuilder() {

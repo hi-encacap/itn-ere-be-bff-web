@@ -1,11 +1,14 @@
 import { CONFIG_GROUP_ENUM, CONFIG_TYPE_ENUM } from '@encacap-group/types/dist/re';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString, Validate } from 'class-validator';
+import { EXIST_VALIDATOR_TYPE } from 'src/common/constants/validator.constant';
+import { WebsiteConfigExistsValidator } from '../validators/website-config-exists.validator';
 
 export class ConfigCreateBodyDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
+  @Validate(WebsiteConfigExistsValidator, [EXIST_VALIDATOR_TYPE.NOT_EXISTS, 'code'])
   code: string;
 
   @IsString()
