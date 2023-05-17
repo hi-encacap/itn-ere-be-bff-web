@@ -48,7 +48,7 @@ export class WebsiteConfigService extends BaseService {
     return this.websiteConfigRepository.update(record.id, data);
   }
 
-  async create(data: ConfigCreateBodyDto, user: IREUser) {
+  create(data: ConfigCreateBodyDto, user: IREUser) {
     return this.websiteConfigRepository.save({
       ...data,
       websiteId: user.websiteId,
