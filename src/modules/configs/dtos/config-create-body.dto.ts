@@ -1,4 +1,4 @@
-import { CONFIG_GROUP_ENUM, CONFIG_TYPE_ENUM } from '@encacap-group/types/dist/re';
+import { CONFIG_GROUP_ENUM, CONFIG_TYPE_ENUM } from '@encacap-group/common/dist/re';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsNotEmpty, IsString, Validate } from 'class-validator';
 import { EXIST_VALIDATOR_TYPE } from 'src/common/constants/validator.constant';

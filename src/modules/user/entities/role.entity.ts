@@ -1,4 +1,4 @@
-import { IRole } from '@encacap-group/types/dist/account';
+import { IRole } from '@encacap-group/common/dist/account';
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
 import { ROLE_SLUG_ENUM } from 'src/common/constants/role.constant';
 import { Column, Entity, OneToMany } from 'typeorm';

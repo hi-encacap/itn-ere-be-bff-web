@@ -1,6 +1,6 @@
 /* eslint max-classes-per-file: ["error", 2] */
 
-import { IREUser, IWebsite } from '@encacap-group/types/dist/re';
+import { IREUser, IWebsite } from '@encacap-group/common/dist/re';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { Allow, IsEmail, IsNotEmpty, IsNumber, IsString, Min, MinLength, Validate } from 'class-validator';

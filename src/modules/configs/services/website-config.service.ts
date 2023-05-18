@@ -1,4 +1,4 @@
-import { CONFIG_TYPE_ENUM, IConfig, IREUser } from '@encacap-group/types/dist/re';
+import { CONFIG_TYPE_ENUM, IConfig, IREUser } from '@encacap-group/common/dist/re';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { set } from 'lodash';

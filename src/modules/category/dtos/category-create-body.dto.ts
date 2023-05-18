@@ -1,4 +1,4 @@
-import { CATEGORY_GROUP_ENUM, slugify } from '@encacap-group/types/dist/re';
+import { CATEGORY_GROUP_ENUM, slugify } from '@encacap-group/common/dist/re';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsEnum, IsNumber, IsOptional, IsString, Validate } from 'class-validator';

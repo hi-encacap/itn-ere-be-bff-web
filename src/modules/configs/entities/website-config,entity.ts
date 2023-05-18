@@ -1,4 +1,4 @@
-import { CONFIG_GROUP_ENUM, CONFIG_TYPE_ENUM } from '@encacap-group/types/dist/re';
+import { CONFIG_GROUP_ENUM, CONFIG_TYPE_ENUM } from '@encacap-group/common/dist/re';
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';

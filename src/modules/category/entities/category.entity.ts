@@ -1,4 +1,4 @@
-import { CATEGORY_GROUP_ENUM, ICloudflareImageResponse } from '@encacap-group/types/dist/re';
+import { CATEGORY_GROUP_ENUM, ICloudflareImageResponse } from '@encacap-group/common/dist/re';
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
 import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';

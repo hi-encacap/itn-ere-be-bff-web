@@ -1,4 +1,4 @@
-import { IREUser } from '@encacap-group/types/dist/re';
+import { IREUser } from '@encacap-group/common/dist/re';
 import { Body, Controller, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { BaseCodeParamDto } from 'src/base/base.dto';
 import { AddWebsiteIdToBody } from 'src/common/decorators/add-website-id-to-body.decorator';

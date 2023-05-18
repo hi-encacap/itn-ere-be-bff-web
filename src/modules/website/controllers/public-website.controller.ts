@@ -1,4 +1,4 @@
-import { IWebsite } from '@encacap-group/types/dist/re';
+import { IWebsite } from '@encacap-group/common/dist/re';
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { Website } from 'src/common/decorators/website.decorator';
 import { WebsiteApiKeyGuard } from 'src/common/guards/website-api-key.guard';

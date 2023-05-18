@@ -1,4 +1,4 @@
-import { IWebsite } from '@encacap-group/types/dist/re';
+import { IWebsite } from '@encacap-group/common/dist/re';
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { BaseCodeParamDto } from 'src/base/base.dto';
 import { Website } from 'src/common/decorators/website.decorator';

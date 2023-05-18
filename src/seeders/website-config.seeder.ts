@@ -5,7 +5,7 @@ import {
   CONFIG_TYPE_ENUM,
   IConfig,
   WEBSITE_DOMAIN_ENUM,
-} from '@encacap-group/types/dist/re';
+} from '@encacap-group/common/dist/re';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { omit } from 'lodash';

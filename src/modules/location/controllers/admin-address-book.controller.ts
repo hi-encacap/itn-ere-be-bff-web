@@ -1,4 +1,4 @@
-import { IREUser } from '@encacap-group/types/dist/re';
+import { IREUser } from '@encacap-group/common/dist/re';
 import { Controller, Delete, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { User } from 'src/common/decorators/user.decorator';
 import { AdminAuthGuard } from 'src/common/guards/admin-auth.guard';

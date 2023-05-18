@@ -1,4 +1,4 @@
-import { UNIT_PRICE_TYPE_ENUM } from '@encacap-group/types/dist/re';
+import { UNIT_PRICE_TYPE_ENUM } from '@encacap-group/common/dist/re';
 import { ValidatorConstraint } from 'class-validator';
 import { EXIST_VALIDATOR_TYPE } from 'src/common/constants/validator.constant';
 import { ExistsConstraintValidationArguments } from 'src/common/interfaces/validator';

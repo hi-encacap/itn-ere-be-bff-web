@@ -3,7 +3,7 @@ import {
   CATEGORY_GROUP_ENUM,
   ICategory,
   WEBSITE_DOMAIN_ENUM,
-} from '@encacap-group/types/dist/re';
+} from '@encacap-group/common/dist/re';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Seeder } from 'nestjs-seeder';

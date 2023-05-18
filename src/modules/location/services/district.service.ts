@@ -1,4 +1,4 @@
-import { IREUser, slugify } from '@encacap-group/types/dist/re';
+import { IREUser, slugify } from '@encacap-group/common/dist/re';
 import { Inject, Injectable, UnprocessableEntityException, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/base/base.service';

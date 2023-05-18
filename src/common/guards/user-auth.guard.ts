@@ -1,5 +1,5 @@
-import { IRole } from '@encacap-group/types/dist/account';
-import { IREUser } from '@encacap-group/types/dist/re';
+import { IRole } from '@encacap-group/common/dist/account';
+import { IREUser } from '@encacap-group/common/dist/re';
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
 import { ROLE_SLUG_ENUM } from '../constants/role.constant';
 

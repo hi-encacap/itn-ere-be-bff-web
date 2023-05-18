@@ -1,4 +1,4 @@
-import { CATEGORY_GROUP_ENUM } from '@encacap-group/types/dist/re';
+import { CATEGORY_GROUP_ENUM } from '@encacap-group/common/dist/re';
 import { Type } from 'class-transformer';
 import { IsEnum, IsNumber, IsOptional, IsString, ValidateIf } from 'class-validator';
 import { BaseListQueryDto } from 'src/base/base.dto';

@@ -1,4 +1,4 @@
-import { IWebsite } from '@encacap-group/types/dist/re';
+import { IWebsite } from '@encacap-group/common/dist/re';
 import { WebsiteConfigEntity } from 'src/modules/configs/entities/website-config,entity';
 import { ContactEntity } from 'src/modules/contact/entities/contact.entity';
 import { UserEntity } from 'src/modules/user/entities/user.entity';

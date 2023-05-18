@@ -1,4 +1,4 @@
-import { IWebsite, WEBSITE_DOMAIN_ENUM } from '@encacap-group/types/dist/re';
+import { IWebsite, WEBSITE_DOMAIN_ENUM } from '@encacap-group/common/dist/re';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Seeder } from 'nestjs-seeder';

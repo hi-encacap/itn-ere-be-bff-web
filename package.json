@@ -25,7 +25,7 @@
     "railway:seed": "railway run yarn seed"
   },
   "dependencies": {
-    "@encacap-group/types": "^1.6.13",
+    "@encacap-group/common": "^1.6.20",
     "@nestjs/axios": "^1.0.0",
     "@nestjs/bull": "^0.6.2",
     "@nestjs/cache-manager": "^1.0.0",

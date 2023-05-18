@@ -1,4 +1,4 @@
-import { IREUser, slugify } from '@encacap-group/types/dist/re';
+import { IREUser, slugify } from '@encacap-group/common/dist/re';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { pick } from 'lodash';

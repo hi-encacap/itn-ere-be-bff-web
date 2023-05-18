@@ -1,4 +1,4 @@
-import { IREUser } from '@encacap-group/types/dist/re';
+import { IREUser } from '@encacap-group/common/dist/re';
 import { Injectable } from '@nestjs/common';
 import { omit } from 'lodash';
 import { TokenService } from '../token/services/token.service';
