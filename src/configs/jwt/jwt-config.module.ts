@@ -11,9 +11,9 @@ import jwtConfiguration from './jwt.configuration';
       isGlobal: true,
       load: [jwtConfiguration],
       validationSchema: Joi.object({
-        API_APP_JWT_SECRET: Joi.string().required(),
-        API_APP_JWT_EXPIRATION_MINUTES: Joi.number().required(),
-        API_APP_JWT_REFRESH_EXPIRATION_DAYS: Joi.number().required(),
+        RE_API_APP_JWT_SECRET: Joi.string().required(),
+        RE_API_APP_JWT_EXPIRATION_MINUTES: Joi.number().required(),
+        RE_API_APP_JWT_REFRESH_EXPIRATION_DAYS: Joi.number().required(),
       }),
     }),
   ],

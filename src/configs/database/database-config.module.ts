@@ -11,7 +11,7 @@ import databaseConfiguration from './database.configuration';
       isGlobal: true,
       load: [databaseConfiguration],
       validationSchema: Joi.object({
-        API_DB_TYPE: Joi.string().required().valid('postgres').default('postgres'),
+        RE_API_DB_TYPE: Joi.string().required().valid('postgres').default('postgres'),
         DB_POSTGRES_HOST: Joi.string().required().default('localhost'),
         DB_POSTGRES_PORT: Joi.number().required().default(5432),
         DB_POSTGRES_USERNAME: Joi.string().required().default('postgres'),
