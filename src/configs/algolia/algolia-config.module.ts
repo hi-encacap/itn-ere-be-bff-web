@@ -11,8 +11,8 @@ import algoliaConfiguration from './algolia.configuration';
       isGlobal: true,
       load: [algoliaConfiguration],
       validationSchema: Joi.object({
-        ALGOLIA_APP_ID: Joi.string().required(),
-        ALGOLIA_API_KEY: Joi.string().required(),
+        API_ALGOLIA_APP_ID: Joi.string().required(),
+        API_ALGOLIA_API_KEY: Joi.string().required(),
       }),
       expandVariables: true,
     }),
