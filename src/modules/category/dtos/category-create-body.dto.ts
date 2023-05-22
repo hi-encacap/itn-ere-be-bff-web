@@ -32,5 +32,5 @@ export class CategoryCreateBodyDto {
   @IsOptional()
   @ApiProperty({ required: false })
   @Validate(CategoryExistsValidator)
-  parentCategoryId?: number;
+  parentId?: number;
 }

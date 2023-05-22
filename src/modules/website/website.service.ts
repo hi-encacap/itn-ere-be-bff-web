@@ -12,4 +12,8 @@ export class WebsiteService {
   get(query: FindOptionsWhere<WebsiteEntity>) {
     return this.websiteRepository.findOneBy(query);
   }
+
+  getAll() {
+    return this.websiteRepository.find();
+  }
 }
