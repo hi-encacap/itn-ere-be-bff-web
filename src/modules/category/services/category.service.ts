@@ -7,9 +7,9 @@ import { AlgoliaCategoryService } from 'src/modules/algolia/services/algolia-cat
 import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { FindOptionsWhere, IsNull, Repository } from 'typeorm';
-import { CategoryCreateBodyDto } from '../dtos/category-create-body.dto';
 import { CategoryListQueryDto } from '../dtos/category-list-query.dto';
 import { CategoryUpdateBodyDto } from '../dtos/category-update-body.dto';
+import { RootCategoryCreateBody } from '../dtos/root-category-create-body.dto';
 import { CategoryEntity } from '../entities/category.entity';
 
 @Injectable()
@@ -80,7 +80,7 @@ export class CategoryService extends BaseService {
     return this.generateGetAllResponse(categories, items, query);
   }
 
-  async create(body: CategoryCreateBodyDto, user: IREUser) {
+  async create(body: Partial<RootCategoryCreateBody>, user: IREUser) {
     const { code } = body;
 
     if (!code) {
@@ -89,7 +89,7 @@ export class CategoryService extends BaseService {
 
     const record = await this.categoryRepository.save({
       ...body,
-      websiteId: user.websiteId,
+      websiteId: body.websiteId ?? user.websiteId,
     });
     const category = await this.get({ code: record.code });
 

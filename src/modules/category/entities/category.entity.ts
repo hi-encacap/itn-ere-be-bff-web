@@ -10,7 +10,7 @@ export class CategoryEntity extends BaseEntityWithPrimaryGeneratedColumn {
   @Column()
   name: string;
 
-  @Column({ name: 'code', unique: true })
+  @Column({ name: 'code' })
   code: string;
 
   @Column({ name: 'thumbnail_id' })
