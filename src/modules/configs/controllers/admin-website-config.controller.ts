@@ -1,5 +1,5 @@
 import { IREUser } from '@encacap-group/common/dist/re';
-import { Body, Controller, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { BaseCodeParamDto } from 'src/base/base.dto';
 import { AddWebsiteIdToBody } from 'src/common/decorators/add-website-id-to-body.decorator';
 import { User } from 'src/common/decorators/user.decorator';
@@ -13,6 +13,11 @@ import { WebsiteConfigService } from '../services/website-config.service';
 @Controller('admin/website-configs')
 export class AdminWebsiteConfigController {
   constructor(private readonly websiteConfigService: WebsiteConfigService) {}
+
+  @Get()
+  getWebsiteConfigs(@User() user: IREUser) {
+    return this.websiteConfigService.getAll({ websiteId: user.websiteId });
+  }
 
   @Post()
   createWebsiteConfig(@User() user: IREUser, @AddWebsiteIdToBody() @Body() body: ConfigCreateBodyDto) {
