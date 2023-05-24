@@ -36,6 +36,7 @@ export class AdminWebsiteConfigController {
         websiteId: user.websiteId,
       },
       body,
+      user,
     );
   }
 }

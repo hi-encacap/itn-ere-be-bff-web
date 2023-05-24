@@ -6,6 +6,7 @@ import { BaseService } from 'src/base/base.service';
 import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
 import { FindOptionsWhere, In, Repository } from 'typeorm';
 import { ConfigCreateBodyDto } from '../dtos/config-create-body.dto';
+import { ConfigUpdateBodyDto } from '../dtos/config-update-body.dto';
 import { WebsiteConfigListQueryDto } from '../dtos/website-config-list-query.dto';
 import { WebsiteConfigEntity } from '../entities/website-config,entity';
 
@@ -27,23 +28,38 @@ export class WebsiteConfigService extends BaseService {
     }
 
     const [data, total] = await queryBuilder.getManyAndCount();
+
     const normalizedData = await Promise.all(data.map((item) => this.normalizeData(item as IConfig)));
 
     return this.generateGetAllResponse(normalizedData, total, query);
   }
 
-  async get(query: FindOptionsWhere<WebsiteConfigEntity>) {
+  async get(query: FindOptionsWhere<WebsiteConfigEntity>, throwError = true) {
     const data = await this.websiteConfigRepository.findOneBy(query);
 
-    if (!data) {
+    if (!data && throwError) {
       throw new NotFoundException();
+    }
+
+    if (!data) {
+      return null;
     }
 
     return this.normalizeData(data as IConfig);
   }
 
-  async update(query: FindOptionsWhere<WebsiteConfigEntity>, data: Partial<IConfig>) {
-    const record = await this.get(query);
+  async update(query: FindOptionsWhere<WebsiteConfigEntity>, data: ConfigUpdateBodyDto, user?: IREUser) {
+    const record = await this.get(query, false);
+
+    if (!record && user) {
+      return this.create(
+        {
+          ...data,
+          code: query.code,
+        } as Required<ConfigUpdateBodyDto>,
+        user,
+      );
+    }
 
     return this.websiteConfigRepository.update(record.id, data);
   }
