@@ -4,6 +4,7 @@ import {
   CONFIG_GROUP_ENUM,
   CONFIG_TYPE_ENUM,
   IConfig,
+  SITE_CONFIG_CODE_ENUM,
   WEBSITE_DOMAIN_ENUM,
 } from '@encacap-group/common/dist/re';
 import { Injectable } from '@nestjs/common';
@@ -21,7 +22,7 @@ interface IConfigSeeder extends Partial<IConfig> {
 const websiteConfigItem: IConfigSeeder[] = [
   // BaolocRE DEV
   {
-    code: BAOLOCRE_SITE_CONFIG_CODE_ENUM.PHONE_NUMBER,
+    code: SITE_CONFIG_CODE_ENUM.PHONE_NUMBER,
     value: '0123456789',
     type: CONFIG_TYPE_ENUM.PRIMITIVE,
     group: CONFIG_GROUP_ENUM.SITE,
@@ -35,7 +36,7 @@ const websiteConfigItem: IConfigSeeder[] = [
     websiteDomain: WEBSITE_DOMAIN_ENUM.BAOLOCRE_DEV,
   },
   {
-    code: BAOLOCRE_SITE_CONFIG_CODE_ENUM.FACEBOOK,
+    code: SITE_CONFIG_CODE_ENUM.FACEBOOK,
     value: 'https://www.facebook.com/encacap',
     type: CONFIG_TYPE_ENUM.PRIMITIVE,
     group: CONFIG_GROUP_ENUM.SITE,
@@ -49,14 +50,14 @@ const websiteConfigItem: IConfigSeeder[] = [
     websiteDomain: WEBSITE_DOMAIN_ENUM.BAOLOCRE_DEV,
   },
   {
-    code: BAOLOCRE_SITE_CONFIG_CODE_ENUM.ADDRESS,
+    code: SITE_CONFIG_CODE_ENUM.ADDRESS,
     value: '2023 Nguyễn Khắc Khánh, Phường Enacap, Quận 1, TP. Hồ Chí Minh',
     type: CONFIG_TYPE_ENUM.PRIMITIVE,
     group: CONFIG_GROUP_ENUM.SITE,
     websiteDomain: WEBSITE_DOMAIN_ENUM.BAOLOCRE_DEV,
   },
   {
-    code: BAOLOCRE_SITE_CONFIG_CODE_ENUM.HOMEPAGE_SLIDER_IMAGES,
+    code: SITE_CONFIG_CODE_ENUM.HOMEPAGE_SLIDER_IMAGE,
     value: JSON.stringify([]),
     type: CONFIG_TYPE_ENUM.PRIMITIVE,
     group: CONFIG_GROUP_ENUM.SITE,
@@ -64,14 +65,14 @@ const websiteConfigItem: IConfigSeeder[] = [
   },
   // ACBuilding DEV
   {
-    code: ACBUILDING_SITE_CONFIG_CODE_ENUM.PHONE_NUMBER,
+    code: SITE_CONFIG_CODE_ENUM.PHONE_NUMBER,
     value: '0123456789',
     type: CONFIG_TYPE_ENUM.PRIMITIVE,
     group: CONFIG_GROUP_ENUM.SITE,
     websiteDomain: WEBSITE_DOMAIN_ENUM.ACBUILDING_DEV,
   },
   {
-    code: ACBUILDING_SITE_CONFIG_CODE_ENUM.ADDRESS,
+    code: SITE_CONFIG_CODE_ENUM.ADDRESS,
     value: 'Số 96 Nguyễn Bỉnh Khiêm, P. 2, TP. Bảo Lộc, T. Lâm Đồng',
     type: CONFIG_TYPE_ENUM.PRIMITIVE,
     group: CONFIG_GROUP_ENUM.SITE,
@@ -99,7 +100,7 @@ const websiteConfigItem: IConfigSeeder[] = [
     websiteDomain: WEBSITE_DOMAIN_ENUM.ACBUILDING_DEV,
   },
   {
-    code: ACBUILDING_SITE_CONFIG_CODE_ENUM.HOMEPAGE_SLIDER_IMAGES,
+    code: SITE_CONFIG_CODE_ENUM.HOMEPAGE_SLIDER_IMAGE,
     value: JSON.stringify([]),
     type: CONFIG_TYPE_ENUM.IMAGE_ARRAY,
     group: CONFIG_GROUP_ENUM.SITE,

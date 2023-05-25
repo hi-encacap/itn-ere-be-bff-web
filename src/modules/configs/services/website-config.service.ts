@@ -88,6 +88,12 @@ export class WebsiteConfigService extends BaseService {
       return this.cloudflareImageService.mapVariantToImages(data, 'value');
     }
 
+    if (type === CONFIG_TYPE_ENUM.CONTACT) {
+      set(data, 'value', JSON.parse(value));
+
+      return data;
+    }
+
     return data;
   }
 }
