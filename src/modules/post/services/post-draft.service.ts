@@ -56,7 +56,7 @@ export class PostDraftService extends BaseService {
     return parsedPost;
   }
 
-  async create(body: PostDraftCreateBodyDto, user: IREUser) {
+  create(body: PostDraftCreateBodyDto, user: IREUser) {
     return this.postDraftRepository.save({
       userId: user.id,
       websiteId: user.websiteId,

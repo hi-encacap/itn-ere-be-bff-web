@@ -19,7 +19,7 @@ export class PostService extends BaseService {
     super();
   }
 
-  async create(body: PostCreateBodyDto, user?: IREUser) {
+  create(body: PostCreateBodyDto, user?: IREUser) {
     let { code } = body;
 
     if (!code) {
@@ -41,8 +41,6 @@ export class PostService extends BaseService {
     if (data) {
       await this.cloudflareImageService.mapVariantToImage(data, 'avatar');
     }
-
-    console.log(data);
 
     return data;
   }
