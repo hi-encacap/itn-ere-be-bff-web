@@ -17,7 +17,7 @@ export class BaseService {
     return queryBuilder;
   }
 
-  setInOperator<T = unknown>(
+  setInFilter<T = unknown>(
     queryBuilder: SelectQueryBuilder<T>,
     values: unknown[],
     ...fields: string[]
@@ -48,7 +48,7 @@ export class BaseService {
     return queryBuilder;
   }
 
-  setFilter<T = unknown>(
+  setFilterOld<T = unknown>(
     queryBuilder: SelectQueryBuilder<T>,
     query: FindOptionsWhere<BaseListQueryDto | unknown>,
     tableAlias: string,
@@ -65,7 +65,7 @@ export class BaseService {
 
     fields.forEach((field) => {
       if (Array.isArray(value)) {
-        newQueryBuilder = this.setInOperator(queryBuilder, value, `${tableAlias}.${field}`);
+        newQueryBuilder = this.setInFilter(queryBuilder, value, `${tableAlias}.${field}`);
       } else if (value) {
         newQueryBuilder.andWhere(`${tableAlias}.${field} = :${field}`, { [field]: value });
       }
@@ -74,7 +74,7 @@ export class BaseService {
     return queryBuilder;
   }
 
-  setFilterV2<T = unknown>(queryBuilder: SelectQueryBuilder<T>, value: unknown, ...fields: string[]) {
+  setFilter<T = unknown>(queryBuilder: SelectQueryBuilder<T>, value: unknown, ...fields: string[]) {
     let newQueryBuilder = queryBuilder;
 
     if (!fields.length) {
@@ -83,7 +83,7 @@ export class BaseService {
 
     fields.forEach((field) => {
       if (Array.isArray(value)) {
-        newQueryBuilder = this.setInOperator(queryBuilder, value, field);
+        newQueryBuilder = this.setInFilter(queryBuilder, value, field);
       } else if (value) {
         newQueryBuilder.andWhere(`${field} = :${field}`, { [field]: value });
       }
@@ -102,7 +102,7 @@ export class BaseService {
       const { hits } = await searchSynonyms(query.searchValue as string, [query.searchBy as string]);
       const matchedIdentities = hits.length ? hits.map((item) => item.objectID) : [null];
 
-      return this.setInOperator(queryBuilder, matchedIdentities, ...columns);
+      return this.setInFilter(queryBuilder, matchedIdentities, ...columns);
     }
 
     return queryBuilder;

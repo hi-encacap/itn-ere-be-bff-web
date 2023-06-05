@@ -19,9 +19,9 @@ export class CategoryExistsValidator implements ValidatorConstraintInterface {
     try {
       const category = await this.categoryService.get({ [key]: value });
 
-      return this.type === EXIST_VALIDATOR_TYPE.EXISTS ? Boolean(category) : !category;
+      return type === EXIST_VALIDATOR_TYPE.EXISTS ? Boolean(category) : !category;
     } catch (error) {
-      return true;
+      return type === EXIST_VALIDATOR_TYPE.EXISTS ? false : true;
     }
   }
 
