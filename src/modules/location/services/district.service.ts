@@ -42,7 +42,7 @@ export class DistrictService extends BaseService {
     }
 
     if (query.provinceCodes) {
-      queryBuilder = this.setInOperator(queryBuilder, query.provinceCodes, 'province.code');
+      queryBuilder = this.setInFilter(queryBuilder, query.provinceCodes, 'province.code');
     }
 
     if (query.websiteId) {

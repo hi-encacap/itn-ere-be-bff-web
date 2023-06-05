@@ -20,8 +20,8 @@ export class CategoryPropertyService extends BaseService {
   get(query: FindOptionsWhere<CategoryPropertyEntity>) {
     let queryBuilder = this.queryBuilder;
 
-    queryBuilder = this.setFilter(queryBuilder, query, 'category', 'websiteId');
-    queryBuilder = this.setFilter(queryBuilder, query, 'categoryProperty', 'id');
+    queryBuilder = this.setFilterOld(queryBuilder, query, 'category', 'websiteId');
+    queryBuilder = this.setFilterOld(queryBuilder, query, 'categoryProperty', 'id');
 
     return queryBuilder.getOne();
   }
@@ -29,9 +29,9 @@ export class CategoryPropertyService extends BaseService {
   getAll(query: CategoryPropertyListQueryDto) {
     let queryBuilder = this.queryBuilder;
 
-    queryBuilder = this.setFilter(queryBuilder, query, 'categoryProperty', 'name');
-    queryBuilder = this.setFilter(queryBuilder, query, 'categoryProperty', 'categoryId');
-    queryBuilder = this.setInOperator(queryBuilder, query.categoryIds, 'category.id');
+    queryBuilder = this.setFilterOld(queryBuilder, query, 'categoryProperty', 'name');
+    queryBuilder = this.setFilterOld(queryBuilder, query, 'categoryProperty', 'categoryId');
+    queryBuilder = this.setInFilter(queryBuilder, query.categoryIds, 'category.id');
     queryBuilder = this.setPagination(queryBuilder, query);
     queryBuilder = this.setSorting(queryBuilder, query, 'categoryProperty');
 

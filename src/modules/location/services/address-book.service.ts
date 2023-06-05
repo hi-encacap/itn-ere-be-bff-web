@@ -23,10 +23,10 @@ export class AddressBookService extends BaseService {
   getAll(query: AddressBookListQueryDto) {
     let queryBuilder = this.queryBuilder;
 
-    queryBuilder = this.setFilter(queryBuilder, query, 'addressBook', 'provinceCodes', 'provinceCode');
-    queryBuilder = this.setFilter(queryBuilder, query, 'addressBook', 'districtCodes', 'districtCode');
-    queryBuilder = this.setFilter(queryBuilder, query, 'addressBook', 'wardCodes', 'wardCode');
-    queryBuilder = this.setFilter(queryBuilder, query, 'addressBook', 'websiteId', 'websiteId');
+    queryBuilder = this.setFilterOld(queryBuilder, query, 'addressBook', 'provinceCodes', 'provinceCode');
+    queryBuilder = this.setFilterOld(queryBuilder, query, 'addressBook', 'districtCodes', 'districtCode');
+    queryBuilder = this.setFilterOld(queryBuilder, query, 'addressBook', 'wardCodes', 'wardCode');
+    queryBuilder = this.setFilterOld(queryBuilder, query, 'addressBook', 'websiteId', 'websiteId');
     queryBuilder = this.setSorting(queryBuilder, query, 'addressBook');
     queryBuilder = this.setPagination(queryBuilder, query);
 

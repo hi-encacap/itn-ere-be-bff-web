@@ -52,7 +52,7 @@ export class CategoryService extends BaseService {
     }
 
     if (query.parentCode) {
-      queryBuilder = this.setFilterV2(queryBuilder, query.parentCode, 'parent.code');
+      queryBuilder = this.setFilter(queryBuilder, query.parentCode, 'parent.code');
     }
 
     const { orderDirection } = query;

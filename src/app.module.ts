@@ -14,6 +14,7 @@ import { ConfigModule } from './modules/configs/config.module';
 import { ContactModule } from './modules/contact/contact.module';
 import { EstateModule } from './modules/estate/estate.module';
 import { LocationModule } from './modules/location/location.module';
+import { PostModule } from './modules/post/post.module';
 import { TokenModule } from './modules/token/token.module';
 import { UnitPriceModule } from './modules/unit-price/unit-price.module';
 import { UserModule } from './modules/user/user.module';
@@ -45,6 +46,7 @@ import { PostgresDatabaseProviderModule } from './providers/postgres/postgres.mo
     EstateModule,
     UnitPriceModule,
     ConfigModule,
+    PostModule,
   ],
   controllers: [],
   providers: [JwtStrategy, JwtService],

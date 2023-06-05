@@ -104,14 +104,14 @@ export class EstateService extends BaseService {
     }
 
     if (statuses?.length) {
-      queryBuilder = this.setInOperator(queryBuilder, statuses, 'estate.status');
+      queryBuilder = this.setInFilter(queryBuilder, statuses, 'estate.status');
     }
 
-    queryBuilder = this.setFilter(queryBuilder, query, 'estate', 'websiteId');
-    queryBuilder = this.setFilter(queryBuilder, query, 'estate', 'categoryId');
-    queryBuilder = this.setFilter(queryBuilder, query, 'estate', 'provinceCode');
-    queryBuilder = this.setFilter(queryBuilder, query, 'estate', 'districtCode');
-    queryBuilder = this.setFilter(queryBuilder, query, 'estate', 'wardCode');
+    queryBuilder = this.setFilterOld(queryBuilder, query, 'estate', 'websiteId');
+    queryBuilder = this.setFilterOld(queryBuilder, query, 'estate', 'categoryId');
+    queryBuilder = this.setFilterOld(queryBuilder, query, 'estate', 'provinceCode');
+    queryBuilder = this.setFilterOld(queryBuilder, query, 'estate', 'districtCode');
+    queryBuilder = this.setFilterOld(queryBuilder, query, 'estate', 'wardCode');
     queryBuilder = this.setPagination(queryBuilder, query);
     queryBuilder = this.setSorting(queryBuilder, query, 'estate', 'upvotedAt');
     queryBuilder = await this.setAlgoliaSearch(

@@ -24,7 +24,7 @@ export class WebsiteConfigService extends BaseService {
     let queryBuilder = this.queryBuilder;
 
     if (query.websiteId) {
-      queryBuilder = this.setFilter(queryBuilder, query, 'websiteConfig', 'websiteId');
+      queryBuilder = this.setFilterOld(queryBuilder, query, 'websiteConfig', 'websiteId');
     }
 
     const [data, total] = await queryBuilder.getManyAndCount();
