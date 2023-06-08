@@ -1,6 +1,7 @@
 import { IREUser } from '@encacap-group/common/dist/re';
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { BaseIdParamDto } from 'src/base/base.dto';
+import { AddWebsiteIdToBody } from 'src/common/decorators/add-website-id-to-body.decorator';
 import { User } from 'src/common/decorators/user.decorator';
 import { AdminAuthGuard } from 'src/common/guards/admin-auth.guard';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
@@ -15,7 +16,7 @@ export class AdminPostController {
   constructor(private readonly postService: PostService) {}
 
   @Post()
-  create(@Body() body: PostCreateBodyDto, @User() user: IREUser) {
+  create(@AddWebsiteIdToBody() @Body() body: PostCreateBodyDto, @User() user: IREUser) {
     return this.postService.create(body, user);
   }
 

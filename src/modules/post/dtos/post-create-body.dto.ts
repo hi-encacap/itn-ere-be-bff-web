@@ -15,7 +15,7 @@ export class PostCreateBodyDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
-  @Validate(PostExistsValidator, [EXIST_VALIDATOR_TYPE.EXISTS, 'code'])
+  @Validate(PostExistsValidator, [EXIST_VALIDATOR_TYPE.NOT_EXISTS, 'code'])
   code?: string;
 
   @ApiProperty()
