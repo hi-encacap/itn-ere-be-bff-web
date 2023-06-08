@@ -106,6 +106,42 @@ const websiteConfigItem: IConfigSeeder[] = [
     group: CONFIG_GROUP_ENUM.SITE,
     websiteDomain: WEBSITE_DOMAIN_ENUM.ACBUILDING_DEV,
   },
+  // ACBuilding
+  {
+    code: SITE_CONFIG_CODE_ENUM.PHONE_NUMBER,
+    value: '0964084184',
+    type: CONFIG_TYPE_ENUM.PRIMITIVE,
+    group: CONFIG_GROUP_ENUM.SITE,
+    websiteDomain: WEBSITE_DOMAIN_ENUM.ACBUILDING,
+  },
+  {
+    code: SITE_CONFIG_CODE_ENUM.ADDRESS,
+    value: 'Số 96 Nguyễn Bỉnh Khiêm, P. 2, TP. Bảo Lộc, T. Lâm Đồng',
+    type: CONFIG_TYPE_ENUM.PRIMITIVE,
+    group: CONFIG_GROUP_ENUM.SITE,
+    websiteDomain: WEBSITE_DOMAIN_ENUM.ACBUILDING,
+  },
+  {
+    code: ACBUILDING_SITE_CONFIG_CODE_ENUM.EMAIL,
+    value: 'ancuongxaydung@gmail.com',
+    type: CONFIG_TYPE_ENUM.PRIMITIVE,
+    group: CONFIG_GROUP_ENUM.SITE,
+    websiteDomain: WEBSITE_DOMAIN_ENUM.ACBUILDING,
+  },
+  {
+    code: ACBUILDING_SITE_CONFIG_CODE_ENUM.FAX,
+    value: '5801475156',
+    type: CONFIG_TYPE_ENUM.PRIMITIVE,
+    group: CONFIG_GROUP_ENUM.SITE,
+    websiteDomain: WEBSITE_DOMAIN_ENUM.ACBUILDING,
+  },
+  {
+    code: ACBUILDING_SITE_CONFIG_CODE_ENUM.BANK,
+    value: '64210000796779 - Ngân hàng BIDV - Chi nhánh Bảo Lộc',
+    type: CONFIG_TYPE_ENUM.PRIMITIVE,
+    group: CONFIG_GROUP_ENUM.SITE,
+    websiteDomain: WEBSITE_DOMAIN_ENUM.ACBUILDING,
+  },
 ];
 
 @Injectable()

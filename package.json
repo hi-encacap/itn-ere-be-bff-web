@@ -20,12 +20,12 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "seed": "node ./dist/seeders/index.js",
-    "seed:refresh": "node ./dist/seeders/index.js --refresh",
+    "seed": "dotenv -e .env.development -e .env.seeder node ./dist/seeders/index.js",
+    "seed:refresh": "dotenv -e .env.development -e .env.seeder node ./dist/seeders/index.js --refresh",
     "railway:seed": "railway run yarn seed"
   },
   "dependencies": {
-    "@encacap-group/common": "^1.6.23",
+    "@encacap-group/common": "^1.7.3",
     "@nestjs/axios": "^1.0.0",
     "@nestjs/bull": "^0.6.2",
     "@nestjs/cache-manager": "^1.0.0",

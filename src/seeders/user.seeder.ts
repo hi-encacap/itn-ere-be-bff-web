@@ -15,32 +15,35 @@ interface IREUserSeeder extends Partial<Omit<IREUser, 'website' | 'roles'>> {
   roleSlugs: ROLE_SLUG_ENUM[];
 }
 
+const rootWebsiteDomain = process.env.RE_API_ROOT_WEBSITE_DOMAIN;
+const rootAccountPassword = process.env.RE_API_ROOT_ACCOUNT_PASSWORD;
+
 const userItems: IREUserSeeder[] = [
   {
-    email: `root@${WEBSITE_DOMAIN_ENUM.ENCACAP_RE_DEV}`,
-    username: `root_${WEBSITE_DOMAIN_ENUM.ENCACAP_RE_DEV.replace(/\./g, '_')}`,
-    password: '123456',
+    email: `root@${rootWebsiteDomain}`,
+    username: `root_${rootWebsiteDomain.replace(/\./g, '_')}`,
+    password: rootAccountPassword,
     firstName: 'Khac Khanh',
     lastName: 'Nguyen',
-    websiteDomain: WEBSITE_DOMAIN_ENUM.ENCACAP_RE_DEV,
+    websiteDomain: rootWebsiteDomain,
     roleSlugs: [ROLE_SLUG_ENUM.ROOT, ROLE_SLUG_ENUM.ADMIN],
   },
   {
-    email: `admin@${WEBSITE_DOMAIN_ENUM.BAOLOCRE_DEV}`,
-    username: `admin_${WEBSITE_DOMAIN_ENUM.BAOLOCRE_DEV.replace(/\./g, '_')}`,
+    email: `admin@${WEBSITE_DOMAIN_ENUM.BAOLOCRE}`,
+    username: `admin_${WEBSITE_DOMAIN_ENUM.BAOLOCRE.replace(/\./g, '_')}`,
     password: '123456',
     firstName: 'Admin',
     lastName: 'Baoloc RE',
-    websiteDomain: WEBSITE_DOMAIN_ENUM.BAOLOCRE_DEV,
+    websiteDomain: WEBSITE_DOMAIN_ENUM.BAOLOCRE,
     roleSlugs: [ROLE_SLUG_ENUM.ADMIN],
   },
   {
-    email: `admin@${WEBSITE_DOMAIN_ENUM.ACBUILDING_DEV}`,
-    username: `admin_${WEBSITE_DOMAIN_ENUM.ACBUILDING_DEV.replace(/\./g, '_')}`,
+    email: `admin@${WEBSITE_DOMAIN_ENUM.ACBUILDING}`,
+    username: `admin_${WEBSITE_DOMAIN_ENUM.ACBUILDING.replace(/\./g, '_')}`,
     password: '123456',
     firstName: 'Admin',
     lastName: 'AC Building',
-    websiteDomain: WEBSITE_DOMAIN_ENUM.ACBUILDING_DEV,
+    websiteDomain: WEBSITE_DOMAIN_ENUM.ACBUILDING,
     roleSlugs: [ROLE_SLUG_ENUM.ADMIN],
   },
 ];
@@ -70,6 +73,10 @@ export class UserSeeder implements Seeder {
 
     const hashedPassword = await UserEntity.hashPassword(item.password || this.configService.rootPassword);
     const website = this.websiteItems.find((website) => website.url === item.websiteDomain);
+
+    if (!website) {
+      throw new Error(`Website with domain ${item.websiteDomain} not found`);
+    }
 
     const newItem = {
       email: item.email,
