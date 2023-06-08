@@ -37,6 +37,27 @@ const items: ICategorySeeder[] = [
     thumbnailId: '2305137FB2D74E78A9412BACEF652A5916277B',
     websiteDomain: WEBSITE_DOMAIN_ENUM.ACBUILDING_DEV,
   },
+  {
+    categoryGroupCode: CATEGORY_GROUP_ENUM.POST,
+    name: 'Sản phẩm',
+    code: ACBUILDING_CATEGORY_CODE_ENUM.PRODUCT,
+    thumbnailId: '23051313D355F8BDF84F51B49D680136825BA0',
+    websiteDomain: WEBSITE_DOMAIN_ENUM.ACBUILDING,
+  },
+  {
+    categoryGroupCode: CATEGORY_GROUP_ENUM.POST,
+    name: 'Dự án',
+    code: ACBUILDING_CATEGORY_CODE_ENUM.PROJECT,
+    thumbnailId: '2305133777EF8AFD314C9D86B6A157D04E0F87',
+    websiteDomain: WEBSITE_DOMAIN_ENUM.ACBUILDING,
+  },
+  {
+    categoryGroupCode: CATEGORY_GROUP_ENUM.POST,
+    name: 'Dịch vụ',
+    code: ACBUILDING_CATEGORY_CODE_ENUM.SERVICE,
+    thumbnailId: '2305137FB2D74E78A9412BACEF652A5916277B',
+    websiteDomain: WEBSITE_DOMAIN_ENUM.ACBUILDING,
+  },
 ];
 
 @Injectable()

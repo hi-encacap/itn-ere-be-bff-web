@@ -8,17 +8,28 @@ import { Repository } from 'typeorm';
 export const websiteItems: Array<Partial<IWebsite>> = [
   {
     name: 'Encacap RE',
-    url: WEBSITE_DOMAIN_ENUM.ENCACAP_RE_DEV,
+    url: WEBSITE_DOMAIN_ENUM.ENCACAP_RE,
     description: 'This is the supper root website. It can be used to manage all the websites.',
   },
   {
-    name: 'BaolocRE - Bất động sản Bảo Lộc',
+    name: 'DEV - BaolocRE - Bất động sản Bảo Lộc',
     url: WEBSITE_DOMAIN_ENUM.BAOLOCRE_DEV,
+    description: 'This is the website for BaolocRE.',
+  },
+  {
+    name: 'BaolocRE - Bất động sản Bảo Lộc',
+    url: WEBSITE_DOMAIN_ENUM.BAOLOCRE,
     description: 'This is the website for BaolocRE.',
   },
   {
     name: 'DEV - Công ty TNHH xây dựng An Cường',
     url: WEBSITE_DOMAIN_ENUM.ACBUILDING_DEV,
+    description:
+      'Chuyên thi công xây dựng nhà dân dụng, nhà tiền chế, kinh doanh vật liệu gỗ, nhựa, sắt, thép...',
+  },
+  {
+    name: 'Công ty TNHH xây dựng An Cường',
+    url: WEBSITE_DOMAIN_ENUM.ACBUILDING,
     description:
       'Chuyên thi công xây dựng nhà dân dụng, nhà tiền chế, kinh doanh vật liệu gỗ, nhựa, sắt, thép...',
   },
