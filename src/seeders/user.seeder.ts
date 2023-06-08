@@ -15,17 +15,14 @@ interface IREUserSeeder extends Partial<Omit<IREUser, 'website' | 'roles'>> {
   roleSlugs: ROLE_SLUG_ENUM[];
 }
 
-const rootWebsiteDomain = process.env.RE_API_ROOT_WEBSITE_DOMAIN;
-const rootAccountPassword = process.env.RE_API_ROOT_ACCOUNT_PASSWORD;
-
 const userItems: IREUserSeeder[] = [
   {
-    email: `root@${rootWebsiteDomain}`,
-    username: `root_${rootWebsiteDomain.replace(/\./g, '_')}`,
-    password: rootAccountPassword,
+    email: `root@${WEBSITE_DOMAIN_ENUM.ENCACAP_RE}`,
+    username: `root_${WEBSITE_DOMAIN_ENUM.ENCACAP_RE.replace(/\./g, '_')}`,
+    password: process.env.RE_API_APP_SECRET_ROOT_PASSWORD,
     firstName: 'Khac Khanh',
     lastName: 'Nguyen',
-    websiteDomain: rootWebsiteDomain,
+    websiteDomain: WEBSITE_DOMAIN_ENUM.ENCACAP_RE,
     roleSlugs: [ROLE_SLUG_ENUM.ROOT, ROLE_SLUG_ENUM.ADMIN],
   },
   {

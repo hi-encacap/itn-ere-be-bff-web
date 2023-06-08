@@ -8,7 +8,7 @@ import { Repository } from 'typeorm';
 export const websiteItems: Array<Partial<IWebsite>> = [
   {
     name: 'Encacap RE',
-    url: process.env.RE_API_ROOT_WEBSITE_DOMAIN,
+    url: WEBSITE_DOMAIN_ENUM.ENCACAP_RE,
     description: 'This is the supper root website. It can be used to manage all the websites.',
   },
   {
