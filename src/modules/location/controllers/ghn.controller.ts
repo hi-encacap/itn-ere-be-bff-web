@@ -1,4 +1,4 @@
-import { IREUser } from '@encacap-group/types/dist/re';
+import { IREUser } from '@encacap-group/common/dist/re';
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { User } from 'src/common/decorators/user.decorator';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';

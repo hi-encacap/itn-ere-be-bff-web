@@ -1,7 +1,6 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { seeder } from 'nestjs-seeder';
 import { AppConfigModule } from 'src/configs/app/config.module';
-import { CategoryGroupWebsiteEntity } from 'src/modules/category/entities/category-group-website.entity';
 import { CategoryGroupEntity } from 'src/modules/category/entities/category-group.entity';
 import { CategoryPropertyEntity } from 'src/modules/category/entities/category-property.entity';
 import { CategoryEntity } from 'src/modules/category/entities/category.entity';
@@ -44,7 +43,6 @@ seeder({
       CloudflareImageEntity,
       ContactEntity,
       CategoryGroupEntity,
-      CategoryGroupWebsiteEntity,
       CategoryEntity,
       CategoryPropertyEntity,
       EstateQuarterEntity,

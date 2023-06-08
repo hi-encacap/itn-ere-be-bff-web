@@ -1,5 +1,5 @@
-import { IRole } from '@encacap-group/types/dist/account';
-import { IREUser, IWebsite } from '@encacap-group/types/dist/re';
+import { IRole } from '@encacap-group/common/dist/account';
+import { IREUser, IWebsite } from '@encacap-group/common/dist/re';
 import { compare, hash } from 'bcrypt';
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
 import { CategoryGroupEntity } from 'src/modules/category/entities/category-group.entity';

@@ -1,4 +1,4 @@
-import { IREUser, slugify } from '@encacap-group/types/dist/re';
+import { IREUser, slugify } from '@encacap-group/common/dist/re';
 import { Inject, Injectable, UnprocessableEntityException, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/base/base.service';
@@ -42,7 +42,7 @@ export class DistrictService extends BaseService {
     }
 
     if (query.provinceCodes) {
-      queryBuilder = this.setInOperator(queryBuilder, query.provinceCodes, 'province.code');
+      queryBuilder = this.setInFilter(queryBuilder, query.provinceCodes, 'province.code');
     }
 
     if (query.websiteId) {

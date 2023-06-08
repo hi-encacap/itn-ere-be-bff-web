@@ -12,9 +12,10 @@ import appConfiguration from './configuration';
       load: [appConfiguration],
       validationSchema: Joi.object({
         APP_ENV: Joi.string().valid('development', 'production', 'test', 'provision').default('development'),
-        APP_PORT: Joi.number().default(3000),
-        APP_NAME: Joi.string().required(),
-        APP_SECRET_ROOT_PASSWORD: Joi.string().required(),
+        RE_API_APP_HOST: Joi.string().default('localhost'),
+        RE_API_APP_PORT: Joi.number().default(3000),
+        RE_API_APP_NAME: Joi.string().required(),
+        RE_API_APP_SECRET_ROOT_PASSWORD: Joi.string().required(),
       }),
     }),
   ],

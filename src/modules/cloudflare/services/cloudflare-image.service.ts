@@ -1,9 +1,8 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable, Logger, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import FormData from 'form-data';
 import { get, set } from 'lodash';
-import { LoggerService } from 'src/common/modules/logger/logger.service';
 import { randomStringPrefix } from 'src/common/utils/helpers.util';
 import AppConfigService from 'src/configs/app/config.service';
 import { CloudflareConfigService } from 'src/configs/cloudflare/cloudflare-config.service';
@@ -16,7 +15,7 @@ import { CloudflareVariantService } from './cloudflare-variant.service';
 
 @Injectable()
 export class CloudflareImageService {
-  private readonly logger = new LoggerService('CloudflareImageService');
+  private readonly logger = new Logger('CloudflareImageService');
   private readonly imageURL: string;
 
   constructor(
@@ -33,19 +32,15 @@ export class CloudflareImageService {
   }
 
   async uploadSingle(file: Express.Multer.File, user: UserEntity) {
-    const imageId = randomStringPrefix();
-
     const record = await this.cloudflareImageRepository.save({
-      id: imageId,
+      id: randomStringPrefix(),
       status: CLOUDFLARE_IMAGE_STATUS_ENUM.PROCESSING,
       size: file.size,
       extension: file.mimetype,
       websiteId: user.websiteId,
     });
 
-    await this.uploadToCloudflare(imageId, file.mimetype, file.buffer);
-
-    return record;
+    return this.uploadToCloudflare(record.id, file.mimetype, file.buffer);
   }
 
   uploadMultiple(files: Express.Multer.File[], user: UserEntity) {
@@ -72,10 +67,11 @@ export class CloudflareImageService {
       await this.httpService.axiosRef.post('', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-      await this.cloudflareImageRepository.save({
+      const record = await this.cloudflareImageRepository.save({
         id: imageId,
         status: CLOUDFLARE_IMAGE_STATUS_ENUM.READY,
       });
+      return this.mapVariantToImage(record, null);
     } catch (error) {
       this.logger.error(error);
       await this.cloudflareImageRepository.save({
@@ -96,15 +92,21 @@ export class CloudflareImageService {
     return this.cloudflareImageRepository.find(query);
   }
 
-  async mapVariantToImage<T>(object: T, imagePath: string) {
+  async mapVariantToImage<T>(object: T, imagePath: string | null) {
     if (Array.isArray(object)) {
       return Promise.all(object.map((item) => this.mapVariantToImage(item, imagePath)));
     }
 
-    const image = get(object, imagePath);
+    const image = imagePath ? get(object, imagePath) : object;
 
     if (!image || typeof object !== 'object') {
       return object;
+    }
+
+    const transformedImage = await this.transformImageToURL(image);
+
+    if (imagePath === null) {
+      return transformedImage;
     }
 
     return set(object, imagePath, await this.transformImageToURL(image));

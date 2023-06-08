@@ -1,4 +1,4 @@
-import { UNIT_PRICE_TYPE_ENUM } from '@encacap-group/types/dist/re';
+import { UNIT_PRICE_TYPE_ENUM } from '@encacap-group/common/dist/re';
 import { IsEnum, IsOptional } from 'class-validator';
 import { BaseListQueryDto } from 'src/base/base.dto';
 

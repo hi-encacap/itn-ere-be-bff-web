@@ -1,4 +1,4 @@
-import { CacheModule, CacheStore } from '@nestjs/cache-manager';
+import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { redisStore } from 'cache-manager-ioredis-yet';
 import { RedisOptions } from 'ioredis';
@@ -11,20 +11,12 @@ import { MemCachingService } from './mem-caching.service';
     CacheModule.registerAsync<RedisOptions>({
       imports: [DatabaseConfigModule],
       inject: [DatabaseConfigService],
-      useFactory: async (databaseConfigService: DatabaseConfigService) => {
-        const { redis } = databaseConfigService;
-
-        const store = await redisStore({
-          host: redis.host,
-          port: redis.port,
-          username: redis.username,
-          password: redis.password,
-          db: redis.database,
-        });
+      useFactory: async ({ redis }: DatabaseConfigService) => {
+        const store = await redisStore(redis);
 
         return {
           isGlobal: true,
-          store: store as unknown as CacheStore,
+          store,
         };
       },
     }),

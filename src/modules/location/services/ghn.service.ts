@@ -1,6 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Inject, Injectable, UnprocessableEntityException, forwardRef } from '@nestjs/common';
-import { LoggerService } from 'src/common/modules/logger/logger.service';
+import { Inject, Injectable, Logger, UnprocessableEntityException, forwardRef } from '@nestjs/common';
 import { LOCATION_ERROR_CODE } from '../constants/location-error-code.constant';
 import { IDistrict, IProvince, IWard } from '../interfaces/location.interface';
 import { DistrictService } from './district.service';
@@ -9,7 +8,7 @@ import { WardService } from './ward.service';
 
 @Injectable()
 export class GHNService {
-  private readonly logger = new LoggerService(GHNService.name);
+  private readonly logger = new Logger(GHNService.name);
 
   constructor(
     @Inject(forwardRef(() => ProvinceService)) private readonly provinceService: ProvinceService,

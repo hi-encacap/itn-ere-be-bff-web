@@ -1,4 +1,4 @@
-import { IREUser, slugify } from '@encacap-group/types/dist/re';
+import { IREUser, slugify } from '@encacap-group/common/dist/re';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { pick } from 'lodash';
@@ -6,10 +6,10 @@ import { BaseService } from 'src/base/base.service';
 import { AlgoliaCategoryService } from 'src/modules/algolia/services/algolia-category.service';
 import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
-import { FindOptionsWhere, Repository } from 'typeorm';
-import { CategoryCreateBodyDto } from '../dtos/category-create-body.dto';
+import { FindOptionsWhere, IsNull, Repository } from 'typeorm';
 import { CategoryListQueryDto } from '../dtos/category-list-query.dto';
 import { CategoryUpdateBodyDto } from '../dtos/category-update-body.dto';
+import { RootCategoryCreateBody } from '../dtos/root-category-create-body.dto';
 import { CategoryEntity } from '../entities/category.entity';
 
 @Injectable()
@@ -29,7 +29,7 @@ export class CategoryService extends BaseService {
       throw new NotFoundException('CATEGORY_NOT_FOUND');
     }
 
-    return record;
+    return this.cloudflareImageService.mapVariantToImage(record, 'thumbnail');
   }
 
   async getAll(query: CategoryListQueryDto) {
@@ -43,6 +43,16 @@ export class CategoryService extends BaseService {
       queryBuilder.andWhere('categoryGroup.code IN (:...categoryGroup)', {
         categoryGroup: query.categoryGroupCodes,
       });
+    }
+
+    if (query.parentId !== undefined) {
+      queryBuilder.andWhere({
+        parentId: isNaN(query.parentId) ? IsNull() : query.parentId,
+      });
+    }
+
+    if (query.parentCode) {
+      queryBuilder = this.setFilter(queryBuilder, query.parentCode, 'parent.code');
     }
 
     const { orderDirection } = query;
@@ -70,7 +80,7 @@ export class CategoryService extends BaseService {
     return this.generateGetAllResponse(categories, items, query);
   }
 
-  async create(body: CategoryCreateBodyDto, user: IREUser) {
+  async create(body: Partial<RootCategoryCreateBody>, user: IREUser) {
     const { code } = body;
 
     if (!code) {
@@ -79,7 +89,7 @@ export class CategoryService extends BaseService {
 
     const record = await this.categoryRepository.save({
       ...body,
-      websiteId: user.websiteId,
+      websiteId: body.websiteId ?? user.websiteId,
     });
     const category = await this.get({ code: record.code });
 
@@ -114,6 +124,14 @@ export class CategoryService extends BaseService {
   private getQueryBuilder() {
     return this.categoryRepository
       .createQueryBuilder('category')
+      .leftJoinAndMapOne('category.parent', CategoryEntity, 'parent', 'parent.id = category.parentId')
+      .leftJoinAndMapMany('category.children', CategoryEntity, 'children', 'children.parentId = category.id')
+      .leftJoinAndMapOne(
+        'children.parent',
+        CategoryEntity,
+        'childrenParent',
+        'childrenParent.id = children.parentId',
+      )
       .leftJoinAndSelect('category.thumbnail', 'thumbnail')
       .leftJoinAndMapOne('category.website', WebsiteEntity, 'website', 'website.id = category.websiteId')
       .leftJoinAndSelect('category.categoryGroup', 'categoryGroup');

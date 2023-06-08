@@ -1,4 +1,4 @@
-import { DEFAULT_CLOUDFLARE_VARIANT_ENUM } from '@encacap-group/types/dist/re';
+import { DEFAULT_CLOUDFLARE_VARIANT_ENUM } from '@encacap-group/common/dist/re';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Seeder } from 'nestjs-seeder';

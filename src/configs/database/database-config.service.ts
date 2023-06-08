@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { RedisOptions } from 'ioredis';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 @Injectable()
@@ -17,13 +18,13 @@ export default class DatabaseConfigService {
     };
   }
 
-  get redis() {
+  get redis(): RedisOptions {
     return {
       host: this.configService.get<string>('database.redis.host'),
       port: this.configService.get<number>('database.redis.port'),
       username: this.configService.get<string>('database.redis.username'),
       password: this.configService.get<string>('database.redis.password'),
-      database: this.configService.get<number>('database.redis.database'),
+      db: this.configService.get<number>('database.redis.database'),
     };
   }
 }

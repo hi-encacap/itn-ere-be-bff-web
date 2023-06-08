@@ -1,4 +1,4 @@
-import { ESTATE_STATUS_ENUM, IWebsite } from '@encacap-group/types/dist/re';
+import { ESTATE_STATUS_ENUM, IWebsite } from '@encacap-group/common/dist/re';
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { BaseIdParamDto } from 'src/base/base.dto';
 import { Website } from 'src/common/decorators/website.decorator';

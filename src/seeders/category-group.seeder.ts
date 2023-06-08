@@ -1,4 +1,4 @@
-import { CATEGORY_GROUP_ENUM } from '@encacap-group/types/dist/re';
+import { CATEGORY_GROUP_ENUM } from '@encacap-group/common/dist/re';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { capitalize, omit, values } from 'lodash';

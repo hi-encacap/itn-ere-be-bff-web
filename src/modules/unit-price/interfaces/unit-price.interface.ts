@@ -1,4 +1,4 @@
-import { UNIT_PRICE_TYPE_ENUM } from '@encacap-group/types/dist/re';
+import { UNIT_PRICE_TYPE_ENUM } from '@encacap-group/common/dist/re';
 
 export interface IUnitPrice {
   id: number;

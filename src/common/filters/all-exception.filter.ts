@@ -1,11 +1,10 @@
-import { ArgumentsHost, Catch, HttpException, HttpStatus } from '@nestjs/common';
+import { ArgumentsHost, Catch, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces';
 import { HttpAdapterHost } from '@nestjs/core';
-import { LoggerService } from '../modules/logger/logger.service';
 
 @Catch()
 export class AllExceptionFilter {
-  private readonly logger = new LoggerService(AllExceptionFilter.name);
+  private readonly logger = new Logger();
 
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
@@ -19,23 +18,9 @@ export class AllExceptionFilter {
     const responseBody = this.getResponseBody(exception, ctx);
 
     if (exception instanceof HttpException) {
-      const request = ctx.getRequest();
-
-      const logMessage = {
-        request: {
-          method: request.method,
-          url: request.url,
-          headers: request.headers,
-          body: request.body,
-          query: request.query,
-          params: request.params,
-        },
-        response: responseBody,
-      };
-
-      this.logger.error(logMessage, null, errorTrackingCode);
+      this.logger.error(exception.message, errorTrackingCode);
     } else if (exception instanceof Error) {
-      this.logger.error(exception.stack);
+      this.logger.error(exception.message, exception.stack);
     }
 
     httpAdapter.reply(

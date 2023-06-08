@@ -1,7 +1,7 @@
-import { CATEGORY_GROUP_ENUM, slugify } from '@encacap-group/types/dist/re';
+import { CATEGORY_GROUP_ENUM, slugify } from '@encacap-group/common/dist/re';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsEnum, IsString, Validate } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString, Validate } from 'class-validator';
 import { CloudflareImageNotExistsValidator } from 'src/modules/cloudflare/validators/cloudflare-image-not-exists.validator';
 import { CategoryExistsValidator } from '../validators/category-exists.validator';
 
@@ -27,4 +27,10 @@ export class CategoryCreateBodyDto {
     enumName: 'CATEGORY_GROUP_ENUM',
   })
   categoryGroupCode: CATEGORY_GROUP_ENUM;
+
+  @IsNumber()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  @Validate(CategoryExistsValidator)
+  parentId?: number;
 }

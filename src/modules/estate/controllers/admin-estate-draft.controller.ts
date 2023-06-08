@@ -1,4 +1,4 @@
-import { IREUser } from '@encacap-group/types/dist/re';
+import { IREUser } from '@encacap-group/common/dist/re';
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { BaseIdParamDto } from 'src/base/base.dto';
 import { User } from 'src/common/decorators/user.decorator';

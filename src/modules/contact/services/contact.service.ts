@@ -1,4 +1,4 @@
-import { IREUser } from '@encacap-group/types/dist/re';
+import { IREUser } from '@encacap-group/common/dist/re';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/base/base.service';
