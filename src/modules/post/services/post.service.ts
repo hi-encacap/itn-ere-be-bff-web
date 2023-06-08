@@ -97,7 +97,7 @@ export class PostService extends BaseService {
     return this.generateGetAllResponse(posts, total, query);
   }
 
-  async getRandom(query: PostListQueryDto) {
+  getRandom(query: PostListQueryDto) {
     return this.getAll({
       ...query,
       orderBy: 'RANDOM()',
