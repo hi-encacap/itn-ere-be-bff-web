@@ -16,7 +16,11 @@ const bootstrap = async () => {
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
   app.enableCors({
-    origin: ['https://dashboard.re.encacap.dev', 'https://baolocre.encacap.dev:3013'],
+    origin: [
+      'https://dashboard.re.encacap.dev',
+      'https://baolocre.encacap.dev:3013',
+      'https://dashboard.re.encacap.com',
+    ],
     credentials: true,
   });
 
