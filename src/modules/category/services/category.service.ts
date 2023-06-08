@@ -126,6 +126,12 @@ export class CategoryService extends BaseService {
       .createQueryBuilder('category')
       .leftJoinAndMapOne('category.parent', CategoryEntity, 'parent', 'parent.id = category.parentId')
       .leftJoinAndMapMany('category.children', CategoryEntity, 'children', 'children.parentId = category.id')
+      .leftJoinAndMapOne(
+        'children.parent',
+        CategoryEntity,
+        'childrenParent',
+        'childrenParent.id = children.parentId',
+      )
       .leftJoinAndSelect('category.thumbnail', 'thumbnail')
       .leftJoinAndMapOne('category.website', WebsiteEntity, 'website', 'website.id = category.websiteId')
       .leftJoinAndSelect('category.categoryGroup', 'categoryGroup');

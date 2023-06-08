@@ -1,7 +1,7 @@
 import { ESTATE_STATUS_ENUM } from '@encacap-group/common/dist/re';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsEnum, IsNumber, IsOptional } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 import { BaseListQueryDto } from 'src/base/base.dto';
 
 export class PostListQueryDto extends BaseListQueryDto {
@@ -32,4 +32,19 @@ export class PostListQueryDto extends BaseListQueryDto {
   @IsOptional()
   @IsEnum(ESTATE_STATUS_ENUM, { each: true })
   statuses?: ESTATE_STATUS_ENUM[];
+
+  @ApiPropertyOptional({ isArray: true })
+  @IsOptional()
+  @IsString({ each: true })
+  codes?: string[];
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  categoryCode?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  rootCategoryCode?: string;
 }

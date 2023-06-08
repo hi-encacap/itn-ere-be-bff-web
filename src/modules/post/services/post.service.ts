@@ -3,6 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { omit } from 'lodash';
 import { BaseService } from 'src/base/base.service';
+import { CategoryEntity } from 'src/modules/category/entities/category.entity';
+import { CategoryService } from 'src/modules/category/services/category.service';
 import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { PostCreateBodyDto } from '../dtos/post-create-body.dto';
@@ -15,6 +17,7 @@ export class PostService extends BaseService {
   constructor(
     @InjectRepository(PostEntity) private readonly postRepository: Repository<PostEntity>,
     private readonly cloudflareImageService: CloudflareImageService,
+    private readonly categoryService: CategoryService,
   ) {
     super();
   }
@@ -60,15 +63,45 @@ export class PostService extends BaseService {
       this.setInFilter(queryBuilder, query.categoryIds, 'post.categoryId');
     }
 
+    if (query.status) {
+      this.setFilter(queryBuilder, query.status, 'post.status');
+    }
+
     if (query.statuses) {
       this.setInFilter(queryBuilder, query.statuses, 'post.status');
     }
+
+    if (query.categoryCode) {
+      this.setFilter(queryBuilder, query.categoryCode, 'category.code');
+    }
+
+    if (query.codes) {
+      this.setInFilter(queryBuilder, query.codes, 'post.code');
+    }
+
+    if (query.rootCategoryCode) {
+      const { items: subCategories } = await this.categoryService.getAll({
+        parentCode: query.rootCategoryCode,
+      });
+      const subCategoryCodes = subCategories.map((subCategory) => subCategory.code);
+
+      this.setInFilter(queryBuilder, subCategoryCodes, 'category.code');
+    }
+
+    this.setPagination(queryBuilder, query);
 
     const [posts, total] = await queryBuilder.getManyAndCount();
 
     await this.cloudflareImageService.mapVariantToImage(posts, 'avatar');
 
     return this.generateGetAllResponse(posts, total, query);
+  }
+
+  async getRandom(query: PostListQueryDto) {
+    return this.getAll({
+      ...query,
+      orderBy: 'RANDOM()',
+    });
   }
 
   unPublish(query: FindOptionsWhere<PostEntity>) {
@@ -95,6 +128,13 @@ export class PostService extends BaseService {
     return this.postRepository
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.avatar', 'avatar')
-      .leftJoinAndSelect('post.category', 'category');
+      .leftJoinAndSelect('post.category', 'category')
+      .leftJoinAndMapOne(
+        'category.parent',
+        CategoryEntity,
+        'categoryParent',
+        'category.parentId = categoryParent.id',
+      )
+      .orderBy('post.upvotedAt', 'DESC');
   }
 }
