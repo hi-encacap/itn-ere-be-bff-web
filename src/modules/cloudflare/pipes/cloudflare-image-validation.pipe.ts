@@ -17,10 +17,6 @@ export class CloudflareImageValidationPipe implements PipeTransform {
       });
     }
 
-    const imageSize = file.size / 1024 / 1024; // in MB
-
-    console.log(imageSize);
-
     return file;
   }
 }
