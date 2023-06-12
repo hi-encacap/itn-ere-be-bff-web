@@ -85,7 +85,7 @@ export class PostService extends BaseService {
       });
       const subCategoryCodes = subCategories.map((subCategory) => subCategory.code);
 
-      this.setInFilter(queryBuilder, subCategoryCodes, 'category.code');
+      this.setInFilter(queryBuilder, [...subCategoryCodes, query.rootCategoryCode], 'category.code');
     }
 
     this.setPagination(queryBuilder, query);
