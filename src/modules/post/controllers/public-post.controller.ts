@@ -21,8 +21,9 @@ export class PublicPostController {
   }
 
   @Get('random')
-  getRandomEstate(@Website() website: IWebsite) {
+  getRandomEstate(@Website() website: IWebsite, @Query() query: PostListQueryDto) {
     return this.postService.getRandom({
+      ...query,
       websiteId: website.id,
       status: ESTATE_STATUS_ENUM.PUBLISHED,
     });
