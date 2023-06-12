@@ -6,6 +6,7 @@
   },
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.prettierPath": "./node_modules/prettier",
   "cSpell.words": ["IJWT"],
   "workbench.colorCustomizations": {
     "activityBar.activeBackground": "#2e796b",
@@ -25,5 +26,5 @@
     "titleBar.activeForeground": "#e7e7e7",
     "titleBar.inactiveBackground": "#20544a99",
     "titleBar.inactiveForeground": "#e7e7e799"
-  },
+  }
 }
