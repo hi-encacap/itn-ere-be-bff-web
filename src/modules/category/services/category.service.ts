@@ -80,7 +80,7 @@ export class CategoryService extends BaseService {
     return this.generateGetAllResponse(categories, items, query);
   }
 
-  async getRoots(query: CategoryListQueryDto) {
+  getRoots(query: CategoryListQueryDto) {
     return this.getAll({
       ...query,
       parentId: null,
