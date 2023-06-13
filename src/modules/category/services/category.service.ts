@@ -80,6 +80,13 @@ export class CategoryService extends BaseService {
     return this.generateGetAllResponse(categories, items, query);
   }
 
+  getRoots(query: CategoryListQueryDto) {
+    return this.getAll({
+      ...query,
+      parentId: null,
+    });
+  }
+
   async create(body: Partial<RootCategoryCreateBody>, user: IREUser) {
     const { code } = body;
 

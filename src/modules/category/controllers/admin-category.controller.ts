@@ -25,6 +25,14 @@ export class AdminCategoryController {
     });
   }
 
+  @Get('roots')
+  getRoots(@Query() query: CategoryListQueryDto, @User() user: IREUser) {
+    return this.categoryService.getRoots({
+      ...query,
+      websiteId: user.websiteId,
+    });
+  }
+
   @Get(':code')
   getPublicCategoryByCode(@Param() param: BaseCodeParamDto, @User() user: IREUser) {
     return this.categoryService.get({
