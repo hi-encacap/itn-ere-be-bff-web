@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AlgoliaModule } from 'src/modules/algolia/algolia.module';
-import { CloudflareModule } from '../cloudflare/cloudflare.module';
+import { CloudflareModule } from '../image/cloudflare.module';
 import { AdminCategoryGroupController } from './controllers/admin-category-group.controller';
 import { AdminCategoryPropertyController } from './controllers/admin-category-property.controller';
 import { AdminCategoryController } from './controllers/admin-category.controller';

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AlgoliaModule } from '../algolia/algolia.module';
-import { CloudflareModule } from '../cloudflare/cloudflare.module';
+import { CloudflareModule } from '../image/cloudflare.module';
 import { AdminContactController } from './controllers/admin-contact.controller';
 import { ContactEntity } from './entities/contact.entity';
 import { ContactService } from './services/contact.service';

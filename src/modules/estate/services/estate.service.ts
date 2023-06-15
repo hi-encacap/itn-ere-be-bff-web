@@ -1,4 +1,6 @@
 import { ESTATE_STATUS_ENUM, IREUser } from '@encacap-group/common/dist/re';
+import { ImageEntity } from '@modules/image/entities/image.entity';
+import { ImageService } from '@modules/image/services/image.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { isObject, pickBy } from 'lodash';
@@ -6,8 +8,6 @@ import { BaseService } from 'src/base/base.service';
 import { IAlgoliaEstate } from 'src/modules/algolia/interfaces/algolia.interface';
 import { AlgoliaEstateService } from 'src/modules/algolia/services/algolia-estate.service';
 import { CategoryPropertyEntity } from 'src/modules/category/entities/category-property.entity';
-import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
-import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { ESTATE_ERROR_CODE } from '../constants/estate-error-code.constant';
 import { EstateCreateBodyDto } from '../dtos/estate-create-body.dto';
@@ -24,7 +24,7 @@ export class EstateService extends BaseService {
     @InjectRepository(EstateEntity) private readonly estateRepository: Repository<EstateEntity>,
     private readonly estatePropertyService: EstatePropertyService,
     private readonly estateImageService: EstateImageService,
-    private readonly cloudflareImageService: CloudflareImageService,
+    private readonly imageService: ImageService,
     private readonly algoliaEstateService: AlgoliaEstateService,
   ) {
     super();
@@ -82,9 +82,9 @@ export class EstateService extends BaseService {
       throw new NotFoundException(ESTATE_ERROR_CODE.ESTATE_NOT_EXISTS);
     }
 
-    await this.cloudflareImageService.mapVariantToImages(record, 'images');
-    await this.cloudflareImageService.mapVariantToImage(record, 'avatar');
-    await this.cloudflareImageService.mapVariantToImage(record, 'contact.avatar');
+    await this.imageService.mapVariantToImages(record, 'images');
+    await this.imageService.mapVariantToImage(record, 'avatar');
+    await this.imageService.mapVariantToImage(record, 'contact.avatar');
 
     return record;
   }
@@ -123,8 +123,8 @@ export class EstateService extends BaseService {
 
     const [records, total] = await queryBuilder.getManyAndCount();
 
-    await this.cloudflareImageService.mapVariantToImages(records, 'images');
-    await this.cloudflareImageService.mapVariantToImage(records, 'avatar');
+    await this.imageService.mapVariantToImages(records, 'images');
+    await this.imageService.mapVariantToImage(records, 'avatar');
 
     return this.generateGetAllResponse(records, total, query);
   }
@@ -134,8 +134,8 @@ export class EstateService extends BaseService {
 
     const [records, total] = await queryBuilder.getManyAndCount();
 
-    await this.cloudflareImageService.mapVariantToImages(records, 'images');
-    await this.cloudflareImageService.mapVariantToImage(records, 'avatar');
+    await this.imageService.mapVariantToImages(records, 'images');
+    await this.imageService.mapVariantToImage(records, 'avatar');
 
     return this.generateGetAllResponse(records, total, query);
   }
@@ -170,7 +170,7 @@ export class EstateService extends BaseService {
         .leftJoin(EstateImageEntity, 'image', 'image.estateId = estate.id')
         .leftJoinAndMapMany(
           'estate.images',
-          CloudflareImageEntity,
+          ImageEntity,
           'cloudflareImage',
           'cloudflareImage.id = image.imageId',
         )
@@ -186,7 +186,7 @@ export class EstateService extends BaseService {
         .leftJoinAndSelect('estate.contact', 'contact')
         .leftJoinAndMapOne(
           'contact.avatar',
-          CloudflareImageEntity,
+          ImageEntity,
           'contactAvatar',
           'contactAvatar.id = contact.avatarId',
         )

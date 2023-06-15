@@ -1,7 +1,7 @@
 import { ESTATE_STATUS_ENUM } from '@encacap-group/common/dist/re';
+import { ImageEntity } from '@modules/image/entities/image.entity';
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
 import { CategoryEntity } from 'src/modules/category/entities/category.entity';
-import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
 import { ContactEntity } from 'src/modules/contact/entities/contact.entity';
 import { DistrictEntity } from 'src/modules/location/entities/district.entity';
 import { ProvinceEntity } from 'src/modules/location/entities/province.entity';
@@ -98,9 +98,9 @@ export class EstateEntity extends BaseEntityWithPrimaryGeneratedColumn {
   @JoinColumn({ name: 'contact_id', referencedColumnName: 'id' })
   contact: ContactEntity;
 
-  @ManyToOne(() => CloudflareImageEntity)
+  @ManyToOne(() => ImageEntity)
   @JoinColumn({ name: 'avatar_id', referencedColumnName: 'id' })
-  avatar: CloudflareImageEntity;
+  avatar: ImageEntity;
 
   @ManyToOne(() => EstateQuarterEntity)
   @JoinColumn({ name: 'quarter_code', referencedColumnName: 'code' })

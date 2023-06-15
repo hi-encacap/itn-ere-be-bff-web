@@ -1,10 +1,10 @@
 import { IREUser, slugify } from '@encacap-group/common/dist/re';
+import { ImageService } from '@modules/image/services/image.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { pick } from 'lodash';
 import { BaseService } from 'src/base/base.service';
 import { AlgoliaCategoryService } from 'src/modules/algolia/services/algolia-category.service';
-import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { FindOptionsWhere, IsNull, Repository } from 'typeorm';
 import { CategoryListQueryDto } from '../dtos/category-list-query.dto';
@@ -16,7 +16,7 @@ import { CategoryEntity } from '../entities/category.entity';
 export class CategoryService extends BaseService {
   constructor(
     @InjectRepository(CategoryEntity) private readonly categoryRepository: Repository<CategoryEntity>,
-    private readonly cloudflareImageService: CloudflareImageService,
+    private readonly imageService: ImageService,
     private readonly algoliaService: AlgoliaCategoryService,
   ) {
     super();
@@ -29,7 +29,7 @@ export class CategoryService extends BaseService {
       throw new NotFoundException('CATEGORY_NOT_FOUND');
     }
 
-    return this.cloudflareImageService.mapVariantToImage(record, 'thumbnail');
+    return this.imageService.mapVariantToImage(record, 'thumbnail');
   }
 
   async getAll(query: CategoryListQueryDto) {
@@ -75,7 +75,7 @@ export class CategoryService extends BaseService {
 
     const [categories, items] = await queryBuilder.getManyAndCount();
 
-    await this.cloudflareImageService.mapVariantToImage(categories, 'thumbnail');
+    await this.imageService.mapVariantToImage(categories, 'thumbnail');
 
     return this.generateGetAllResponse(categories, items, query);
   }

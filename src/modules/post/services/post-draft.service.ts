@@ -1,8 +1,8 @@
 import { ESTATE_STATUS_ENUM, IREUser } from '@encacap-group/common/dist/re';
+import { ImageService } from '@modules/image/services/image.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/base/base.service';
-import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { PostDraftCreateBodyDto } from '../dtos/post-draft-create-body.dto';
 import { PostListQueryDto } from '../dtos/post-list-query.dto';
@@ -13,7 +13,7 @@ import { PostEntity } from '../entities/post.entity';
 export class PostDraftService extends BaseService {
   constructor(
     @InjectRepository(PostDraftEntity) private readonly postDraftRepository: Repository<PostDraftEntity>,
-    private readonly cloudflareImageService: CloudflareImageService,
+    private readonly imageService: ImageService,
   ) {
     super();
   }
@@ -83,7 +83,7 @@ export class PostDraftService extends BaseService {
     const { avatarId } = record;
 
     if (avatarId) {
-      record.avatar = await this.cloudflareImageService.get(avatarId);
+      record.avatar = await this.imageService.get(avatarId);
     }
 
     return record;

@@ -1,6 +1,6 @@
 import { CATEGORY_GROUP_ENUM, ICloudflareImageResponse } from '@encacap-group/common/dist/re';
+import { ImageEntity } from '@modules/image/entities/image.entity';
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
-import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { CategoryGroupEntity } from './category-group.entity';
@@ -25,7 +25,7 @@ export class CategoryEntity extends BaseEntityWithPrimaryGeneratedColumn {
   @Column({ name: 'category_group_code' })
   categoryGroupCode: CATEGORY_GROUP_ENUM;
 
-  @OneToOne(() => CloudflareImageEntity)
+  @OneToOne(() => ImageEntity)
   @JoinColumn({ name: 'thumbnail_id', referencedColumnName: 'id' })
   thumbnail: ICloudflareImageResponse;
 

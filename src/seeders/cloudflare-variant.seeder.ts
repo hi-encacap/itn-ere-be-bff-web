@@ -1,25 +1,32 @@
 import { DEFAULT_CLOUDFLARE_VARIANT_ENUM } from '@encacap-group/common/dist/re';
+import { IMAGE_VARIANT_FIT_ENUM } from '@modules/image/constants/image-variant.constant';
+import { ImageVariantEntity } from '@modules/image/entities/image-variant.entity';
+import { IImageVariant } from '@modules/image/interfaces/image-variant.interface';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Seeder } from 'nestjs-seeder';
-import { CLOUDFLARE_VARIANT_FIT_ENUM } from 'src/modules/cloudflare/constants/cloudflare-variant.constant';
-import { CloudflareVariantEntity } from 'src/modules/cloudflare/entities/cloudflare-variant.entity';
-import { ICloudflareVariant } from 'src/modules/cloudflare/interfaces/cloudflare-variant.interface';
 import { Repository } from 'typeorm';
 
-const variantItems: ICloudflareVariant[] = [
+const variantItems: IImageVariant[] = [
   {
     code: DEFAULT_CLOUDFLARE_VARIANT_ENUM.PUBLIC,
-    fit: CLOUDFLARE_VARIANT_FIT_ENUM.SCALE_DOWN,
+    fit: IMAGE_VARIANT_FIT_ENUM.SCALE_DOWN,
     width: null,
     height: null,
     isDefault: true,
   },
   {
     code: DEFAULT_CLOUDFLARE_VARIANT_ENUM.SMALL,
-    fit: CLOUDFLARE_VARIANT_FIT_ENUM.SCALE_DOWN,
+    fit: IMAGE_VARIANT_FIT_ENUM.SCALE_DOWN,
     width: 96,
     height: null,
+    isDefault: true,
+  },
+  {
+    code: DEFAULT_CLOUDFLARE_VARIANT_ENUM.THUMBNAIL,
+    fit: IMAGE_VARIANT_FIT_ENUM.SCALE_DOWN,
+    width: 400,
+    height: 768,
     isDefault: true,
   },
 ];
@@ -27,11 +34,11 @@ const variantItems: ICloudflareVariant[] = [
 @Injectable()
 export class CloudflareVariantSeeder implements Seeder {
   constructor(
-    @InjectRepository(CloudflareVariantEntity)
-    private readonly cloudflareVariantRepository: Repository<CloudflareVariantEntity>,
+    @InjectRepository(ImageVariantEntity)
+    private readonly cloudflareVariantRepository: Repository<ImageVariantEntity>,
   ) {}
 
-  async upsertItem(item: ICloudflareVariant) {
+  async upsertItem(item: IImageVariant) {
     const record = await this.cloudflareVariantRepository.findOneBy({ code: item.code });
 
     if (!record) {

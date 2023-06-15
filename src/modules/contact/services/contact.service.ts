@@ -1,10 +1,10 @@
 import { IREUser } from '@encacap-group/common/dist/re';
+import { ImageEntity } from '@modules/image/entities/image.entity';
+import { ImageService } from '@modules/image/services/image.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/base/base.service';
 import { AlgoliaContactService } from 'src/modules/algolia/services/algolia-contact.service';
-import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
-import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
@@ -16,7 +16,7 @@ import { ContactEntity } from '../entities/contact.entity';
 export class ContactService extends BaseService {
   constructor(
     @InjectRepository(ContactEntity) private readonly contactRepository: Repository<ContactEntity>,
-    private readonly cloudflareImageService: CloudflareImageService,
+    private readonly imageService: ImageService,
     private readonly algoliaContactService: AlgoliaContactService,
   ) {
     super();
@@ -56,7 +56,7 @@ export class ContactService extends BaseService {
 
     const [contacts, total] = await queryBuilder.getManyAndCount();
 
-    await this.cloudflareImageService.mapVariantToImage(contacts, 'avatar');
+    await this.imageService.mapVariantToImage(contacts, 'avatar');
 
     return this.generateGetAllResponse(contacts, total, query);
   }
@@ -68,7 +68,7 @@ export class ContactService extends BaseService {
       throw new NotFoundException();
     }
 
-    await this.cloudflareImageService.mapVariantToImage(data, 'avatar');
+    await this.imageService.mapVariantToImage(data, 'avatar');
 
     return data;
   }
@@ -83,7 +83,7 @@ export class ContactService extends BaseService {
       .createQueryBuilder('contact')
       .leftJoin(UserEntity, 'user', 'user.id = contact.userId')
       .leftJoinAndMapOne('contact.website', WebsiteEntity, 'website', 'website.id = user.websiteId')
-      .leftJoinAndMapOne('contact.avatar', CloudflareImageEntity, 'avatar', 'avatar.id = contact.avatarId')
+      .leftJoinAndMapOne('contact.avatar', ImageEntity, 'avatar', 'avatar.id = contact.avatarId')
       .orderBy('contact.id', 'DESC');
   }
 

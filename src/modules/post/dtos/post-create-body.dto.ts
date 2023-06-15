@@ -1,10 +1,10 @@
 import { ESTATE_STATUS_ENUM } from '@encacap-group/common/dist/re';
+import { ImageNotExistsValidator } from '@modules/image/validators/image-not-exists.validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Exclude, Type } from 'class-transformer';
 import { Allow, IsNumber, IsOptional, IsString, Validate } from 'class-validator';
 import { EXIST_VALIDATOR_TYPE } from 'src/common/constants/validator.constant';
 import { CategoryExistsValidator } from 'src/modules/category/validators/category-exists.validator';
-import { CloudflareImageNotExistsValidator } from 'src/modules/cloudflare/validators/cloudflare-image-not-exists.validator';
 import { PostExistsValidator } from '../validators/post-exists.validator';
 
 export class PostCreateBodyDto {
@@ -35,7 +35,7 @@ export class PostCreateBodyDto {
 
   @ApiProperty()
   @IsString()
-  @Validate(CloudflareImageNotExistsValidator)
+  @Validate(ImageNotExistsValidator)
   avatarId: string;
 
   @ApiPropertyOptional()

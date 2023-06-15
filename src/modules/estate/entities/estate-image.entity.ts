@@ -1,4 +1,4 @@
-import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
+import { ImageEntity } from '@modules/image/entities/image.entity';
 import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { EstateEntity } from './estate.entity';
 
@@ -15,7 +15,7 @@ export class EstateImageEntity {
   @JoinColumn({ name: 'estate_id' })
   estate: EstateEntity;
 
-  @ManyToOne(() => CloudflareImageEntity)
+  @ManyToOne(() => ImageEntity)
   @JoinColumn({ name: 'image_id' })
-  image: CloudflareImageEntity;
+  image: ImageEntity;
 }
