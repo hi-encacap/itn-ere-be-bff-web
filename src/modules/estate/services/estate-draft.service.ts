@@ -1,9 +1,9 @@
 import { ESTATE_STATUS_ENUM, IREUser } from '@encacap-group/common/dist/re';
+import { CategoryService } from '@modules/category/services/category.service';
 import { ImageService } from '@modules/image/services/image.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/base/base.service';
-import { CategoryService } from 'src/modules/category/services/category.service';
 import { ContactService } from 'src/modules/contact/services/contact.service';
 import { DistrictService } from 'src/modules/location/services/district.service';
 import { ProvinceService } from 'src/modules/location/services/province.service';
@@ -45,7 +45,7 @@ export class EstateDraftService extends BaseService {
     let queryBuilder = this.queryBuilder;
 
     queryBuilder = this.setPagination(queryBuilder, query);
-    queryBuilder = this.setSorting(queryBuilder, query, 'estateDraft', 'createdAt');
+    queryBuilder = this.setSort(queryBuilder, query, 'estateDraft', 'createdAt');
 
     const [records, total] = await queryBuilder.getManyAndCount();
     const parsedRecords = await Promise.all(

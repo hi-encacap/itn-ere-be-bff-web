@@ -113,7 +113,7 @@ export class EstateService extends BaseService {
     queryBuilder = this.setFilterOld(queryBuilder, query, 'estate', 'districtCode');
     queryBuilder = this.setFilterOld(queryBuilder, query, 'estate', 'wardCode');
     queryBuilder = this.setPagination(queryBuilder, query);
-    queryBuilder = this.setSorting(queryBuilder, query, 'estate', 'upvotedAt');
+    queryBuilder = this.setSort(queryBuilder, query, 'estate', 'upvotedAt');
     queryBuilder = await this.setAlgoliaSearch(
       queryBuilder,
       query,

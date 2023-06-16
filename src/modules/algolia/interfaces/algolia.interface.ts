@@ -7,7 +7,6 @@ export interface IAlgoliaBase {
 
 export interface IAlgoliaCategory extends IAlgoliaBase {
   name: string;
-  categoryGroupName: string;
 }
 
 export interface IAlgoliaContact extends IAlgoliaBase {

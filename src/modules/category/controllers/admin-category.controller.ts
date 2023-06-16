@@ -26,10 +26,10 @@ export class AdminCategoryController {
   }
 
   @Get('roots')
-  getRoots(@Query() query: CategoryListQueryDto, @User() user: IREUser) {
-    return this.categoryService.getRoots({
-      ...query,
+  getRoots(@User() user: IREUser) {
+    return this.categoryService.getAll({
       websiteId: user.websiteId,
+      parentId: null,
     });
   }
 

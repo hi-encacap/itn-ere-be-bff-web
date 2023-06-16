@@ -1,4 +1,8 @@
+import { CategoryEntity } from '@modules/category/entities/category.entity';
+import { WebsiteConfigEntity } from '@modules/configs/entities/website-config,entity';
+import { ContactEntity } from '@modules/contact/entities/contact.entity';
 import { ImageVariantEntity } from '@modules/image/entities/image-variant.entity';
+import { ImageEntity } from '@modules/image/entities/image.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { seeder } from 'nestjs-seeder';
 import { AppConfigModule } from 'src/configs/app/config.module';
@@ -31,6 +35,11 @@ seeder({
       CategoryGroupEntity,
       EstateQuarterEntity,
       UnitPriceEntity,
+      ContactEntity,
+      ImageEntity,
+      ImageVariantEntity,
+      WebsiteConfigEntity,
+      CategoryEntity,
     ]),
   ],
 }).run([

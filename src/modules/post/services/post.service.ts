@@ -1,11 +1,10 @@
 import { ESTATE_STATUS_ENUM, IREUser, slugify } from '@encacap-group/common/dist/re';
+import { CategoryService } from '@modules/category/services/category.service';
 import { ImageService } from '@modules/image/services/image.service';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { omit } from 'lodash';
 import { BaseService } from 'src/base/base.service';
-import { CategoryEntity } from 'src/modules/category/entities/category.entity';
-import { CategoryService } from 'src/modules/category/services/category.service';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { PostCreateBodyDto } from '../dtos/post-create-body.dto';
 import { PostListQueryDto } from '../dtos/post-list-query.dto';
@@ -56,7 +55,11 @@ export class PostService extends BaseService {
     }
 
     if (query.categoryId) {
-      this.setFilter(queryBuilder, query.categoryId, 'post.categoryId');
+      const category = await this.categoryService.getOrFail({ id: query.categoryId });
+      const { left, right } = category;
+
+      queryBuilder.andWhere('category.left > :left', { left });
+      queryBuilder.andWhere('category.right < :right', { right });
     }
 
     if (query.categoryIds) {
@@ -129,12 +132,6 @@ export class PostService extends BaseService {
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.avatar', 'avatar')
       .leftJoinAndSelect('post.category', 'category')
-      .leftJoinAndMapOne(
-        'category.parent',
-        CategoryEntity,
-        'categoryParent',
-        'category.parentId = categoryParent.id',
-      )
       .orderBy('post.upvotedAt', 'DESC');
   }
 }

@@ -45,7 +45,7 @@ export class ContactService extends BaseService {
       queryBuilder.andWhere('website.id = :websiteId', { websiteId: query.websiteId });
     }
 
-    queryBuilder = this.setSorting(queryBuilder, query, 'contact');
+    queryBuilder = this.setSort(queryBuilder, query, 'contact');
     queryBuilder = this.setPagination(queryBuilder, query);
     queryBuilder = await this.setAlgoliaSearch(
       queryBuilder,

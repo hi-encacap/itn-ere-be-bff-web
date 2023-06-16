@@ -20,7 +20,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "seed": "dotenv -e .env.development -e .env.seeder node ./dist/seeders/index.js",
+    "seed": "node ./dist/seeders/index.js",
     "seed:refresh": "dotenv -e .env.development -e .env.seeder node ./dist/seeders/index.js --refresh",
     "railway:seed": "railway run yarn seed"
   },

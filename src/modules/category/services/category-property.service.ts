@@ -33,7 +33,7 @@ export class CategoryPropertyService extends BaseService {
     queryBuilder = this.setFilterOld(queryBuilder, query, 'categoryProperty', 'categoryId');
     queryBuilder = this.setInFilter(queryBuilder, query.categoryIds, 'category.id');
     queryBuilder = this.setPagination(queryBuilder, query);
-    queryBuilder = this.setSorting(queryBuilder, query, 'categoryProperty');
+    queryBuilder = this.setSort(queryBuilder, query, 'categoryProperty');
 
     return this.getManyAndCount(queryBuilder);
   }

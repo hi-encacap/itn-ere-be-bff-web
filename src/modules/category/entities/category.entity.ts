@@ -13,21 +13,24 @@ export class CategoryEntity extends BaseEntityWithPrimaryGeneratedColumn {
   @Column({ name: 'code' })
   code: string;
 
-  @Column({ name: 'thumbnail_id' })
-  thumbnailId: string;
+  @Column({ name: 'avatar_id' })
+  avatarId: string;
 
   @Column({ name: 'website_id' })
   websiteId: number;
 
-  @Column({ name: 'parent_id', nullable: true })
-  parentId: number;
-
   @Column({ name: 'category_group_code' })
   categoryGroupCode: CATEGORY_GROUP_ENUM;
 
+  @Column({ name: 'left' })
+  left: number;
+
+  @Column({ name: 'right' })
+  right: number;
+
   @OneToOne(() => ImageEntity)
-  @JoinColumn({ name: 'thumbnail_id', referencedColumnName: 'id' })
-  thumbnail: ICloudflareImageResponse;
+  @JoinColumn({ name: 'avatar_id', referencedColumnName: 'id' })
+  avatar: ICloudflareImageResponse;
 
   @ManyToOne(() => CategoryGroupEntity, (categoryGroup) => categoryGroup.categories)
   @JoinColumn({ name: 'category_group_code', referencedColumnName: 'code' })

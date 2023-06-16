@@ -50,9 +50,9 @@ import { CategoryPropertyExistsValidator } from './validators/category-property-
   ],
   exports: [
     CategoryExistsValidator,
-    CategoryService,
     CategoryPropertyExistsValidator,
     CategoryPropertyService,
+    CategoryService,
   ],
 })
 export class CategoryModule {}
