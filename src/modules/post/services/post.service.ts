@@ -62,8 +62,12 @@ export class PostService extends BaseService {
       queryBuilder.andWhere('category.right < :right', { right });
     }
 
-    if (query.categoryIds) {
-      this.setInFilter(queryBuilder, query.categoryIds, 'post.categoryId');
+    if (query.categoryCode) {
+      const category = await this.categoryService.get({ code: query.categoryCode });
+      const { left, right } = category;
+
+      queryBuilder.andWhere('category.left >= :left', { left });
+      queryBuilder.andWhere('category.right <= :right', { right });
     }
 
     if (query.status) {
@@ -74,30 +78,21 @@ export class PostService extends BaseService {
       this.setInFilter(queryBuilder, query.statuses, 'post.status');
     }
 
-    if (query.categoryCode) {
-      this.setFilter(queryBuilder, query.categoryCode, 'category.code');
-    }
-
     if (query.codes) {
       this.setInFilter(queryBuilder, query.codes, 'post.code');
     }
 
-    if (query.rootCategoryCode) {
-      const { items: subCategories } = await this.categoryService.getAll({
-        parentCode: query.rootCategoryCode,
-      });
-      const subCategoryCodes = subCategories.map((subCategory) => subCategory.code);
-
-      this.setInFilter(queryBuilder, [...subCategoryCodes, query.rootCategoryCode], 'category.code');
-    }
-
     this.setPagination(queryBuilder, query);
 
-    const [posts, total] = await queryBuilder.getManyAndCount();
+    const [data, total] = await queryBuilder.getManyAndCount();
 
-    await this.imageService.mapVariantToImage(posts, 'avatar');
+    if (this.isExpanding(query, 'category.parent')) {
+      await Promise.all(data.map((item) => this.categoryService.mapParentToCategory(item.category)));
+    }
 
-    return this.generateGetAllResponse(posts, total, query);
+    await this.imageService.mapVariantToImage(data, 'avatar');
+
+    return this.generateGetAllResponse(data, total, query);
   }
 
   getRandom(query: PostListQueryDto) {

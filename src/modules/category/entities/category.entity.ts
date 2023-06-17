@@ -1,4 +1,4 @@
-import { CATEGORY_GROUP_ENUM, ICloudflareImageResponse } from '@encacap-group/common/dist/re';
+import { CATEGORY_GROUP_ENUM, IImageResponse } from '@encacap-group/common/dist/re';
 import { ImageEntity } from '@modules/image/entities/image.entity';
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
@@ -30,7 +30,7 @@ export class CategoryEntity extends BaseEntityWithPrimaryGeneratedColumn {
 
   @OneToOne(() => ImageEntity)
   @JoinColumn({ name: 'avatar_id', referencedColumnName: 'id' })
-  avatar: ICloudflareImageResponse;
+  avatar: IImageResponse;
 
   @ManyToOne(() => CategoryGroupEntity, (categoryGroup) => categoryGroup.categories)
   @JoinColumn({ name: 'category_group_code', referencedColumnName: 'code' })

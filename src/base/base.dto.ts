@@ -20,7 +20,14 @@ export class BaseCodeParamDto {
   code: string;
 }
 
-export class BaseListQueryDto {
+export class BaseQueryDto {
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  expand?: string;
+}
+
+export class BaseListQueryDto extends BaseQueryDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsPositive()
@@ -54,11 +61,6 @@ export class BaseListQueryDto {
   @IsEnum(ORDER_DIRECTION_ENUM)
   @Transform(({ value }) => value.toUpperCase())
   orderDirection?: ORDER_DIRECTION_ENUM;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  expand?: string;
 }
 
 export class BaseListWithCodeQueryDto {

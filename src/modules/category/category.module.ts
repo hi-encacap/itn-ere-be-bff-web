@@ -8,7 +8,6 @@ import { AdminCategoryController } from './controllers/admin-category.controller
 import { PublicCategoryController } from './controllers/public-category.controller';
 import { RootCategoryGroupController } from './controllers/root-category-group.controller';
 import { RootCategoryController } from './controllers/root-category.controller';
-import { CategoryGroupWebsiteEntity } from './entities/category-group-website.entity';
 import { CategoryGroupEntity } from './entities/category-group.entity';
 import { CategoryPropertyEntity } from './entities/category-property.entity';
 import { CategoryEntity } from './entities/category.entity';
@@ -23,12 +22,7 @@ import { CategoryPropertyExistsValidator } from './validators/category-property-
 @Module({
   imports: [
     AlgoliaModule,
-    TypeOrmModule.forFeature([
-      CategoryGroupEntity,
-      CategoryGroupWebsiteEntity,
-      CategoryEntity,
-      CategoryPropertyEntity,
-    ]),
+    TypeOrmModule.forFeature([CategoryGroupEntity, CategoryEntity, CategoryPropertyEntity]),
     CloudflareModule,
   ],
   controllers: [

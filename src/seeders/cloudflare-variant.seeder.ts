@@ -1,4 +1,4 @@
-import { DEFAULT_CLOUDFLARE_VARIANT_ENUM } from '@encacap-group/common/dist/re';
+import { IMAGE_VARIANT_ENUM } from '@encacap-group/common/dist/re';
 import { IMAGE_VARIANT_FIT_ENUM } from '@modules/image/constants/image-variant.constant';
 import { ImageVariantEntity } from '@modules/image/entities/image-variant.entity';
 import { IImageVariant } from '@modules/image/interfaces/image-variant.interface';
@@ -9,21 +9,21 @@ import { Repository } from 'typeorm';
 
 const variantItems: IImageVariant[] = [
   {
-    code: DEFAULT_CLOUDFLARE_VARIANT_ENUM.PUBLIC,
+    code: IMAGE_VARIANT_ENUM.PUBLIC,
     fit: IMAGE_VARIANT_FIT_ENUM.SCALE_DOWN,
     width: null,
     height: null,
     isDefault: true,
   },
   {
-    code: DEFAULT_CLOUDFLARE_VARIANT_ENUM.SMALL,
+    code: IMAGE_VARIANT_ENUM.SMALL,
     fit: IMAGE_VARIANT_FIT_ENUM.SCALE_DOWN,
     width: 96,
     height: null,
     isDefault: true,
   },
   {
-    code: DEFAULT_CLOUDFLARE_VARIANT_ENUM.THUMBNAIL,
+    code: IMAGE_VARIANT_ENUM.THUMBNAIL,
     fit: IMAGE_VARIANT_FIT_ENUM.SCALE_DOWN,
     width: 400,
     height: 768,

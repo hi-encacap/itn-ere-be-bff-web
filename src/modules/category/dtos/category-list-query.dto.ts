@@ -1,6 +1,6 @@
 import { CATEGORY_GROUP_ENUM } from '@encacap-group/common/dist/re';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Exclude, Type } from 'class-transformer';
 import { IsEnum, IsNumber, IsOptional, IsString, ValidateIf } from 'class-validator';
 import { BaseListQueryDto } from 'src/base/base.dto';
 
@@ -37,4 +37,14 @@ export class CategoryListQueryDto extends BaseListQueryDto {
   @IsOptional()
   @IsString()
   parentCode?: string;
+
+  @Exclude()
+  @IsOptional()
+  @IsNumber()
+  left?: number;
+
+  @Exclude()
+  @IsOptional()
+  @IsNumber()
+  right?: number;
 }

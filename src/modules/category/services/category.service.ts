@@ -1,10 +1,11 @@
+import { BaseQueryDto } from '@bases/base.dto';
 import { BaseService } from '@bases/base.service';
 import { IREUser } from '@encacap-group/common/dist/re';
 import { AlgoliaCategoryService } from '@modules/algolia/services/algolia-category.service';
 import { ImageService } from '@modules/image/services/image.service';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { first, pick, set } from 'lodash';
+import { first, omit, pick, set } from 'lodash';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { CategoryCreateBodyDto } from '../dtos/category-create-body.dto';
 import { CategoryListQueryDto } from '../dtos/category-list-query.dto';
@@ -25,13 +26,41 @@ export class CategoryService extends BaseService {
     return this.queryBuilder.where(query).getOneOrFail();
   }
 
-  get(query: FindOptionsWhere<CategoryEntity>) {
-    return this.queryBuilder.where(query).getOne();
+  async get(query: FindOptionsWhere<CategoryEntity> & BaseQueryDto) {
+    const queryBuilder = this.queryBuilder;
+
+    if (this.isExpanding(query, 'categoryGroup')) {
+      queryBuilder.leftJoinAndSelect('category.categoryGroup', 'categoryGroup');
+    }
+
+    if (this.isExpanding(query, 'website')) {
+      queryBuilder.leftJoinAndSelect('category.website', 'website');
+    }
+
+    if (this.isExpanding(query, 'avatar')) {
+      queryBuilder.leftJoinAndSelect('category.avatar', 'avatar');
+    }
+
+    const record = await queryBuilder.where(omit(query, 'expand')).getOne();
+
+    if (this.isExpanding(query, 'parent')) {
+      await this.mapParentToCategory(record);
+    }
+
+    if (this.isExpanding(query, 'children')) {
+      await this.mapChildrenToCategory(record, query);
+    }
+
+    if (this.isExpanding(query, 'avatar')) {
+      await this.imageService.mapVariantToImage(record, 'avatar');
+    }
+
+    return record;
   }
 
   async getAll(query: CategoryListQueryDto) {
     const queryBuilder = this.queryBuilder;
-    const { parentCode, parentId } = query;
+    const { parentCode, parentId, left, right } = query;
 
     if (parentCode) {
       const { left, right } = await this.getOrFail({ code: parentCode });
@@ -53,6 +82,11 @@ export class CategoryService extends BaseService {
       const rootCategoryIds = rootCategory.map((category) => category.id);
 
       this.setInFilter(queryBuilder, rootCategoryIds, 'category.id');
+    }
+
+    if (left && right) {
+      queryBuilder.andWhere('category.left > :left', { left });
+      queryBuilder.andWhere('category.right < :right', { right });
     }
 
     if (this.isExpanding(query, 'categoryGroup')) {
@@ -78,12 +112,16 @@ export class CategoryService extends BaseService {
 
     const [data, total] = await queryBuilder.getManyAndCount();
 
+    if (this.isExpanding(query, 'avatar')) {
+      await this.imageService.mapVariantToImage(data, 'avatar');
+    }
+
     if (this.isExpanding(query, 'parent')) {
       await Promise.all(data.map(this.mapParentToCategory.bind(this)));
     }
 
-    if (this.isExpanding(query, 'avatar')) {
-      await this.imageService.mapVariantToImage(data, 'avatar');
+    if (this.isExpanding(query, 'children')) {
+      await Promise.all(data.map(this.mapChildrenToCategory.bind(this)));
     }
 
     return this.generateGetAllResponse(data, total, query);
@@ -128,7 +166,7 @@ export class CategoryService extends BaseService {
     return this.categoryRepository.softDelete(id);
   }
 
-  private async mapParentToCategory(category: CategoryEntity) {
+  async mapParentToCategory(category: CategoryEntity) {
     const { left, right } = category;
     const allParents = await this.queryBuilder
       .where('"left" < :left', { left })
@@ -137,6 +175,55 @@ export class CategoryService extends BaseService {
       .getMany();
 
     return this.recursiveMapParentToCategory(category, allParents);
+  }
+
+  /**
+   * Map direct children to category and recursively map children to children.
+   * @param {CategoryEntity} category
+   * @returns {Promise<CategoryEntity>}
+   */
+  async mapChildrenToCategory(category: CategoryEntity, query: BaseQueryDto): Promise<CategoryEntity> {
+    const { left, right } = category;
+
+    const getAllChildrenQuery: CategoryListQueryDto = {
+      left: left,
+      right: right,
+    };
+    const getAllChildrenQueryExpand = [];
+
+    if (this.isExpanding(query, 'children.avatar')) {
+      getAllChildrenQueryExpand.push('avatar');
+    }
+
+    if (this.isExpanding(query, 'children.parent')) {
+      getAllChildrenQueryExpand.push('parent');
+    }
+
+    const { items: allChildren } = await this.getAll({
+      ...getAllChildrenQuery,
+      expand: getAllChildrenQueryExpand.join(','),
+    });
+
+    let prevChild = allChildren.find((child) => child.left === left + 1);
+    const directChildren = [];
+
+    while (true && prevChild) {
+      directChildren.push(prevChild);
+
+      const nextChild = allChildren.find((child) => child.left === prevChild.right + 1);
+
+      if (!nextChild) {
+        break;
+      }
+
+      prevChild = nextChild;
+    }
+
+    set(category, 'children', directChildren);
+
+    await Promise.all(directChildren.map((child) => this.mapChildrenToCategory(child, query)));
+
+    return category;
   }
 
   private async recursiveMapParentToCategory(category: CategoryEntity, categories: CategoryEntity[]) {
