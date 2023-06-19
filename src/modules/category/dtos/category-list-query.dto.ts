@@ -38,6 +38,11 @@ export class CategoryListQueryDto extends BaseListQueryDto {
   @IsString()
   parentCode?: string;
 
+  @ApiPropertyOptional({ isArray: true })
+  @IsOptional()
+  @IsString({ each: true })
+  excludedCodes?: string[];
+
   @Exclude()
   @IsOptional()
   @IsNumber()

@@ -43,11 +43,11 @@ export class CategoryService extends BaseService {
 
     const record = await queryBuilder.where(omit(query, 'expand')).getOne();
 
-    if (this.isExpanding(query, 'parent')) {
+    if (record && this.isExpanding(query, 'parent')) {
       await this.mapParentToCategory(record);
     }
 
-    if (this.isExpanding(query, 'children')) {
+    if (record && this.isExpanding(query, 'children')) {
       await this.mapChildrenToCategory(record, query);
     }
 
@@ -60,7 +60,7 @@ export class CategoryService extends BaseService {
 
   async getAll(query: CategoryListQueryDto) {
     const queryBuilder = this.queryBuilder;
-    const { parentCode, parentId, left, right } = query;
+    const { parentCode, parentId, left, right, excludedCodes } = query;
 
     if (parentCode) {
       const { left, right } = await this.getOrFail({ code: parentCode });
@@ -78,7 +78,9 @@ export class CategoryService extends BaseService {
 
     if (parentId === null) {
       const allCategories = await this.queryBuilder.where(pick(query, 'websiteId')).getMany();
-      const rootCategory = allCategories.filter((category) => this.isRoot(category, allCategories));
+      const rootCategory = allCategories.filter(
+        (category) => !excludedCodes.includes(category.code) && this.isRoot(category, allCategories),
+      );
       const rootCategoryIds = rootCategory.map((category) => category.id);
 
       this.setInFilter(queryBuilder, rootCategoryIds, 'category.id');

@@ -64,10 +64,15 @@ export class PostService extends BaseService {
 
     if (query.categoryCode) {
       const category = await this.categoryService.get({ code: query.categoryCode });
-      const { left, right } = category;
 
-      queryBuilder.andWhere('category.left >= :left', { left });
-      queryBuilder.andWhere('category.right <= :right', { right });
+      if (category) {
+        const { left, right } = category;
+
+        queryBuilder.andWhere('category.left >= :left', { left });
+        queryBuilder.andWhere('category.right <= :right', { right });
+      } else {
+        queryBuilder.andWhere('post.categoryId IS NULL');
+      }
     }
 
     if (query.status) {
