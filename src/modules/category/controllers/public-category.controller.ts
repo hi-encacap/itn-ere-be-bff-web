@@ -19,6 +19,15 @@ export class PublicCategoryController {
     });
   }
 
+  @Get('roots')
+  getRoots(@Query() query: CategoryListQueryDto, @Website() website: IWebsite) {
+    return this.categoryService.getAll({
+      ...query,
+      websiteId: website.id,
+      parentId: null,
+    });
+  }
+
   @Get(':code')
   getPublicCategoryByCode(
     @Param() param: BaseCodeParamDto,
