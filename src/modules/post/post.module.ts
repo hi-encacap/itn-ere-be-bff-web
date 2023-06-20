@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CategoryModule } from '../category/category.module';
-import { CloudflareModule } from '../cloudflare/cloudflare.module';
+import { CloudflareModule } from '../image/cloudflare.module';
 import { AdminPostDraftController } from './controllers/admin-post-draft.controller';
 import { AdminPostController } from './controllers/admin-post.controller';
 import { PublicPostController } from './controllers/public-post.controller';

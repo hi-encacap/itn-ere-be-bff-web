@@ -1,4 +1,5 @@
 import { ESTATE_QUARTER_ENUM, ESTATE_STATUS_ENUM, UNIT_PRICE_TYPE_ENUM } from '@encacap-group/common/dist/re';
+import { ImageNotExistsValidator } from '@modules/image/validators/image-not-exists.validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
@@ -14,7 +15,6 @@ import {
 import { EXIST_VALIDATOR_TYPE } from 'src/common/constants/validator.constant';
 import { CategoryExistsValidator } from 'src/modules/category/validators/category-exists.validator';
 import { CategoryPropertyExistsValidator } from 'src/modules/category/validators/category-property-exists.validator';
-import { CloudflareImageNotExistsValidator } from 'src/modules/cloudflare/validators/cloudflare-image-not-exists.validator';
 import { ContactNotExistsValidator } from 'src/modules/contact/validators/contact-not-exists.validator';
 import { DistrictExistsValidator } from 'src/modules/location/validators/district-exists.validator';
 import { ProvinceExistsValidator } from 'src/modules/location/validators/province-exists.validator';
@@ -146,7 +146,7 @@ export class EstateCreateBodyDto {
 
   @IsArray()
   @Type(() => String)
-  @Validate(CloudflareImageNotExistsValidator, [EXIST_VALIDATOR_TYPE.NOT_EXISTS], {
+  @Validate(ImageNotExistsValidator, [EXIST_VALIDATOR_TYPE.NOT_EXISTS], {
     each: true,
   })
   @ApiProperty({ name: 'image_ids', description: 'Mã ảnh', isArray: true })

@@ -1,9 +1,9 @@
+import { ImageVariantEntity } from '@modules/image/entities/image-variant.entity';
+import { ImageService } from '@modules/image/services/image.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import _, { omit, pick } from 'lodash';
 import { BaseService } from 'src/base/base.service';
-import { CloudflareVariantEntity } from 'src/modules/cloudflare/entities/cloudflare-variant.entity';
-import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { RootUserCreateBodyDto } from '../dtos/root-user-create-body.dto';
 import { RootUserUpdateBodyDto } from '../dtos/root-user-update-body.dto';
@@ -19,7 +19,7 @@ export class UserService extends BaseService {
     private readonly userRepository: Repository<UserEntity>,
 
     private readonly userRoleMappingService: UserRoleMappingService,
-    private readonly cloudflareImageService: CloudflareImageService,
+    private readonly imageService: ImageService,
   ) {
     super();
   }
@@ -27,7 +27,7 @@ export class UserService extends BaseService {
   async findAll() {
     const users = await this.queryBuilder.getMany();
 
-    this.cloudflareImageService.mapVariantToImage(users, 'avatar');
+    this.imageService.mapVariantToImage(users, 'avatar');
 
     return users;
   }
@@ -101,6 +101,6 @@ export class UserService extends BaseService {
       .leftJoin(UserRoleMappingEntity, 'userRole', 'userRole.userId = user.id')
       .leftJoinAndMapMany('user.roles', RoleEntity, 'role', 'role.id = userRole.roleId')
       .leftJoinAndSelect('user.avatar', 'avatar')
-      .leftJoinAndMapMany('avatar.variants', CloudflareVariantEntity, 'variant', 'variant.isDefault = TRUE');
+      .leftJoinAndMapMany('avatar.variants', ImageVariantEntity, 'variant', 'variant.isDefault = TRUE');
   }
 }

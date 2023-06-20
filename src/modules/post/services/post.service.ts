@@ -1,11 +1,10 @@
 import { ESTATE_STATUS_ENUM, IREUser, slugify } from '@encacap-group/common/dist/re';
+import { CategoryService } from '@modules/category/services/category.service';
+import { ImageService } from '@modules/image/services/image.service';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { omit } from 'lodash';
 import { BaseService } from 'src/base/base.service';
-import { CategoryEntity } from 'src/modules/category/entities/category.entity';
-import { CategoryService } from 'src/modules/category/services/category.service';
-import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { PostCreateBodyDto } from '../dtos/post-create-body.dto';
 import { PostListQueryDto } from '../dtos/post-list-query.dto';
@@ -16,7 +15,7 @@ import { PostEntity } from '../entities/post.entity';
 export class PostService extends BaseService {
   constructor(
     @InjectRepository(PostEntity) private readonly postRepository: Repository<PostEntity>,
-    private readonly cloudflareImageService: CloudflareImageService,
+    private readonly imageService: ImageService,
     private readonly categoryService: CategoryService,
   ) {
     super();
@@ -42,7 +41,7 @@ export class PostService extends BaseService {
     const data = await this.queryBuilder.where(query).getOne();
 
     if (data) {
-      await this.cloudflareImageService.mapVariantToImage(data, 'avatar');
+      await this.imageService.mapVariantToImage(data, 'avatar');
     }
 
     return data;
@@ -56,11 +55,24 @@ export class PostService extends BaseService {
     }
 
     if (query.categoryId) {
-      this.setFilter(queryBuilder, query.categoryId, 'post.categoryId');
+      const category = await this.categoryService.getOrFail({ id: query.categoryId });
+      const { left, right } = category;
+
+      queryBuilder.andWhere('category.left > :left', { left });
+      queryBuilder.andWhere('category.right < :right', { right });
     }
 
-    if (query.categoryIds) {
-      this.setInFilter(queryBuilder, query.categoryIds, 'post.categoryId');
+    if (query.categoryCode) {
+      const category = await this.categoryService.get({ code: query.categoryCode });
+
+      if (category) {
+        const { left, right } = category;
+
+        queryBuilder.andWhere('category.left >= :left', { left });
+        queryBuilder.andWhere('category.right <= :right', { right });
+      } else {
+        queryBuilder.andWhere('post.categoryId IS NULL');
+      }
     }
 
     if (query.status) {
@@ -71,30 +83,21 @@ export class PostService extends BaseService {
       this.setInFilter(queryBuilder, query.statuses, 'post.status');
     }
 
-    if (query.categoryCode) {
-      this.setFilter(queryBuilder, query.categoryCode, 'category.code');
-    }
-
     if (query.codes) {
       this.setInFilter(queryBuilder, query.codes, 'post.code');
     }
 
-    if (query.rootCategoryCode) {
-      const { items: subCategories } = await this.categoryService.getAll({
-        parentCode: query.rootCategoryCode,
-      });
-      const subCategoryCodes = subCategories.map((subCategory) => subCategory.code);
-
-      this.setInFilter(queryBuilder, [...subCategoryCodes, query.rootCategoryCode], 'category.code');
-    }
-
     this.setPagination(queryBuilder, query);
 
-    const [posts, total] = await queryBuilder.getManyAndCount();
+    const [data, total] = await queryBuilder.getManyAndCount();
 
-    await this.cloudflareImageService.mapVariantToImage(posts, 'avatar');
+    if (this.isExpanding(query, 'category.parent')) {
+      await Promise.all(data.map((item) => this.categoryService.mapParentToCategory(item.category)));
+    }
 
-    return this.generateGetAllResponse(posts, total, query);
+    await this.imageService.mapVariantToImage(data, 'avatar');
+
+    return this.generateGetAllResponse(data, total, query);
   }
 
   getRandom(query: PostListQueryDto) {
@@ -129,12 +132,6 @@ export class PostService extends BaseService {
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.avatar', 'avatar')
       .leftJoinAndSelect('post.category', 'category')
-      .leftJoinAndMapOne(
-        'category.parent',
-        CategoryEntity,
-        'categoryParent',
-        'category.parentId = categoryParent.id',
-      )
       .orderBy('post.upvotedAt', 'DESC');
   }
 }

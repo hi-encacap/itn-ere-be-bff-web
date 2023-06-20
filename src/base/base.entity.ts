@@ -1,5 +1,3 @@
-/* eslint max-classes-per-file: ["error", 5] */
-
 import {
   BaseEntity,
   CreateDateColumn,

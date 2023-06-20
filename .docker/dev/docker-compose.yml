@@ -44,11 +44,10 @@ services:
       - DB_POSTGRES_HOST=postgres
       - DB_REDIS_HOST=redis
     networks:
-      encacap-re-network:
-        aliases:
-          - dev.api.re.encacap.com
+      - encacap-re-network
     depends_on:
       - postgres
+      - redis
 
 networks:
   encacap-re-network:

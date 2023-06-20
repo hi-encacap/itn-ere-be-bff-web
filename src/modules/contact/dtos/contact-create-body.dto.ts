@@ -1,6 +1,6 @@
+import { ImageNotExistsValidator } from '@modules/image/validators/image-not-exists.validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsOptional, IsString, Validate } from 'class-validator';
-import { CloudflareImageNotExistsValidator } from 'src/modules/cloudflare/validators/cloudflare-image-not-exists.validator';
 import { ContactExistsValidator } from '../validators/contact-exists.validator';
 
 export class ContactCreateBodyDto {
@@ -15,7 +15,7 @@ export class ContactCreateBodyDto {
 
   @IsString()
   @IsNotEmpty()
-  @Validate(CloudflareImageNotExistsValidator)
+  @Validate(ImageNotExistsValidator)
   @ApiProperty()
   avatarId: string;
 

@@ -1,146 +1,293 @@
-import { IREUser, slugify } from '@encacap-group/common/dist/re';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BaseQueryDto } from '@bases/base.dto';
+import { BaseService } from '@bases/base.service';
+import { IREUser } from '@encacap-group/common/dist/re';
+import { AlgoliaCategoryService } from '@modules/algolia/services/algolia-category.service';
+import { ImageService } from '@modules/image/services/image.service';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { pick } from 'lodash';
-import { BaseService } from 'src/base/base.service';
-import { AlgoliaCategoryService } from 'src/modules/algolia/services/algolia-category.service';
-import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
-import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
-import { FindOptionsWhere, IsNull, Repository } from 'typeorm';
+import { first, omit, pick, set } from 'lodash';
+import { FindOptionsWhere, Repository } from 'typeorm';
+import { CategoryCreateBodyDto } from '../dtos/category-create-body.dto';
 import { CategoryListQueryDto } from '../dtos/category-list-query.dto';
 import { CategoryUpdateBodyDto } from '../dtos/category-update-body.dto';
-import { RootCategoryCreateBody } from '../dtos/root-category-create-body.dto';
 import { CategoryEntity } from '../entities/category.entity';
 
 @Injectable()
 export class CategoryService extends BaseService {
   constructor(
     @InjectRepository(CategoryEntity) private readonly categoryRepository: Repository<CategoryEntity>,
-    private readonly cloudflareImageService: CloudflareImageService,
-    private readonly algoliaService: AlgoliaCategoryService,
+    private readonly algoliaCategoryService: AlgoliaCategoryService,
+    private readonly imageService: ImageService,
   ) {
     super();
   }
 
-  async get(query: FindOptionsWhere<CategoryEntity>) {
-    const record = await this.getQueryBuilder().where(query).getOne();
+  getOrFail(query: FindOptionsWhere<CategoryEntity>) {
+    return this.queryBuilder.where(query).getOneOrFail();
+  }
 
-    if (!record) {
-      throw new NotFoundException('CATEGORY_NOT_FOUND');
+  async get(query: FindOptionsWhere<CategoryEntity> & BaseQueryDto) {
+    const queryBuilder = this.queryBuilder;
+
+    if (this.isExpanding(query, 'categoryGroup')) {
+      queryBuilder.leftJoinAndSelect('category.categoryGroup', 'categoryGroup');
     }
 
-    return this.cloudflareImageService.mapVariantToImage(record, 'thumbnail');
+    if (this.isExpanding(query, 'website')) {
+      queryBuilder.leftJoinAndSelect('category.website', 'website');
+    }
+
+    if (this.isExpanding(query, 'avatar')) {
+      queryBuilder.leftJoinAndSelect('category.avatar', 'avatar');
+    }
+
+    const record = await queryBuilder.where(omit(query, 'expand')).getOne();
+
+    if (record && this.isExpanding(query, 'parent')) {
+      await this.mapParentToCategory(record);
+    }
+
+    if (record && this.isExpanding(query, 'children')) {
+      await this.mapChildrenToCategory(record, query);
+    }
+
+    if (this.isExpanding(query, 'avatar')) {
+      await this.imageService.mapVariantToImage(record, 'avatar');
+    }
+
+    return record;
   }
 
   async getAll(query: CategoryListQueryDto) {
-    let queryBuilder = this.getQueryBuilder();
+    const queryBuilder = this.queryBuilder;
+    const { parentCode, parentId, left, right, excludedCodes } = query;
 
-    if (query.websiteId) {
-      queryBuilder.andWhere('website.id = :websiteId', { websiteId: query.websiteId });
+    if (parentCode) {
+      const { left, right } = await this.getOrFail({ code: parentCode });
+
+      queryBuilder.andWhere('category.left > :left', { left });
+      queryBuilder.andWhere('category.right < :right', { right });
     }
 
-    if (query.categoryGroupCodes) {
-      queryBuilder.andWhere('categoryGroup.code IN (:...categoryGroup)', {
-        categoryGroup: query.categoryGroupCodes,
-      });
+    if (parentId) {
+      const { left, right } = await this.getOrFail({ id: parentId });
+
+      queryBuilder.andWhere('category.left > :left', { left });
+      queryBuilder.andWhere('category.right < :right', { right });
     }
 
-    if (query.parentId !== undefined) {
-      queryBuilder.andWhere({
-        parentId: isNaN(query.parentId) ? IsNull() : query.parentId,
-      });
+    if (parentId === null) {
+      const allCategories = await this.queryBuilder.where(pick(query, 'websiteId')).getMany();
+      const rootCategory = allCategories.filter(
+        (category) => !excludedCodes.includes(category.code) && this.isRoot(category, allCategories),
+      );
+      const rootCategoryIds = rootCategory.map((category) => category.id);
+
+      this.setInFilter(queryBuilder, rootCategoryIds, 'category.id');
     }
 
-    if (query.parentCode) {
-      queryBuilder = this.setFilter(queryBuilder, query.parentCode, 'parent.code');
+    if (left && right) {
+      queryBuilder.andWhere('category.left > :left', { left });
+      queryBuilder.andWhere('category.right < :right', { right });
     }
 
-    const { orderDirection } = query;
-    let { orderBy } = query;
-
-    if (orderBy === 'categoryGroupName') {
-      orderBy = 'categoryGroup.name';
-    } else {
-      orderBy = `category.${orderBy ?? 'createdAt'}`;
+    if (this.isExpanding(query, 'categoryGroup')) {
+      queryBuilder.leftJoinAndSelect('category.categoryGroup', 'categoryGroup');
     }
 
-    queryBuilder.orderBy(orderBy, orderDirection);
-    queryBuilder = this.setPagination(queryBuilder, query);
-    queryBuilder = await this.setAlgoliaSearch(
+    if (this.isExpanding(query, 'website')) {
+      queryBuilder.leftJoinAndSelect('category.website', 'website');
+    }
+
+    if (this.isExpanding(query, 'avatar')) {
+      queryBuilder.leftJoinAndSelect('category.avatar', 'avatar');
+    }
+
+    this.setPagination(queryBuilder, query);
+    this.setSort(queryBuilder, query, 'category', 'left');
+    await this.setAlgoliaSearch(
       queryBuilder,
       query,
-      this.algoliaService.search.bind(this.algoliaService),
-      'category.code',
+      this.algoliaCategoryService.search.bind(this.algoliaCategoryService),
+      'category.id',
     );
 
-    const [categories, items] = await queryBuilder.getManyAndCount();
+    const [data, total] = await queryBuilder.getManyAndCount();
 
-    await this.cloudflareImageService.mapVariantToImage(categories, 'thumbnail');
-
-    return this.generateGetAllResponse(categories, items, query);
-  }
-
-  getRoots(query: CategoryListQueryDto) {
-    return this.getAll({
-      ...query,
-      parentId: null,
-    });
-  }
-
-  async create(body: Partial<RootCategoryCreateBody>, user: IREUser) {
-    const { code } = body;
-
-    if (!code) {
-      body.code = slugify(body.name);
+    if (this.isExpanding(query, 'avatar')) {
+      await this.imageService.mapVariantToImage(data, 'avatar');
     }
 
-    const record = await this.categoryRepository.save({
-      ...body,
-      websiteId: body.websiteId ?? user.websiteId,
-    });
-    const category = await this.get({ code: record.code });
+    if (this.isExpanding(query, 'parent')) {
+      await Promise.all(data.map(this.mapParentToCategory.bind(this)));
+    }
 
-    this.algoliaService.save({
-      objectID: category.code,
+    if (this.isExpanding(query, 'children')) {
+      await Promise.all(data.map(this.mapChildrenToCategory.bind(this)));
+    }
+
+    return this.generateGetAllResponse(data, total, query);
+  }
+
+  async create(body: CategoryCreateBodyDto, user?: IREUser) {
+    const { parentId } = body;
+    let category = null;
+
+    if (!parentId) {
+      category = await this.createRoot({
+        ...body,
+        websiteId: user.websiteId,
+      });
+    } else {
+      category = await this.createChild({
+        ...body,
+        websiteId: user.websiteId,
+      });
+    }
+
+    this.algoliaCategoryService.save({
+      objectID: category.id,
       name: category.name,
-      categoryGroupName: category.categoryGroup.name,
     });
 
     return category;
   }
 
   async update(id: number, body: CategoryUpdateBodyDto) {
-    await this.categoryRepository.update({ id }, pick(body, ['name', 'categoryGroupId', 'thumbnailId']));
+    const record = await this.categoryRepository.update(id, body);
 
-    const category = await this.get({ id });
-
-    this.algoliaService.update({
-      objectID: String(category.id),
-      name: category.name,
-      categoryGroupName: category.categoryGroup.name,
+    this.algoliaCategoryService.save({
+      objectID: String(id),
+      name: body.name,
     });
+
+    return record;
+  }
+
+  delete(id: number) {
+    return this.categoryRepository.softDelete(id);
+  }
+
+  async mapParentToCategory(category: CategoryEntity) {
+    const { left, right } = category;
+    const allParents = await this.queryBuilder
+      .where('"left" < :left', { left })
+      .andWhere('"right" > :right', { right })
+      .orderBy('"left"', 'DESC')
+      .getMany();
+
+    return this.recursiveMapParentToCategory(category, allParents);
+  }
+
+  /**
+   * Map direct children to category and recursively map children to children.
+   * @param {CategoryEntity} category
+   * @returns {Promise<CategoryEntity>}
+   */
+  async mapChildrenToCategory(category: CategoryEntity, query: BaseQueryDto): Promise<CategoryEntity> {
+    const { left, right } = category;
+
+    const getAllChildrenQuery: CategoryListQueryDto = {
+      left,
+      right,
+    };
+    const getAllChildrenQueryExpand = [];
+
+    if (this.isExpanding(query, 'children.avatar')) {
+      getAllChildrenQueryExpand.push('avatar');
+    }
+
+    if (this.isExpanding(query, 'children.parent')) {
+      getAllChildrenQueryExpand.push('parent');
+    }
+
+    const { items: allChildren } = await this.getAll({
+      ...getAllChildrenQuery,
+      expand: getAllChildrenQueryExpand.join(','),
+    });
+
+    let prevChild = allChildren.find((child) => child.left === left + 1);
+    const directChildren = [];
+
+    while (true && prevChild) {
+      directChildren.push(prevChild);
+
+      const nextChild = allChildren.find((child) => child.left === prevChild.right + 1);
+
+      if (!nextChild) {
+        break;
+      }
+
+      prevChild = nextChild;
+    }
+
+    set(category, 'children', directChildren);
+
+    await Promise.all(directChildren.map((child) => this.mapChildrenToCategory(child, query)));
 
     return category;
   }
 
-  delete(id: number) {
-    this.algoliaService.remove(String(id));
-    return this.categoryRepository.delete({ id });
+  private recursiveMapParentToCategory(category: CategoryEntity, categories: CategoryEntity[]) {
+    const parent = first(categories);
+
+    if (!parent) {
+      return category;
+    }
+
+    set(category, 'parent', parent);
+
+    return this.recursiveMapParentToCategory(parent, categories.slice(1));
   }
 
-  private getQueryBuilder() {
-    return this.categoryRepository
-      .createQueryBuilder('category')
-      .leftJoinAndMapOne('category.parent', CategoryEntity, 'parent', 'parent.id = category.parentId')
-      .leftJoinAndMapMany('category.children', CategoryEntity, 'children', 'children.parentId = category.id')
-      .leftJoinAndMapOne(
-        'children.parent',
-        CategoryEntity,
-        'childrenParent',
-        'childrenParent.id = children.parentId',
-      )
-      .leftJoinAndSelect('category.thumbnail', 'thumbnail')
-      .leftJoinAndMapOne('category.website', WebsiteEntity, 'website', 'website.id = category.websiteId')
-      .leftJoinAndSelect('category.categoryGroup', 'categoryGroup');
+  private async createRoot(body: CategoryCreateBodyDto) {
+    const maxRight = await this.queryBuilder.select('MAX(category.right)', 'maxRight').getRawOne();
+
+    const maxRightValue = maxRight ? maxRight.maxRight : 0;
+
+    const category = this.categoryRepository.create({
+      ...body,
+      left: maxRightValue + 1,
+      right: maxRightValue + 2,
+    });
+
+    return this.categoryRepository.save(category);
+  }
+
+  private async createChild(body: CategoryCreateBodyDto) {
+    const { parentId } = body;
+
+    const { right } = await this.getOrFail({ id: parentId });
+
+    await this.queryBuilder
+      .update()
+      .set({ right: () => '"right" + 2' })
+      .where('right >= :right', { right })
+      .execute();
+
+    await this.queryBuilder
+      .update()
+      .set({ left: () => '"left" + 2' })
+      .where('left > :right', { right })
+      .execute();
+
+    const category = this.categoryRepository.create({
+      ...body,
+      left: right,
+      right: right + 1,
+    });
+
+    return this.categoryRepository.save(category);
+  }
+
+  private isRoot(category: CategoryEntity, categories: CategoryEntity[]) {
+    const { left, right } = category;
+    const parent = categories.find(({ left: l, right: r }) => l < left && r > right);
+
+    return !parent;
+  }
+
+  private get queryBuilder() {
+    return this.categoryRepository.createQueryBuilder('category');
   }
 }

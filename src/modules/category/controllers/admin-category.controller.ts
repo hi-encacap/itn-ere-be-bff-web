@@ -1,6 +1,6 @@
 import { IREUser } from '@encacap-group/common/dist/re';
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
-import { BaseCodeParamDto } from 'src/base/base.dto';
+import { BaseCodeParamDto, BaseQueryDto } from 'src/base/base.dto';
 import { AddWebsiteIdToParam } from 'src/common/decorators/add-website-id-to-param.decorator';
 import { User } from 'src/common/decorators/user.decorator';
 import { AdminAuthGuard } from 'src/common/guards/admin-auth.guard';
@@ -26,16 +26,21 @@ export class AdminCategoryController {
   }
 
   @Get('roots')
-  getRoots(@Query() query: CategoryListQueryDto, @User() user: IREUser) {
-    return this.categoryService.getRoots({
-      ...query,
+  getRoots(@User() user: IREUser) {
+    return this.categoryService.getAll({
       websiteId: user.websiteId,
+      parentId: null,
     });
   }
 
   @Get(':code')
-  getPublicCategoryByCode(@Param() param: BaseCodeParamDto, @User() user: IREUser) {
+  getPublicCategoryByCode(
+    @Param() param: BaseCodeParamDto,
+    @Query() query: BaseQueryDto,
+    @User() user: IREUser,
+  ) {
     return this.categoryService.get({
+      ...query,
       code: param.code,
       websiteId: user.websiteId,
     });

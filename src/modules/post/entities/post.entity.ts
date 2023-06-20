@@ -1,7 +1,7 @@
 import { ESTATE_STATUS_ENUM } from '@encacap-group/common/dist/re';
+import { ImageEntity } from '@modules/image/entities/image.entity';
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
 import { CategoryEntity } from 'src/modules/category/entities/category.entity';
-import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
@@ -35,9 +35,9 @@ export class PostEntity extends BaseEntityWithPrimaryGeneratedColumn {
   @Column({ name: 'website_id' })
   websiteId: number;
 
-  @ManyToOne(() => CloudflareImageEntity)
+  @ManyToOne(() => ImageEntity)
   @JoinColumn({ name: 'avatar_id', referencedColumnName: 'id' })
-  avatar: CloudflareImageEntity;
+  avatar: ImageEntity;
 
   @ManyToOne(() => CategoryEntity)
   @JoinColumn({ name: 'category_id', referencedColumnName: 'id' })

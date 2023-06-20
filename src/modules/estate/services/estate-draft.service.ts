@@ -1,9 +1,9 @@
 import { ESTATE_STATUS_ENUM, IREUser } from '@encacap-group/common/dist/re';
+import { CategoryService } from '@modules/category/services/category.service';
+import { ImageService } from '@modules/image/services/image.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/base/base.service';
-import { CategoryService } from 'src/modules/category/services/category.service';
-import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
 import { ContactService } from 'src/modules/contact/services/contact.service';
 import { DistrictService } from 'src/modules/location/services/district.service';
 import { ProvinceService } from 'src/modules/location/services/province.service';
@@ -22,7 +22,7 @@ export class EstateDraftService extends BaseService {
   constructor(
     @InjectRepository(EstateDraftEntity)
     private readonly estateDraftRepository: Repository<EstateDraftEntity>,
-    private readonly cloudflareImageService: CloudflareImageService,
+    private readonly imageService: ImageService,
     private readonly unitPriceService: UnitPriceService,
     private readonly provinceService: ProvinceService,
     private readonly districtService: DistrictService,
@@ -45,7 +45,7 @@ export class EstateDraftService extends BaseService {
     let queryBuilder = this.queryBuilder;
 
     queryBuilder = this.setPagination(queryBuilder, query);
-    queryBuilder = this.setSorting(queryBuilder, query, 'estateDraft', 'createdAt');
+    queryBuilder = this.setSort(queryBuilder, query, 'estateDraft', 'createdAt');
 
     const [records, total] = await queryBuilder.getManyAndCount();
     const parsedRecords = await Promise.all(
@@ -58,8 +58,8 @@ export class EstateDraftService extends BaseService {
       ),
     );
 
-    await this.cloudflareImageService.mapVariantToImages(parsedRecords, 'images');
-    await this.cloudflareImageService.mapVariantToImage(parsedRecords, 'avatar');
+    await this.imageService.mapVariantToImages(parsedRecords, 'images');
+    await this.imageService.mapVariantToImage(parsedRecords, 'avatar');
 
     return this.generateGetAllResponse(parsedRecords, total, query);
   }
@@ -77,8 +77,8 @@ export class EstateDraftService extends BaseService {
       id: record.id,
     });
 
-    await this.cloudflareImageService.mapVariantToImage(mappedRecord, 'avatar');
-    await this.cloudflareImageService.mapVariantToImages(mappedRecord, 'images');
+    await this.imageService.mapVariantToImage(mappedRecord, 'avatar');
+    await this.imageService.mapVariantToImages(mappedRecord, 'images');
 
     return mappedRecord;
   }
@@ -143,11 +143,11 @@ export class EstateDraftService extends BaseService {
     }
 
     if (avatarId) {
-      record.avatar = await this.cloudflareImageService.get(avatarId);
+      record.avatar = await this.imageService.get(avatarId);
     }
 
     if (imageIds?.length) {
-      record.images = (await this.cloudflareImageService.getAll({
+      record.images = (await this.imageService.getAll({
         where: {
           id: In(imageIds),
         },

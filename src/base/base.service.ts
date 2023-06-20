@@ -33,7 +33,7 @@ export class BaseService {
     return queryBuilder;
   }
 
-  setSorting<T = unknown>(
+  setSort<T = unknown>(
     queryBuilder: SelectQueryBuilder<T>,
     query: FindOptionsWhere<BaseListQueryDto>,
     tableAlias: string,
@@ -134,5 +134,22 @@ export class BaseService {
     const [items, totalItems] = await queryBuilder.getManyAndCount();
 
     return this.generateGetAllResponse(items, totalItems, query);
+  }
+
+  isExpanding(query: FindOptionsWhere<BaseListQueryDto>, key: string) {
+    const { expand } = query;
+
+    if (!expand) {
+      return false;
+    }
+
+    if (typeof expand !== 'string') {
+      return false;
+    }
+
+    return expand
+      .split(',')
+      .map((item) => item.trim())
+      .includes(key);
   }
 }

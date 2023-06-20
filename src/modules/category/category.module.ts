@@ -1,14 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AlgoliaModule } from 'src/modules/algolia/algolia.module';
-import { CloudflareModule } from '../cloudflare/cloudflare.module';
+import { CloudflareModule } from '../image/cloudflare.module';
 import { AdminCategoryGroupController } from './controllers/admin-category-group.controller';
 import { AdminCategoryPropertyController } from './controllers/admin-category-property.controller';
 import { AdminCategoryController } from './controllers/admin-category.controller';
 import { PublicCategoryController } from './controllers/public-category.controller';
 import { RootCategoryGroupController } from './controllers/root-category-group.controller';
 import { RootCategoryController } from './controllers/root-category.controller';
-import { CategoryGroupWebsiteEntity } from './entities/category-group-website.entity';
 import { CategoryGroupEntity } from './entities/category-group.entity';
 import { CategoryPropertyEntity } from './entities/category-property.entity';
 import { CategoryEntity } from './entities/category.entity';
@@ -23,12 +22,7 @@ import { CategoryPropertyExistsValidator } from './validators/category-property-
 @Module({
   imports: [
     AlgoliaModule,
-    TypeOrmModule.forFeature([
-      CategoryGroupEntity,
-      CategoryGroupWebsiteEntity,
-      CategoryEntity,
-      CategoryPropertyEntity,
-    ]),
+    TypeOrmModule.forFeature([CategoryGroupEntity, CategoryEntity, CategoryPropertyEntity]),
     CloudflareModule,
   ],
   controllers: [
@@ -50,9 +44,9 @@ import { CategoryPropertyExistsValidator } from './validators/category-property-
   ],
   exports: [
     CategoryExistsValidator,
-    CategoryService,
     CategoryPropertyExistsValidator,
     CategoryPropertyService,
+    CategoryService,
   ],
 })
 export class CategoryModule {}

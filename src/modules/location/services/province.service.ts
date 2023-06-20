@@ -53,7 +53,7 @@ export class ProvinceService extends BaseService {
       queryBuilder.andWhere('provinceWebsite.websiteId = :websiteId', { websiteId });
     }
 
-    queryBuilder = this.setSorting(queryBuilder, query, 'province');
+    queryBuilder = this.setSort(queryBuilder, query, 'province');
     queryBuilder = this.setPagination(queryBuilder, query);
 
     return this.getManyAndCount(queryBuilder, query);
