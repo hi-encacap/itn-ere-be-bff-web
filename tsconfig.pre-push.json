@@ -1,0 +1,9 @@
+// tsconfig for `pre-push` build should not exclude `**/*spec.ts` files and dist folder will be `dist-pre-push`
+
+{
+  "extends": "./tsconfig.json",
+  "exclude": ["node_modules", "test", "dist", "**/*spec.ts"],
+  "compilerOptions": {
+    "outDir": "dist-pre-push"
+  }
+}
