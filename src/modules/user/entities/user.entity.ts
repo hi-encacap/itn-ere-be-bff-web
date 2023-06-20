@@ -3,8 +3,8 @@ import { IREUser, IWebsite } from '@encacap-group/common/dist/re';
 import { compare, hash } from 'bcrypt';
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
 import { CategoryGroupEntity } from 'src/modules/category/entities/category-group.entity';
-import { CloudflareImageEntity } from 'src/modules/cloudflare/entities/cloudflare-image.entity';
 import { ContactEntity } from 'src/modules/contact/entities/contact.entity';
+import { ImageEntity } from 'src/modules/image/entities/image.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Column, Entity, JoinColumn, OneToMany, ManyToOne as OneToOne } from 'typeorm';
 import { UserRoleMappingEntity } from './user-role-mapping.entity';
@@ -36,9 +36,9 @@ export class UserEntity extends BaseEntityWithPrimaryGeneratedColumn implements 
   @Column({ name: 'avatar_id', nullable: true })
   avatarId!: string;
 
-  @OneToOne(() => CloudflareImageEntity)
+  @OneToOne(() => ImageEntity)
   @JoinColumn({ name: 'avatar_id', referencedColumnName: 'id' })
-  avatar?: CloudflareImageEntity;
+  avatar?: ImageEntity;
 
   @OneToMany(() => UserRoleMappingEntity, (userRoleMapping) => userRoleMapping.userId, {
     cascade: ['remove', 'update'],

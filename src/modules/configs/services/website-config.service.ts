@@ -1,9 +1,9 @@
 import { CONFIG_TYPE_ENUM, IConfig, IREUser } from '@encacap-group/common/dist/re';
+import { ImageService } from '@modules/image/services/image.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { set } from 'lodash';
 import { BaseService } from 'src/base/base.service';
-import { CloudflareImageService } from 'src/modules/cloudflare/services/cloudflare-image.service';
 import { FindOptionsWhere, In, Repository } from 'typeorm';
 import { ConfigCreateBodyDto } from '../dtos/config-create-body.dto';
 import { ConfigUpdateBodyDto } from '../dtos/config-update-body.dto';
@@ -15,7 +15,7 @@ export class WebsiteConfigService extends BaseService {
   constructor(
     @InjectRepository(WebsiteConfigEntity)
     private readonly websiteConfigRepository: Repository<WebsiteConfigEntity>,
-    private readonly cloudflareImageService: CloudflareImageService,
+    private readonly imageService: ImageService,
   ) {
     super();
   }
@@ -81,11 +81,11 @@ export class WebsiteConfigService extends BaseService {
 
     if (type === CONFIG_TYPE_ENUM.IMAGE_ARRAY) {
       const imageIds = JSON.parse(value);
-      const images = await this.cloudflareImageService.getAll({ where: { id: In(imageIds) } });
+      const images = await this.imageService.getAll({ where: { id: In(imageIds) } });
 
       set(data, 'value', images);
 
-      return this.cloudflareImageService.mapVariantToImages(data, 'value');
+      return this.imageService.mapVariantToImages(data, 'value');
     }
 
     if (type === CONFIG_TYPE_ENUM.CONTACT) {

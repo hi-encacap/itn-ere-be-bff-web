@@ -1,6 +1,6 @@
 import { IWebsite } from '@encacap-group/common/dist/re';
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
-import { BaseCodeParamDto } from 'src/base/base.dto';
+import { BaseCodeParamDto, BaseQueryDto } from 'src/base/base.dto';
 import { Website } from 'src/common/decorators/website.decorator';
 import { WebsiteApiKeyGuard } from 'src/common/guards/website-api-key.guard';
 import { CategoryListQueryDto } from '../dtos/category-list-query.dto';
@@ -19,9 +19,23 @@ export class PublicCategoryController {
     });
   }
 
+  @Get('roots')
+  getRoots(@Query() query: CategoryListQueryDto, @Website() website: IWebsite) {
+    return this.categoryService.getAll({
+      ...query,
+      websiteId: website.id,
+      parentId: null,
+    });
+  }
+
   @Get(':code')
-  getPublicCategoryByCode(@Param() param: BaseCodeParamDto, @Website() website: IWebsite) {
+  getPublicCategoryByCode(
+    @Param() param: BaseCodeParamDto,
+    @Query() query: BaseQueryDto,
+    @Website() website: IWebsite,
+  ) {
     return this.categoryService.get({
+      ...query,
       code: param.code,
       websiteId: website.id,
     });

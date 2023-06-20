@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CloudflareModule } from '../cloudflare/cloudflare.module';
+import { CloudflareModule } from '../image/cloudflare.module';
 import { WebsiteModule } from '../website/website.module';
 import { RootRoleController } from './controllers/root-role.controller';
 import { RootUserController } from './controllers/root-user.controller';

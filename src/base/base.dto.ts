@@ -1,3 +1,4 @@
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import { IsEnum, IsNumber, IsOptional, IsPositive, IsString } from 'class-validator';
 import { ORDER_DIRECTION_ENUM } from './base.constant';
@@ -19,29 +20,43 @@ export class BaseCodeParamDto {
   code: string;
 }
 
-export class BaseListQueryDto {
+export class BaseQueryDto {
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  expand?: string;
+}
+
+export class BaseListQueryDto extends BaseQueryDto {
+  @ApiPropertyOptional()
   @IsOptional()
   @IsPositive()
   @Type(() => Number)
   page?: number;
 
+  @ApiPropertyOptional()
   @IsOptional()
   @IsPositive()
   @Type(() => Number)
   limit?: number;
 
+  @ApiPropertyOptional()
   @IsOptional()
   @IsString()
   searchBy?: string;
 
+  @ApiPropertyOptional()
+  @ApiPropertyOptional()
   @IsOptional()
   @IsString()
   searchValue?: string;
 
+  @ApiPropertyOptional()
   @IsOptional()
   @IsString()
   orderBy?: string;
 
+  @ApiPropertyOptional({ enum: ORDER_DIRECTION_ENUM, enumName: 'ORDER_DIRECTION_ENUM' })
   @IsOptional()
   @IsEnum(ORDER_DIRECTION_ENUM)
   @Transform(({ value }) => value.toUpperCase())

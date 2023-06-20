@@ -25,24 +25,6 @@ const userItems: IREUserSeeder[] = [
     websiteDomain: WEBSITE_DOMAIN_ENUM.ENCACAP_RE,
     roleSlugs: [ROLE_SLUG_ENUM.ROOT, ROLE_SLUG_ENUM.ADMIN],
   },
-  {
-    email: `admin@${WEBSITE_DOMAIN_ENUM.BAOLOCRE}`,
-    username: `admin_${WEBSITE_DOMAIN_ENUM.BAOLOCRE.replace(/\./g, '_')}`,
-    password: '123456',
-    firstName: 'Admin',
-    lastName: 'Baoloc RE',
-    websiteDomain: WEBSITE_DOMAIN_ENUM.BAOLOCRE,
-    roleSlugs: [ROLE_SLUG_ENUM.ADMIN],
-  },
-  {
-    email: `admin@${WEBSITE_DOMAIN_ENUM.ACBUILDING}`,
-    username: `admin_${WEBSITE_DOMAIN_ENUM.ACBUILDING.replace(/\./g, '_')}`,
-    password: '123456',
-    firstName: 'Admin',
-    lastName: 'AC Building',
-    websiteDomain: WEBSITE_DOMAIN_ENUM.ACBUILDING,
-    roleSlugs: [ROLE_SLUG_ENUM.ADMIN],
-  },
 ];
 
 @Injectable()

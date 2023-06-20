@@ -69,7 +69,7 @@ export class WardService extends BaseService {
       queryBuilder = this.setInFilter(queryBuilder, query.districtCodes, 'district.code');
     }
 
-    queryBuilder = this.setSorting(queryBuilder, query, 'ward');
+    queryBuilder = this.setSort(queryBuilder, query, 'ward');
     queryBuilder = this.setPagination(queryBuilder, query);
 
     return this.getManyAndCount(queryBuilder, query);

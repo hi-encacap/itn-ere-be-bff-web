@@ -27,7 +27,7 @@ export class AddressBookService extends BaseService {
     queryBuilder = this.setFilterOld(queryBuilder, query, 'addressBook', 'districtCodes', 'districtCode');
     queryBuilder = this.setFilterOld(queryBuilder, query, 'addressBook', 'wardCodes', 'wardCode');
     queryBuilder = this.setFilterOld(queryBuilder, query, 'addressBook', 'websiteId', 'websiteId');
-    queryBuilder = this.setSorting(queryBuilder, query, 'addressBook');
+    queryBuilder = this.setSort(queryBuilder, query, 'addressBook');
     queryBuilder = this.setPagination(queryBuilder, query);
 
     return this.getManyAndCount(queryBuilder, query);
