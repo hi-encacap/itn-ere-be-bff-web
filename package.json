@@ -99,7 +99,9 @@
   "private": true,
   "scripts": {
     "build": "nest build",
-    "build:pre-push": "rimraf dist-pre-push && yarn build -p ./tsconfig.pre-push.json",
+    "build:pre-push": "yarn clean:pre-push && nest build --path ./tsconfig.pre-push.json && yarn clean:pre-push",
+    "clean:pre-push": "rimraf dist-pre-push",
+    "clean": "rimraf dist",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "prebuild": "rimraf dist",
