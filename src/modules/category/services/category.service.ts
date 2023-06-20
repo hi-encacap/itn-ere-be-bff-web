@@ -188,8 +188,8 @@ export class CategoryService extends BaseService {
     const { left, right } = category;
 
     const getAllChildrenQuery: CategoryListQueryDto = {
-      left: left,
-      right: right,
+      left,
+      right,
     };
     const getAllChildrenQueryExpand = [];
 
@@ -228,7 +228,7 @@ export class CategoryService extends BaseService {
     return category;
   }
 
-  private async recursiveMapParentToCategory(category: CategoryEntity, categories: CategoryEntity[]) {
+  private recursiveMapParentToCategory(category: CategoryEntity, categories: CategoryEntity[]) {
     const parent = first(categories);
 
     if (!parent) {
