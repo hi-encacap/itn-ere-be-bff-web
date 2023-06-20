@@ -20,7 +20,7 @@ export class WebsiteConfigEntity extends BaseEntityWithPrimaryGeneratedColumn {
   @Column({ name: 'website_id' })
   websiteId!: number;
 
-  @ManyToOne(() => WebsiteEntity, (website) => website.websiteConfigs)
+  @ManyToOne(() => WebsiteEntity)
   @JoinColumn({ name: 'website_id', referencedColumnName: 'id' })
   website!: WebsiteEntity;
 }

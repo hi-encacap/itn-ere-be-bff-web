@@ -1,3 +1,4 @@
+import path from 'path';
 import { DataSource } from 'typeorm';
 
 export default new DataSource({
@@ -7,6 +8,6 @@ export default new DataSource({
   username: process.env.DB_POSTGRES_USERNAME,
   password: process.env.DB_POSTGRES_PASSWORD,
   database: process.env.DB_POSTGRES_NAME,
-  entities: [`${__dirname}src/**/*.entity.{ts,js}`],
-  migrations: [`${__dirname}src/migrations/!(*.index).{ts,js}`],
+  entities: [path.resolve(__dirname, '../**/*.entity.{ts,js}')],
+  migrations: [path.resolve(__dirname, '!(index).{ts,js}')],
 });
