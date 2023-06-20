@@ -56,4 +56,5 @@ const bootstrap = async () => {
   loggerService.debug(`Application is running on: ${await app.getUrl()}`);
 };
 
+// skipcq: JS-0328
 bootstrap();
