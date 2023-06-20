@@ -17,7 +17,6 @@ import DatabaseConfigService from 'src/configs/database/database-config.service'
           username: databaseConfig.username,
           password: databaseConfig.password,
           database: databaseConfig.database,
-          synchronize: true,
           autoLoadEntities: true,
         };
       },

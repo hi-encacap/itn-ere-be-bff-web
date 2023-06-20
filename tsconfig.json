@@ -23,7 +23,8 @@
       "@middlewares/*": ["src/common/middlewares/*"],
       "@utils/*": ["src/common/utils/*"],
       "@configs/*": ["src/configs/*"],
-      "@providers/*": ["src/providers/*"]
+      "@providers/*": ["src/providers/*"],
+      "@migrations/*": ["src/migrations/*"]
     },
     "incremental": true,
     "skipLibCheck": true,
