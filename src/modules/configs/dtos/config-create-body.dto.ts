@@ -1,4 +1,4 @@
-import { CONFIG_GROUP_ENUM, CONFIG_TYPE_ENUM } from '@encacap-group/common/dist/re';
+import { CONFIG_TYPE_ENUM } from '@encacap-group/common/dist/re';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsNotEmpty, IsString, Validate } from 'class-validator';
 import { EXIST_VALIDATOR_TYPE } from 'src/common/constants/validator.constant';
@@ -15,11 +15,6 @@ export class ConfigCreateBodyDto {
   @IsNotEmpty()
   @ApiProperty()
   value: string;
-
-  @IsEnum(CONFIG_GROUP_ENUM)
-  @IsNotEmpty()
-  @ApiProperty({ enum: CONFIG_GROUP_ENUM, enumName: 'CONFIG_GROUP_ENUM' })
-  group: CONFIG_GROUP_ENUM;
 
   @IsEnum(CONFIG_TYPE_ENUM)
   @IsNotEmpty()

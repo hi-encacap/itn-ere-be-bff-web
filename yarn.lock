@@ -612,10 +612,10 @@
     eslint-module-utils "2.7.4"
     reflect-metadata "0.1.13"
 
-"@encacap-group/common@^1.8.1":
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/@encacap-group/common/-/common-1.8.1.tgz#85ca5238848862833643445c267238a77afc7983"
-  integrity sha512-jpumnwBNSCkQ9wGaUhRMIJoZf42ESJfk+0FVXT07wkQnGvdB6oks8vIh6BEUfT9sX4tae5YQsE1zIbhvKMocog==
+"@encacap-group/common@^1.8.4":
+  version "1.8.4"
+  resolved "https://registry.yarnpkg.com/@encacap-group/common/-/common-1.8.4.tgz#ad9300067803cd3fd6bd75c6dc3ce4cff93dde25"
+  integrity sha512-dbFSdXRqBVq84DYdx9wH5f8XuKrbSdCCel19/OmuwTNcmPdOXRh8MrkFJTIc6sQJstn5QApp2eFjqoSRU5x6wA==
   dependencies:
     axios "^1.4.0"
     react-hook-form "^7.43.9"
@@ -6761,6 +6761,7 @@ word-wrap@^1.2.3:
   integrity sha512-Hz/mrNwitNRh/HUAtM/VT/5VH+ygD6DV7mYKZAtHOrbs8U7lvPS6xf7EJKMF0uW1KJCl0H701g3ZGus+muE5vQ==
 
 "wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@^7.0.0:
+  name wrap-ansi-cjs
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
