@@ -119,7 +119,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "test:watch": "jest --watch",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "typeorm:migration:run": "yarn typeorm migration:run -d ./src/migrations/index.ts"
+    "migration:run": "yarn typeorm migration:run -d ./src/migrations/index.ts",
+    "migration:create": "yarn typeorm migration:create"
   },
   "version": "0.0.1"
 }
