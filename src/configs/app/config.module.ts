@@ -7,7 +7,7 @@ import appConfiguration from './configuration';
 @Module({
   imports: [
     NestConfigModule.forRoot({
-      envFilePath: ['.env.development', '.env.production'],
+      envFilePath: [`.env.${process.env.NODE_ENV}`, '.env'],
       isGlobal: true,
       load: [appConfiguration],
       validationSchema: Joi.object({
