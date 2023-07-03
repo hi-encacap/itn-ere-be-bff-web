@@ -1,4 +1,4 @@
-import { CONFIG_GROUP_ENUM, CONFIG_TYPE_ENUM } from '@encacap-group/common/dist/re';
+import { CONFIG_TYPE_ENUM } from '@encacap-group/common/dist/re';
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
@@ -13,9 +13,6 @@ export class WebsiteConfigEntity extends BaseEntityWithPrimaryGeneratedColumn {
 
   @Column({ name: 'type', enum: CONFIG_TYPE_ENUM })
   type!: CONFIG_TYPE_ENUM;
-
-  @Column({ name: 'group', enum: CONFIG_GROUP_ENUM })
-  group!: CONFIG_GROUP_ENUM;
 
   @Column({ name: 'website_id' })
   websiteId!: number;

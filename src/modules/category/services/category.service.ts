@@ -79,7 +79,7 @@ export class CategoryService extends BaseService {
     if (parentId === null) {
       const allCategories = await this.queryBuilder.where(pick(query, 'websiteId')).getMany();
       const rootCategory = allCategories.filter(
-        (category) => !excludedCodes.includes(category.code) && this.isRoot(category, allCategories),
+        (category) => !excludedCodes?.includes(category.code) && this.isRoot(category, allCategories),
       );
       const rootCategoryIds = rootCategory.map((category) => category.id);
 

@@ -612,13 +612,21 @@
     eslint-module-utils "2.7.4"
     reflect-metadata "0.1.13"
 
-"@encacap-group/common@^1.8.1":
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/@encacap-group/common/-/common-1.8.1.tgz#85ca5238848862833643445c267238a77afc7983"
-  integrity sha512-jpumnwBNSCkQ9wGaUhRMIJoZf42ESJfk+0FVXT07wkQnGvdB6oks8vIh6BEUfT9sX4tae5YQsE1zIbhvKMocog==
+"@encacap-group/common@^1.8.7":
+  version "1.8.8"
+  resolved "https://registry.yarnpkg.com/@encacap-group/common/-/common-1.8.8.tgz#fa21abd03d40804d026d32a2bbf56de09179dd4d"
+  integrity sha512-4LgS5RXWt6Qv4UlTGdV9nB6t5ytShyN1CJ6VNkDqOshx0XQNkGa+GD4amvTM7S0i9QsKjJqrdWTykK1ZPx1NUA==
   dependencies:
+    "@encacap-group/common" "^1.8.7"
     axios "^1.4.0"
-    react-hook-form "^7.43.9"
+
+"@encacap-group/common@^1.8.9":
+  version "1.8.9"
+  resolved "https://registry.yarnpkg.com/@encacap-group/common/-/common-1.8.9.tgz#2d6cb662ceb7b37a4c010c38df50e5e42d194228"
+  integrity sha512-i1QCBFFm1QDH8VWxlx8FTCdb2ZnuhNG2mFBkZfWa3QtH1tK3lZBISi8HLs08D92tUFX6w+oR0w1OE5hGB2Y7ug==
+  dependencies:
+    "@encacap-group/common" "^1.8.7"
+    axios "^1.4.0"
 
 "@eslint/eslintrc@^1.4.0":
   version "1.4.0"
@@ -5633,11 +5641,6 @@ raw-body@2.5.2:
     iconv-lite "0.4.24"
     unpipe "1.0.0"
 
-react-hook-form@^7.43.9:
-  version "7.43.9"
-  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.43.9.tgz#84b56ac2f38f8e946c6032ccb760e13a1037c66d"
-  integrity sha512-AUDN3Pz2NSeoxQ7Hs6OhQhDr6gtF9YRuutGDwPQqhSUAHJSgGl2VeY3qN19MG0SucpjgDiuMJ4iC5T5uB+eaNQ==
-
 react-is@^18.0.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.2.0.tgz#199431eeaaa2e09f86427efbb4f1473edb47609b"
@@ -6761,6 +6764,7 @@ word-wrap@^1.2.3:
   integrity sha512-Hz/mrNwitNRh/HUAtM/VT/5VH+ygD6DV7mYKZAtHOrbs8U7lvPS6xf7EJKMF0uW1KJCl0H701g3ZGus+muE5vQ==
 
 "wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@^7.0.0:
+  name wrap-ansi-cjs
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
