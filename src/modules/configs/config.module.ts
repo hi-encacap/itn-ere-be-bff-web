@@ -1,3 +1,4 @@
+import { PostModule } from '@modules/post/post.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CloudflareModule } from '../image/cloudflare.module';
@@ -8,7 +9,7 @@ import { WebsiteConfigService } from './services/website-config.service';
 import { WebsiteConfigExistsValidator } from './validators/website-config-exists.validator';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([WebsiteConfigEntity]), CloudflareModule],
+  imports: [TypeOrmModule.forFeature([WebsiteConfigEntity]), CloudflareModule, PostModule],
   controllers: [PublicWebsiteConfigController, AdminWebsiteConfigController],
   providers: [WebsiteConfigService, WebsiteConfigExistsValidator],
 })

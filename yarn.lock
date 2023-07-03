@@ -612,13 +612,21 @@
     eslint-module-utils "2.7.4"
     reflect-metadata "0.1.13"
 
-"@encacap-group/common@^1.8.4":
-  version "1.8.4"
-  resolved "https://registry.yarnpkg.com/@encacap-group/common/-/common-1.8.4.tgz#ad9300067803cd3fd6bd75c6dc3ce4cff93dde25"
-  integrity sha512-dbFSdXRqBVq84DYdx9wH5f8XuKrbSdCCel19/OmuwTNcmPdOXRh8MrkFJTIc6sQJstn5QApp2eFjqoSRU5x6wA==
+"@encacap-group/common@^1.8.7":
+  version "1.8.8"
+  resolved "https://registry.yarnpkg.com/@encacap-group/common/-/common-1.8.8.tgz#fa21abd03d40804d026d32a2bbf56de09179dd4d"
+  integrity sha512-4LgS5RXWt6Qv4UlTGdV9nB6t5ytShyN1CJ6VNkDqOshx0XQNkGa+GD4amvTM7S0i9QsKjJqrdWTykK1ZPx1NUA==
   dependencies:
+    "@encacap-group/common" "^1.8.7"
     axios "^1.4.0"
-    react-hook-form "^7.43.9"
+
+"@encacap-group/common@^1.8.9":
+  version "1.8.9"
+  resolved "https://registry.yarnpkg.com/@encacap-group/common/-/common-1.8.9.tgz#2d6cb662ceb7b37a4c010c38df50e5e42d194228"
+  integrity sha512-i1QCBFFm1QDH8VWxlx8FTCdb2ZnuhNG2mFBkZfWa3QtH1tK3lZBISi8HLs08D92tUFX6w+oR0w1OE5hGB2Y7ug==
+  dependencies:
+    "@encacap-group/common" "^1.8.7"
+    axios "^1.4.0"
 
 "@eslint/eslintrc@^1.4.0":
   version "1.4.0"
@@ -5632,11 +5640,6 @@ raw-body@2.5.2:
     http-errors "2.0.0"
     iconv-lite "0.4.24"
     unpipe "1.0.0"
-
-react-hook-form@^7.43.9:
-  version "7.43.9"
-  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.43.9.tgz#84b56ac2f38f8e946c6032ccb760e13a1037c66d"
-  integrity sha512-AUDN3Pz2NSeoxQ7Hs6OhQhDr6gtF9YRuutGDwPQqhSUAHJSgGl2VeY3qN19MG0SucpjgDiuMJ4iC5T5uB+eaNQ==
 
 react-is@^18.0.0:
   version "18.2.0"

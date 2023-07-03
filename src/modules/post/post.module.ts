@@ -15,5 +15,6 @@ import { PostExistsValidator } from './validators/post-exists.validator';
   imports: [TypeOrmModule.forFeature([PostEntity, PostDraftEntity]), CloudflareModule, CategoryModule],
   controllers: [AdminPostController, AdminPostDraftController, PublicPostController],
   providers: [PostService, PostDraftService, PostExistsValidator],
+  exports: [PostService, PostDraftService],
 })
 export class PostModule {}

@@ -31,7 +31,7 @@ const bootstrap = async () => {
       exceptionFactory(errors) {
         const errorField = errors.reduce((errorField, error) => {
           const { property, constraints } = error;
-          const errorMessages = Object.values(constraints);
+          const errorMessages = Object.values(constraints ?? {});
 
           return {
             ...errorField,
