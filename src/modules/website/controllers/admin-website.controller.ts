@@ -12,7 +12,7 @@ export class AdminWebsiteController {
   constructor(private readonly websiteService: WebsiteService) {}
 
   @Put('me')
-  async updateWebsite(@Body() body: WebsiteUpdateBodyDto, @User() user: IREUser) {
+  updateWebsite(@Body() body: WebsiteUpdateBodyDto, @User() user: IREUser) {
     return this.websiteService.updateById(user.websiteId, body);
   }
 }
