@@ -1,3 +1,4 @@
+import { CacheModule } from '@modules/cache/cache.module';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
@@ -35,6 +36,7 @@ import { PostgresDatabaseProviderModule } from './providers/postgres/postgres.mo
     MemCachingProviderModule,
     BullProviderModule,
 
+    CacheModule,
     WebsiteModule,
     UserModule,
     AuthModule,
