@@ -20,6 +20,11 @@ export class AuthController {
     return this.authService.refreshToken(token);
   }
 
+  @Post('reset-root-password')
+  resetRootPassword(@Body('email') email: string) {
+    return this.authService.resetRootPassword(email);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get('me')
   me(@Request() { user }) {

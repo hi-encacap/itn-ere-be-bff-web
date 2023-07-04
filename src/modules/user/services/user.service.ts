@@ -72,6 +72,10 @@ export class UserService extends BaseService {
   async update(id: number, body: RootUserUpdateBodyDto) {
     const record = await this.findOneById(id);
 
+    if (body.password) {
+      body.password = await UserEntity.hashPassword(body.password);
+    }
+
     await this.userRepository
       .createQueryBuilder('user')
       .update(UserEntity)
