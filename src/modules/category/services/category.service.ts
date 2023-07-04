@@ -1,10 +1,12 @@
 import { BaseQueryDto } from '@bases/base.dto';
 import { BaseService } from '@bases/base.service';
+import { MEM_CACHING_KEY_ENUM } from '@constants/caching.constant';
 import { IREUser } from '@encacap-group/common/dist/re';
 import { AlgoliaCategoryService } from '@modules/algolia/services/algolia-category.service';
 import { ImageService } from '@modules/image/services/image.service';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { MemCachingService } from '@providers/mem-caching/mem-caching.service';
 import { first, omit, pick, set } from 'lodash';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { CategoryCreateBodyDto } from '../dtos/category-create-body.dto';
@@ -18,6 +20,7 @@ export class CategoryService extends BaseService {
     @InjectRepository(CategoryEntity) private readonly categoryRepository: Repository<CategoryEntity>,
     private readonly algoliaCategoryService: AlgoliaCategoryService,
     private readonly imageService: ImageService,
+    private readonly cacheService: MemCachingService,
   ) {
     super();
   }
@@ -149,22 +152,30 @@ export class CategoryService extends BaseService {
       objectID: category.id,
       name: category.name,
     });
+    this.clearCache(user.websiteId);
 
     return category;
   }
 
   async update(id: number, body: CategoryUpdateBodyDto) {
+    const existedCategory = await this.getOrFail({ id });
     const record = await this.categoryRepository.update(id, body);
 
     this.algoliaCategoryService.save({
       objectID: String(id),
       name: body.name,
     });
+    this.clearCache(existedCategory.websiteId);
 
     return record;
   }
 
-  delete(id: number) {
+  async delete(id: number) {
+    const record = await this.getOrFail({ id });
+
+    this.algoliaCategoryService.remove(String(id));
+    this.clearCache(record.websiteId);
+
     return this.categoryRepository.softDelete(id);
   }
 
@@ -289,5 +300,9 @@ export class CategoryService extends BaseService {
 
   private get queryBuilder() {
     return this.categoryRepository.createQueryBuilder('category');
+  }
+
+  private clearCache(websiteId?: number) {
+    return this.cacheService.clearCacheByPattern(MEM_CACHING_KEY_ENUM.CATEGORY, websiteId);
   }
 }
