@@ -1,8 +1,10 @@
+import { MEM_CACHING_KEY_ENUM } from '@constants/caching.constant';
 import { CONFIG_TYPE_ENUM, IREUser, IWebsiteConfig } from '@encacap-group/common/dist/re';
 import { ImageService } from '@modules/image/services/image.service';
 import { PostService } from '@modules/post/services/post.service';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { MemCachingService } from '@providers/mem-caching/mem-caching.service';
 import { set } from 'lodash';
 import { BaseService } from 'src/base/base.service';
 import { FindOptionsWhere, In, QueryRunner, Repository } from 'typeorm';
@@ -16,6 +18,7 @@ export class WebsiteConfigService extends BaseService {
   constructor(
     @InjectRepository(WebsiteConfigEntity)
     private readonly websiteConfigRepository: Repository<WebsiteConfigEntity>,
+    private readonly cacheService: MemCachingService,
     private readonly imageService: ImageService,
     private readonly postService: PostService,
   ) {
@@ -56,6 +59,8 @@ export class WebsiteConfigService extends BaseService {
 
   async update(query: FindOptionsWhere<WebsiteConfigEntity>, data: ConfigUpdateBodyDto, user?: IREUser) {
     const record = await this.get(query, false);
+
+    await this.clearCache(record.websiteId);
 
     if (!record && user) {
       return this.create(
@@ -101,6 +106,7 @@ export class WebsiteConfigService extends BaseService {
       );
 
       await queryRunner.commitTransaction();
+      await this.clearCache(user.websiteId);
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw new BadRequestException(error);
@@ -152,5 +158,9 @@ export class WebsiteConfigService extends BaseService {
     }
 
     return data;
+  }
+
+  private clearCache(websiteId?: number) {
+    return this.cacheService.clearCacheByPattern(MEM_CACHING_KEY_ENUM.WEBSITE_CONFIG, websiteId);
   }
 }

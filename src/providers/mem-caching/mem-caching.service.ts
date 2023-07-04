@@ -15,4 +15,23 @@ export class MemCachingService {
   setCloudflareVariants(data: ImageVariantEntity[]) {
     return this.cacheManager.set(MEM_CACHING_KEY_ENUM.CLOUDFLARE_VARIANTS, data, 0);
   }
+
+  set(key: string, data: unknown, ttl = 0) {
+    return this.cacheManager.set(key, data, ttl);
+  }
+
+  async clearCacheByPattern(prefix: string, websiteId?: number) {
+    const keys: string[] = await this.cacheManager.store.keys();
+    let keyPrefix: string = prefix;
+
+    if (websiteId) {
+      keyPrefix = `${websiteId}-${keyPrefix}`;
+    }
+
+    keys.forEach((key) => {
+      if (key.startsWith(keyPrefix)) {
+        this.cacheManager.del(key);
+      }
+    });
+  }
 }
