@@ -1,3 +1,4 @@
+import AppConfigService from '@configs/app/config.service';
 import { IREUser } from '@encacap-group/common/dist/re';
 import { Injectable } from '@nestjs/common';
 import { omit } from 'lodash';
@@ -7,7 +8,11 @@ import { IJwtPayload } from './interfaces/auth.interface';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly userService: UserService, private readonly tokenService: TokenService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly tokenService: TokenService,
+    private readonly appConfigService: AppConfigService,
+  ) {}
 
   async validateUser(email: string, password: string): Promise<Omit<IREUser, 'password'> | null> {
     const user = await this.userService.findOne({
@@ -47,5 +52,15 @@ export class AuthService {
     const user = await this.userService.findOneById(payload.id);
 
     return this.generateAuthToken(user);
+  }
+
+  async resetRootPassword(email: string) {
+    const user = await this.userService.findOne({
+      email,
+    });
+
+    return this.userService.update(user.id, {
+      password: this.appConfigService.rootPassword,
+    });
   }
 }
