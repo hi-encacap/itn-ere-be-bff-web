@@ -24,7 +24,7 @@ export class PostService extends BaseService {
     super();
   }
 
-  create(body: PostCreateBodyDto, user?: IREUser) {
+  async create(body: PostCreateBodyDto, user?: IREUser) {
     let { code } = body;
 
     if (!code) {
@@ -37,7 +37,7 @@ export class PostService extends BaseService {
       code,
     });
 
-    this.clearCache(user.websiteId);
+    await this.clearCache(user.websiteId);
 
     return this.postRepository.save(post);
   }
@@ -115,7 +115,7 @@ export class PostService extends BaseService {
   async unPublish(query: FindOptionsWhere<PostEntity>) {
     const record = await this.get(query);
 
-    this.clearCache(record.websiteId);
+    await this.clearCache(record.websiteId);
 
     return this.postRepository.update(query, { status: ESTATE_STATUS_ENUM.UNPUBLISHED });
   }
@@ -123,7 +123,7 @@ export class PostService extends BaseService {
   async publish(query: FindOptionsWhere<PostEntity>) {
     const record = await this.get(query);
 
-    this.clearCache(record.websiteId);
+    await this.clearCache(record.websiteId);
 
     return this.postRepository.update(query, { status: ESTATE_STATUS_ENUM.PUBLISHED });
   }
@@ -135,7 +135,7 @@ export class PostService extends BaseService {
   async updateById(id: number, body: PostUpdateBodyDto) {
     const record = await this.get({ id });
 
-    this.clearCache(record.websiteId);
+    await this.clearCache(record.websiteId);
 
     return this.postRepository.update(id, body);
   }
@@ -143,7 +143,7 @@ export class PostService extends BaseService {
   async delete(query: FindOptionsWhere<PostEntity>) {
     const record = await this.get(query);
 
-    this.clearCache(record.websiteId);
+    await this.clearCache(record.websiteId);
 
     return this.postRepository.softDelete(query);
   }

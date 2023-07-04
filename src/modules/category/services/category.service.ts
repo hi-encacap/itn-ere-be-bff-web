@@ -152,7 +152,7 @@ export class CategoryService extends BaseService {
       objectID: category.id,
       name: category.name,
     });
-    this.clearCache(user.websiteId);
+    await this.clearCache(user.websiteId);
 
     return category;
   }
@@ -165,7 +165,7 @@ export class CategoryService extends BaseService {
       objectID: String(id),
       name: body.name,
     });
-    this.clearCache(existedCategory.websiteId);
+    await this.clearCache(existedCategory.websiteId);
 
     return record;
   }
@@ -174,7 +174,7 @@ export class CategoryService extends BaseService {
     const record = await this.getOrFail({ id });
 
     this.algoliaCategoryService.remove(String(id));
-    this.clearCache(record.websiteId);
+    await this.clearCache(record.websiteId);
 
     return this.categoryRepository.softDelete(id);
   }
