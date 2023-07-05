@@ -220,7 +220,7 @@ export class CategoryService extends BaseService {
     let prevChild = allChildren.find((child) => child.left === left + 1);
     const directChildren = [];
 
-    while (true && prevChild) {
+    while (prevChild) {
       directChildren.push(prevChild);
 
       const nextChild = allChildren.find((child) => child.left === prevChild.right + 1);
