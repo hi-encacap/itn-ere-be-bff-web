@@ -103,6 +103,9 @@
     "clean:pre-push": "rimraf dist-pre-push",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "migration:create": "yarn typeorm migration:create",
+    "migration:generate": "yarn typeorm migration:generate -d ./src/migrations/index.ts",
+    "migration:run": "yarn typeorm migration:run -d ./src/migrations/index.ts",
     "prebuild": "rimraf dist",
     "railway:dev": "railway run yarn start:dev",
     "railway:seed": "railway run yarn seed",
@@ -118,10 +121,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "test:watch": "jest --watch",
-    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "migration:run": "yarn typeorm migration:run -d ./src/migrations/index.ts",
-    "migration:create": "yarn typeorm migration:create",
-    "migration:generate": "yarn typeorm migration:generate -d ./src/migrations/index.ts"
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
   },
   "version": "0.0.1"
 }
