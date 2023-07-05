@@ -18,7 +18,9 @@ export class WebsiteMemCachingInterceptor extends CacheInterceptor {
       }
 
       if (websiteId) {
-        return `${websiteId}-${cacheKey}-${request._parsedUrl.query}`;
+        return `${websiteId}-${cacheKey}${request._parsedUrl.pathname.replace(/\//g, '-')}-${
+          request._parsedUrl.query
+        }`;
       }
 
       return `${cacheKey}-${request._parsedUrl.query}`;
