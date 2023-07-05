@@ -1,7 +1,7 @@
 {
   "author": "",
   "dependencies": {
-    "@encacap-group/common": "^1.8.1",
+    "@encacap-group/common": "^1.8.9",
     "@nestjs/axios": "^1.0.0",
     "@nestjs/bull": "^0.6.2",
     "@nestjs/cache-manager": "^1.0.0",
@@ -101,9 +101,11 @@
     "build": "nest build",
     "build:pre-push": "yarn clean:pre-push && nest build --path ./tsconfig.pre-push.json && yarn clean:pre-push",
     "clean:pre-push": "rimraf dist-pre-push",
-    "clean": "rimraf dist",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "migration:create": "yarn typeorm migration:create",
+    "migration:generate": "yarn typeorm migration:generate -d ./src/migrations/index.ts",
+    "migration:run": "yarn typeorm migration:run -d ./src/migrations/index.ts",
     "prebuild": "rimraf dist",
     "railway:dev": "railway run yarn start:dev",
     "railway:seed": "railway run yarn seed",
@@ -111,15 +113,15 @@
     "seed:refresh": "dotenv -e .env.development -e .env.seeder node ./dist/seeders/index.js --refresh",
     "start": "nest start",
     "start:debug": "nest start --debug --watch",
-    "start:dev": "nest start --watch",
+    "start:dev": "NODE_ENV=development nest start --watch",
     "start:prod": "node dist/main",
+    "start:stg": "NODE_ENV=staging yarn start",
     "test": "jest",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "test:watch": "jest --watch",
-    "typeorm": "npx typeorm-ts-node-commonjs",
-    "typeorm:migration:run": "yarn typeorm migration:run -d ./src/migrations/index.ts"
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
   },
   "version": "0.0.1"
 }

@@ -18,9 +18,17 @@ export class LoggerMiddleware implements NestMiddleware {
     }
 
     const requestId = req.headers['x-request-id'] || randomStringPrefix();
+    const startTime = Date.now();
+
     res.setHeader('x-request-id', requestId);
 
-    this.loggerService.log(`${req.method} ${req.originalUrl} - ${req.ip.replace('::ffff:', '')}`, requestId);
+    res.on('finish', () => {
+      const duration = Date.now() - startTime;
+      this.loggerService.log(
+        `${req.method} ${req.originalUrl} - ${res.statusCode} - ${duration}ms`,
+        requestId,
+      );
+    });
 
     return next();
   }

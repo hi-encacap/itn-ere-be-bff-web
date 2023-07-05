@@ -2,7 +2,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class CategoryGroupWebsiteRefactoring1687241294608 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query('DROP TABLE "category_group_websites"');
+    await queryRunner.dropTable('category_group_websites');
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

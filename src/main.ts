@@ -18,8 +18,11 @@ const bootstrap = async () => {
   app.enableCors({
     origin: [
       'https://dashboard.re.encacap.dev',
-      'https://baolocre.encacap.dev:3013',
+      'https://www.dashboard.re.encacap.dev',
       'https://dashboard.re.encacap.com',
+      'https://www.dashboard.re.encacap.com',
+      'https://stg.dashboard.re.encacap.com',
+      'https://www.stg.dashboard.re.encacap.com',
     ],
     credentials: true,
   });
@@ -31,7 +34,7 @@ const bootstrap = async () => {
       exceptionFactory(errors) {
         const errorField = errors.reduce((errorField, error) => {
           const { property, constraints } = error;
-          const errorMessages = Object.values(constraints);
+          const errorMessages = Object.values(constraints ?? {});
 
           return {
             ...errorField,

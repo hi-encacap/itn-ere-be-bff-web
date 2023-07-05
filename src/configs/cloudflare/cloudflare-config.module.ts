@@ -7,7 +7,7 @@ import cloudflareConfiguration from './cloudflare.configuration';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ['.env.development', '.env.production'],
+      envFilePath: [`.env.${process.env.NODE_ENV}`, '.env'],
       isGlobal: true,
       load: [cloudflareConfiguration],
       validationSchema: Joi.object({

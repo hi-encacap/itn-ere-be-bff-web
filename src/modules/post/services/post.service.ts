@@ -1,8 +1,10 @@
+import { MEM_CACHING_KEY_ENUM } from '@constants/caching.constant';
 import { ESTATE_STATUS_ENUM, IREUser, slugify } from '@encacap-group/common/dist/re';
 import { CategoryService } from '@modules/category/services/category.service';
 import { ImageService } from '@modules/image/services/image.service';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { MemCachingService } from '@providers/mem-caching/mem-caching.service';
 import { omit } from 'lodash';
 import { BaseService } from 'src/base/base.service';
 import { FindOptionsWhere, Repository } from 'typeorm';
@@ -17,11 +19,12 @@ export class PostService extends BaseService {
     @InjectRepository(PostEntity) private readonly postRepository: Repository<PostEntity>,
     private readonly imageService: ImageService,
     private readonly categoryService: CategoryService,
+    private readonly cacheService: MemCachingService,
   ) {
     super();
   }
 
-  create(body: PostCreateBodyDto, user?: IREUser) {
+  async create(body: PostCreateBodyDto, user?: IREUser) {
     let { code } = body;
 
     if (!code) {
@@ -33,6 +36,8 @@ export class PostService extends BaseService {
       websiteId: user.websiteId,
       code,
     });
+
+    await this.clearCache(user.websiteId);
 
     return this.postRepository.save(post);
   }
@@ -107,11 +112,19 @@ export class PostService extends BaseService {
     });
   }
 
-  unPublish(query: FindOptionsWhere<PostEntity>) {
+  async unPublish(query: FindOptionsWhere<PostEntity>) {
+    const record = await this.get(query);
+
+    await this.clearCache(record.websiteId);
+
     return this.postRepository.update(query, { status: ESTATE_STATUS_ENUM.UNPUBLISHED });
   }
 
-  publish(query: FindOptionsWhere<PostEntity>) {
+  async publish(query: FindOptionsWhere<PostEntity>) {
+    const record = await this.get(query);
+
+    await this.clearCache(record.websiteId);
+
     return this.postRepository.update(query, { status: ESTATE_STATUS_ENUM.PUBLISHED });
   }
 
@@ -119,11 +132,19 @@ export class PostService extends BaseService {
     return this.postRepository.update(id, { updatedAt: new Date() });
   }
 
-  updateById(id: number, body: PostUpdateBodyDto) {
+  async updateById(id: number, body: PostUpdateBodyDto) {
+    const record = await this.get({ id });
+
+    await this.clearCache(record.websiteId);
+
     return this.postRepository.update(id, body);
   }
 
-  delete(query: FindOptionsWhere<PostEntity>) {
+  async delete(query: FindOptionsWhere<PostEntity>) {
+    const record = await this.get(query);
+
+    await this.clearCache(record.websiteId);
+
     return this.postRepository.softDelete(query);
   }
 
@@ -133,5 +154,9 @@ export class PostService extends BaseService {
       .leftJoinAndSelect('post.avatar', 'avatar')
       .leftJoinAndSelect('post.category', 'category')
       .orderBy('post.upvotedAt', 'DESC');
+  }
+
+  private clearCache(websiteId?: number) {
+    return this.cacheService.clearCacheByPattern(MEM_CACHING_KEY_ENUM.POST, websiteId);
   }
 }
