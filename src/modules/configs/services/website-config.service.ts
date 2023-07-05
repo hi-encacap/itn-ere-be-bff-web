@@ -60,8 +60,6 @@ export class WebsiteConfigService extends BaseService {
   async update(query: FindOptionsWhere<WebsiteConfigEntity>, data: ConfigUpdateBodyDto, user?: IREUser) {
     const record = await this.get(query, false);
 
-    await this.clearCache(record.websiteId);
-
     if (!record && user) {
       return this.create(
         {
@@ -72,10 +70,14 @@ export class WebsiteConfigService extends BaseService {
       );
     }
 
+    await this.clearCache(record.websiteId);
+
     return this.websiteConfigRepository.update(record.id, data);
   }
 
-  create(data: ConfigCreateBodyDto, user: IREUser) {
+  async create(data: ConfigCreateBodyDto, user: IREUser) {
+    await this.clearCache(user.websiteId);
+
     return this.websiteConfigRepository.save({
       ...data,
       websiteId: user.websiteId,

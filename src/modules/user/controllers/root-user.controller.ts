@@ -6,8 +6,8 @@ import {
   HttpCode,
   Param,
   ParseIntPipe,
-  Patch,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
@@ -36,9 +36,14 @@ export class RootUserController {
     return this.userService.findOneById(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id', ParseIntPipe) id: number, @Body() body: RootUserUpdateBodyDto) {
     return this.userService.update(id, body);
+  }
+
+  @Put(':id/password')
+  updatePassword(@Param('id', ParseIntPipe) id: number, @Body('password') password: string) {
+    return this.userService.updatePassword(id, password);
   }
 
   @Delete(':id')
