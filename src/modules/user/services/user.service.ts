@@ -91,6 +91,10 @@ export class UserService extends BaseService {
     return this.findOneById(id);
   }
 
+  updatePassword(id: number, password: string) {
+    return this.update(id, { password });
+  }
+
   async deleteById(id: number) {
     const record = await this.findOneById(id);
 
