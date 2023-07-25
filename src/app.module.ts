@@ -1,4 +1,5 @@
 import { CacheModule } from '@modules/cache/cache.module';
+import { HomeModule } from '@modules/home/home.module';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
@@ -49,6 +50,7 @@ import { PostgresDatabaseProviderModule } from './providers/postgres/postgres.mo
     UnitPriceModule,
     ConfigModule,
     PostModule,
+    HomeModule,
   ],
   controllers: [],
   providers: [JwtStrategy, JwtService],
