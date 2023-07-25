@@ -2,17 +2,15 @@ version: '3.9'
 name: encacap-re-api
 
 services:
-  dev:
+  prod:
     container_name: encacap-re-api
     build:
       context: ../../.
       dockerfile: ./.docker/prod/Dockerfile
+      target: prod
     image: encacap-re-api
     ports:
       - 3011:3011
-    command: yarn start:prod
-    volumes:
-      - ../../.:/usr/src/app
     env_file:
       - ../../.env.production
     networks:
