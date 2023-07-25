@@ -2,7 +2,7 @@ version: '3.9'
 name: encacap-re-api
 
 services:
-  prod:
+  api:
     container_name: encacap-re-api
     build:
       context: ../../.
@@ -15,4 +15,3 @@ services:
       - ../../.env.production
     extra_hosts:
       - host.docker.internal:host-gateway
-    network_mode: bridge
