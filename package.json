@@ -45,7 +45,7 @@
     "@darraghor/eslint-plugin-nestjs-typed": "^3.17.1",
     "@faker-js/faker": "^7.6.0",
     "@nestjs/cli": "^9.0.0",
-    "@nestjs/schematics": "^9.0.0",
+    "@nestjs/schematics": "^10.0.1",
     "@nestjs/testing": "^9.0.0",
     "@types/bcrypt": "^5.0.0",
     "@types/bluebird": "^3.5.37",
@@ -76,7 +76,7 @@
     "ts-loader": "^9.2.3",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "4.0.0",
-    "typescript": "^4.3.5",
+    "typescript": "^5.1.6",
     "webpack": "^5.74.0"
   },
   "jest": {
