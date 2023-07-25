@@ -18,3 +18,4 @@ ENV NODE_ENV=production
 COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 CMD ["pnpm", "start:prod"]
+EXPOSE 3011

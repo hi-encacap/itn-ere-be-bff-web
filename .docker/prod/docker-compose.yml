@@ -13,9 +13,6 @@ services:
       - 3011:3011
     env_file:
       - ../../.env.production
-    networks:
-      - encacap-re-network
-
-networks:
-  encacap-re-network:
-    driver: bridge
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    network_mode: bridge
