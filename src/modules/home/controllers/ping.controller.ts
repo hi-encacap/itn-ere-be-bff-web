@@ -1,6 +1,9 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, VERSION_NEUTRAL } from '@nestjs/common';
 
-@Controller('ping')
+@Controller({
+  path: 'ping',
+  version: VERSION_NEUTRAL,
+})
 export class PingController {
   @Get()
   ping() {
