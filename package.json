@@ -2,7 +2,7 @@
   "author": "",
   "dependencies": {
     "@algolia/client-search": "^4.19.1",
-    "@encacap-group/common": "^1.9.3",
+    "@encacap-group/common": "^1.8.9",
     "@nestjs/axios": "^3.0.0",
     "@nestjs/bull": "^10.0.1",
     "@nestjs/cache-manager": "^2.1.0",

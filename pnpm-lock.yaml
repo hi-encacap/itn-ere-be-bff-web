@@ -9,8 +9,8 @@ dependencies:
     specifier: ^4.19.1
     version: 4.19.1
   '@encacap-group/common':
-    specifier: ^1.9.3
-    version: 1.9.3
+    specifier: ^1.8.9
+    version: 1.8.9
   '@nestjs/axios':
     specifier: ^3.0.0
     version: 3.0.0(@nestjs/common@10.1.2)(axios@1.4.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
@@ -1187,6 +1187,18 @@ packages:
       - supports-color
       - typescript
     dev: true
+
+  /@encacap-group/common@1.8.9:
+    resolution:
+      {
+        integrity: sha512-i1QCBFFm1QDH8VWxlx8FTCdb2ZnuhNG2mFBkZfWa3QtH1tK3lZBISi8HLs08D92tUFX6w+oR0w1OE5hGB2Y7ug==,
+      }
+    dependencies:
+      '@encacap-group/common': 1.9.3
+      axios: 1.4.0
+    transitivePeerDependencies:
+      - debug
+    dev: false
 
   /@encacap-group/common@1.9.3:
     resolution:
