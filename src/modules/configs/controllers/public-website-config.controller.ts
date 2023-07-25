@@ -1,16 +1,8 @@
 import { MEM_CACHING_KEY_ENUM } from '@constants/caching.constant';
 import { IWebsite } from '@encacap-group/common/dist/re';
 import { WebsiteMemCachingInterceptor } from '@interceptors/website-mem-caching.interceptor';
-import {
-  CacheKey,
-  CacheTTL,
-  Controller,
-  Get,
-  Param,
-  Query,
-  UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
+import { CacheKey, CacheTTL } from '@nestjs/cache-manager';
+import { Controller, Get, Param, Query, UseGuards, UseInterceptors } from '@nestjs/common';
 import { BaseCodeParamDto } from 'src/base/base.dto';
 import { Website } from 'src/common/decorators/website.decorator';
 import { WebsiteApiKeyGuard } from 'src/common/guards/website-api-key.guard';
