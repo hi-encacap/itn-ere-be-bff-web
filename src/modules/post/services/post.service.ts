@@ -107,7 +107,7 @@ export class PostService extends BaseService {
 
     const [data, total] = await queryBuilder.getManyAndCount();
 
-    if (this.isExpanding(query, 'category.parent')) {
+    if (this.isExpand(query, 'category.parent')) {
       await Promise.all(data.map((item) => this.categoryService.mapParentToCategory(item.category)));
     }
 

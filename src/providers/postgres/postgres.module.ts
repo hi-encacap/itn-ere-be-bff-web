@@ -18,6 +18,8 @@ import DatabaseConfigService from 'src/configs/database/database-config.service'
           password: databaseConfig.password,
           database: databaseConfig.database,
           autoLoadEntities: true,
+          entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
+          synchronize: true,
         };
       },
     }),

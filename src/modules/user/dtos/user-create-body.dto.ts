@@ -1,5 +1,6 @@
 /* eslint max-classes-per-file: ["error", 2] */
 
+import { IPermission } from '@encacap-group/common/dist/account';
 import { IREUser, IWebsite } from '@encacap-group/common/dist/re';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
@@ -57,4 +58,8 @@ export class UserCreateBodyDto implements Partial<IREUser> {
   @Allow()
   @Type(() => RoleEntity)
   roles: RoleEntity[];
+
+  @Allow()
+  @Type(() => String)
+  permissions: IPermission[];
 }

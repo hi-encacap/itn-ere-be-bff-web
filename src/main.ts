@@ -23,6 +23,8 @@ const bootstrap = async () => {
       'https://www.dashboard.re.encacap.com',
       'https://stg.dashboard.re.encacap.com',
       'https://www.stg.dashboard.re.encacap.com',
+      'https://admin.xaydungancuong.vn',
+      'https://www.admin.xaydungancuong.vn',
     ],
     credentials: true,
   });
@@ -56,7 +58,7 @@ const bootstrap = async () => {
   });
 
   await app.listen(configService.port, configService.host);
-  loggerService.debug(`Application is running on: ${await app.getUrl()}`);
+  return loggerService.debug(`Application is running on: ${await app.getUrl()}`);
 };
 
 // skipcq: JS-0328

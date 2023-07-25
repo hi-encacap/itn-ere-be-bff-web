@@ -1,4 +1,4 @@
-import { IRole } from '@encacap-group/common/dist/account';
+import { IPermission, IRole } from '@encacap-group/common/dist/account';
 import { IREUser, IWebsite } from '@encacap-group/common/dist/re';
 import { compare, hash } from 'bcrypt';
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
@@ -6,7 +6,8 @@ import { CategoryGroupEntity } from 'src/modules/category/entities/category-grou
 import { ContactEntity } from 'src/modules/contact/entities/contact.entity';
 import { ImageEntity } from 'src/modules/image/entities/image.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
-import { Column, Entity, JoinColumn, OneToMany, ManyToOne as OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne as OneToOne, OneToMany } from 'typeorm';
+import { UserPermissionEntity } from '../../permission/entities/user-permission.entity';
 import { UserRoleMappingEntity } from './user-role-mapping.entity';
 
 @Entity({ name: 'users' })
@@ -44,6 +45,10 @@ export class UserEntity extends BaseEntityWithPrimaryGeneratedColumn implements 
     cascade: ['remove', 'update'],
   })
   roles!: IRole[];
+
+  @OneToMany(() => UserPermissionEntity, (userPermission) => userPermission.userId)
+  @JoinColumn({ name: 'user_id', referencedColumnName: 'code' })
+  permissions!: IPermission[];
 
   @OneToMany(() => ContactEntity, (contact) => contact.user)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })

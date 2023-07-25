@@ -1,6 +1,7 @@
 import { ShopifyConfigModule } from '@configs/shopify/shopify-config.module';
 import { CacheModule } from '@modules/cache/cache.module';
 import { HomeModule } from '@modules/home/home.module';
+import { PermissionModule } from '@modules/permission/permission.module';
 import { ShopifyModule } from '@modules/shopify/shopify.module';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -55,6 +56,7 @@ import { PostgresDatabaseProviderModule } from './providers/postgres/postgres.mo
     PostModule,
     HomeModule,
     ShopifyModule,
+    PermissionModule,
   ],
   controllers: [],
   providers: [JwtStrategy, JwtService],
