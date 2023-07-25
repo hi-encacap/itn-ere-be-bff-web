@@ -123,7 +123,11 @@ export class ImageService {
       return object;
     }
 
-    return set(object, imagePath, await Promise.all(images.map((image) => this.transformImageToURL(image))));
+    return set(
+      object as object,
+      imagePath,
+      await Promise.all(images.map((image) => this.transformImageToURL(image))),
+    );
   }
 
   private async transformImageToURL(image: ImageEntity) {

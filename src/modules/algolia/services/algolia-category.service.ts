@@ -1,3 +1,4 @@
+import { SearchResponse } from '@algolia/client-search';
 import { Injectable } from '@nestjs/common';
 import algoliasearch, { SearchClient, SearchIndex } from 'algoliasearch';
 import { AlgoliaConfigService } from 'src/configs/algolia/algolia-config.service';
@@ -29,7 +30,7 @@ export class AlgoliaCategoryService {
     this.index.deleteObject(objectID);
   }
 
-  search(query: string, retrieveAttributes?: string[]) {
+  search(query: string, retrieveAttributes?: string[]): Readonly<Promise<SearchResponse<IAlgoliaCategory>>> {
     return this.index.search(query, {
       attributesToRetrieve: retrieveAttributes ?? ['code', 'name', 'categoryGroupCode'],
     });
