@@ -1,6 +1,7 @@
 {
   "author": "",
   "dependencies": {
+    "@algolia/client-search": "^4.19.1",
     "@encacap-group/common": "^1.8.9",
     "@nestjs/axios": "^1.0.0",
     "@nestjs/bull": "^0.6.2",
@@ -59,6 +60,7 @@
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
+    "@typescript-eslint/type-utils": "^6.2.0",
     "dotenv-cli": "^7.2.1",
     "eslint": "^8.26.0",
     "eslint-config-prettier": "^8.5.0",

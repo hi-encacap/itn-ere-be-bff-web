@@ -1,3 +1,4 @@
+import { SearchResponse } from '@algolia/client-search';
 import { Injectable, Logger } from '@nestjs/common';
 import algoliasearch, { SearchClient, SearchIndex } from 'algoliasearch';
 import { isNil, omitBy } from 'lodash';
@@ -46,7 +47,7 @@ export class AlgoliaEstateService {
     this.index.deleteObject(categoryCode);
   }
 
-  search(query: string, retrieveAttributes?: string[]) {
+  search(query: string, retrieveAttributes?: string[]): Readonly<Promise<SearchResponse<IAlgoliaEstate>>> {
     return this.index.search<IAlgoliaEstate>(query, {
       attributesToRetrieve: retrieveAttributes,
     });
