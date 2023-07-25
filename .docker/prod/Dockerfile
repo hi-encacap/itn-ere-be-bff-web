@@ -1,11 +1,20 @@
-FROM node:19.6.0-alpine3.17
-
+FROM node:20-slim as base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 WORKDIR /usr/src/app
+COPY package.json pnpm-lock.yaml ./
 
-COPY package.json yarn.lock ./
+FROM base as deps
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
-RUN yarn install --frozen-lockfile
-
+FROM base as builder
 COPY . .
+COPY --from=deps /usr/src/app/node_modules ./node_modules
+RUN pnpm build
 
-RUN yarn build
+FROM base as prod
+ENV NODE_ENV=production
+COPY --from=builder /usr/src/app/dist ./dist
+COPY --from=builder /usr/src/app/node_modules ./node_modules
+CMD ["pnpm", "start:prod"]
