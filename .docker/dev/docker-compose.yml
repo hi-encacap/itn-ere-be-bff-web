@@ -12,7 +12,7 @@ services:
     volumes:
       - ../../.postgres:/var/lib/postgresql/data
     networks:
-      - encacap-re-network
+      - encacap-re-network-dev
 
   redis:
     container_name: encacap-re-api-redis
@@ -22,11 +22,11 @@ services:
     ports:
       - 6379:6379
     networks:
-      - encacap-re-network
+      - encacap-re-network-dev
     volumes:
       - ../../.redis:/data
 
-  dev:
+  api:
     container_name: encacap-re-api-dev
     build:
       context: ../../.
@@ -44,13 +44,14 @@ services:
       - DB_POSTGRES_HOST=postgres
       - DB_REDIS_HOST=redis
     networks:
-      - encacap-re-network
+      - encacap-re-network-dev
     depends_on:
       - postgres
       - redis
 
 networks:
-  encacap-re-network:
+  encacap-re-network-dev:
+    external: true
     driver: bridge
 
 volumes:

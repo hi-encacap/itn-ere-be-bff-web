@@ -15,3 +15,11 @@ services:
       - ../../.env.production
     extra_hosts:
       - host.docker.internal:host-gateway
+    # create an external network to allow the api communicate from other compose files.
+    networks:
+      - encacap-re-network
+
+networks:
+  encacap-re-network:
+    external: true
+    driver: bridge
