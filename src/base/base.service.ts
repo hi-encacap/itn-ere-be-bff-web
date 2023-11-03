@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+import { camelCase, get } from 'lodash';
 import { parseBaseListQuery } from 'src/common/utils/request.util';
 import { IAlgoliaSearchFunction } from 'src/modules/algolia/interfaces/algolia.interface';
 import { FindOptionsWhere, SelectQueryBuilder } from 'typeorm';
@@ -151,5 +151,28 @@ export class BaseService {
       .split(',')
       .map((item) => item.trim())
       .includes(key);
+  }
+
+  /**
+   * @description Deep convert object keys to camelCase.
+   */
+  normalizeObjectKeys<T = unknown>(object: T): T {
+    if (typeof object !== 'object' || !object) {
+      return object;
+    }
+
+    if (Array.isArray(object)) {
+      return object.map((item) => this.normalizeObjectKeys(item)) as unknown as T;
+    }
+
+    const newObject = {};
+
+    Object.keys(object).forEach((key) => {
+      const newKey = camelCase(key);
+
+      newObject[newKey] = this.normalizeObjectKeys(object[key]);
+    });
+
+    return newObject as T;
   }
 }

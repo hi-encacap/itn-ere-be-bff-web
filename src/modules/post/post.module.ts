@@ -1,3 +1,4 @@
+import { ShopifyModule } from '@modules/shopify/shopify.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CategoryModule } from '../category/category.module';
@@ -12,7 +13,12 @@ import { PostService } from './services/post.service';
 import { PostExistsValidator } from './validators/post-exists.validator';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PostEntity, PostDraftEntity]), CloudflareModule, CategoryModule],
+  imports: [
+    TypeOrmModule.forFeature([PostEntity, PostDraftEntity]),
+    CloudflareModule,
+    CategoryModule,
+    ShopifyModule,
+  ],
   controllers: [AdminPostController, AdminPostDraftController, PublicPostController],
   providers: [PostService, PostDraftService, PostExistsValidator],
   exports: [PostService, PostDraftService],
