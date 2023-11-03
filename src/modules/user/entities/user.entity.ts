@@ -58,6 +58,7 @@ export class UserEntity extends BaseEntityWithPrimaryGeneratedColumn implements 
   website!: IWebsite;
 
   roleIds!: number[];
+  permissions: never[];
 
   static hashPassword(password: string) {
     return hash(password, 10);

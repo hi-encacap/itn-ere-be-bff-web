@@ -10,7 +10,7 @@ import { RoleEntity } from '../entities/role.entity';
 import { EmailExistsValidator } from '../validators/email-exists.validator';
 import { UsernameExistsValidator } from '../validators/username-exists.validator';
 
-export class UserCreateBodyDto implements IREUser {
+export class UserCreateBodyDto implements Partial<IREUser> {
   @IsString()
   @IsNotEmpty()
   @ApiPropertyOptional()

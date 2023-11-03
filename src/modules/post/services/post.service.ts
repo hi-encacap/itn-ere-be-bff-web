@@ -1,7 +1,8 @@
 import { MEM_CACHING_KEY_ENUM } from '@constants/caching.constant';
-import { ESTATE_STATUS_ENUM, IREUser, slugify } from '@encacap-group/common/dist/re';
+import { CATEGORY_GROUP_ENUM, ESTATE_STATUS_ENUM, IREUser, slugify } from '@encacap-group/common/dist/re';
 import { CategoryService } from '@modules/category/services/category.service';
 import { ImageService } from '@modules/image/services/image.service';
+import { ShopifyService } from '@modules/shopify/services/shopify.service';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MemCachingService } from '@providers/mem-caching/mem-caching.service';
@@ -20,6 +21,7 @@ export class PostService extends BaseService {
     private readonly imageService: ImageService,
     private readonly categoryService: CategoryService,
     private readonly cacheService: MemCachingService,
+    private readonly shopifyService: ShopifyService,
   ) {
     super();
   }
@@ -43,6 +45,11 @@ export class PostService extends BaseService {
   }
 
   async get(query: FindOptionsWhere<PostEntity>) {
+    // TODO: UPDATE.
+    if (Number(query.id) > 99999) {
+      return this.shopifyService.getProductById(String(query.id)) as Promise<PostEntity>;
+    }
+
     const data = await this.queryBuilder.where(query).getOne();
 
     if (data) {
@@ -69,6 +76,10 @@ export class PostService extends BaseService {
 
     if (query.categoryCode) {
       const category = await this.categoryService.get({ code: query.categoryCode });
+
+      if (category && category.categoryGroupCode === CATEGORY_GROUP_ENUM.PRODUCT) {
+        return this.shopifyService.getProducts(category);
+      }
 
       if (category) {
         const { left, right } = category;

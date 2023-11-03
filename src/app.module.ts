@@ -1,5 +1,7 @@
+import { ShopifyConfigModule } from '@configs/shopify/shopify-config.module';
 import { CacheModule } from '@modules/cache/cache.module';
 import { HomeModule } from '@modules/home/home.module';
+import { ShopifyModule } from '@modules/shopify/shopify.module';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
@@ -32,6 +34,7 @@ import { PostgresDatabaseProviderModule } from './providers/postgres/postgres.mo
     CloudflareConfigModule,
     AlgoliaConfigModule,
     GHNConfigModule,
+    ShopifyConfigModule,
 
     PostgresDatabaseProviderModule,
     MemCachingProviderModule,
@@ -51,6 +54,7 @@ import { PostgresDatabaseProviderModule } from './providers/postgres/postgres.mo
     ConfigModule,
     PostModule,
     HomeModule,
+    ShopifyModule,
   ],
   controllers: [],
   providers: [JwtStrategy, JwtService],
