@@ -8,7 +8,7 @@ export class PublicShopifyController {
   constructor(private readonly shopifyService: ShopifyService) {}
 
   @Get('products')
-  async getProducts() {
+  getProducts() {
     return this.shopifyService.getProducts();
   }
 }
