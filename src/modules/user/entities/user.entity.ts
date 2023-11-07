@@ -6,7 +6,7 @@ import { CategoryGroupEntity } from 'src/modules/category/entities/category-grou
 import { ContactEntity } from 'src/modules/contact/entities/contact.entity';
 import { ImageEntity } from 'src/modules/image/entities/image.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
-import { Column, Entity, JoinColumn, ManyToOne as OneToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, ManyToOne as OneToOne } from 'typeorm';
 import { UserPermissionEntity } from '../../permission/entities/user-permission.entity';
 import { UserRoleMappingEntity } from './user-role-mapping.entity';
 
@@ -63,7 +63,6 @@ export class UserEntity extends BaseEntityWithPrimaryGeneratedColumn implements 
   website!: IWebsite;
 
   roleIds!: number[];
-  permissions: never[];
 
   static hashPassword(password: string) {
     return hash(password, 10);
