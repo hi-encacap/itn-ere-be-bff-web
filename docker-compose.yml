@@ -34,7 +34,7 @@ services:
       target: development
     image: encacap-re-api-dev
     ports:
-      - 3111:3000
+      - 3000:3000
     command: pnpm start:dev
     volumes:
       - ./src:/usr/src/app/src
@@ -58,6 +58,8 @@ services:
     image: encacap-re-api
     ports:
       - 3000:3000
+    command:
+      - pnpm start:prod
     env_file:
       - ./.env.production
     extra_hosts:
