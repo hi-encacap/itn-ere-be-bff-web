@@ -49,8 +49,28 @@ services:
       - postgres
       - redis
 
+  production:
+    container_name: encacap-re-api
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+      target: production
+    image: encacap-re-api
+    ports:
+      - 3000:3000
+    env_file:
+      - ./.env.production
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    # create an external network to allow the api communicate from other compose files.
+    networks:
+      - encacap-re-network
+
 networks:
   encacap-re-network-dev:
+    external: true
+    driver: bridge
+  encacap-re-network:
     external: true
     driver: bridge
 

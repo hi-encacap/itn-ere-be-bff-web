@@ -25,7 +25,7 @@ COPY .env.* .eslintrc.js .prettierrc nest-cli.json tsconfig.* ./
 RUN pnpm build
 
 ## Development
-FROM depedencies as development
+FROM base as development
 
 ENV NODE_ENV=development
 
@@ -33,7 +33,7 @@ COPY --from=depedencies /usr/src/app/node_modules ./node_modules
 COPY . .
 
 ## Production
-FROM builder as production
+FROM base as production
 
 ENV NODE_ENV=production
 
