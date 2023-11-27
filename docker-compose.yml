@@ -58,8 +58,7 @@ services:
     image: encacap-re-api
     ports:
       - 3000:3000
-    command:
-      - pnpm start:prod
+    command: pnpm start:prod
     env_file:
       - ./.env.production
     extra_hosts:
