@@ -12,7 +12,7 @@ services:
     volumes:
       - ./.docker/.postgres:/var/lib/postgresql/data
     networks:
-      - encacap-re-network-dev
+      - encacap-re-network
 
   redis:
     container_name: encacap-re-api-redis
@@ -22,7 +22,7 @@ services:
     ports:
       - 6379:6379
     networks:
-      - encacap-re-network-dev
+      - encacap-re-network
     volumes:
       - ./.docker/.redis:/data
 
@@ -44,7 +44,7 @@ services:
       - DB_POSTGRES_HOST=postgres
       - DB_REDIS_HOST=redis
     networks:
-      - encacap-re-network-dev
+      - encacap-re-network
     depends_on:
       - postgres
       - redis
@@ -67,9 +67,6 @@ services:
       - encacap-re-network
 
 networks:
-  encacap-re-network-dev:
-    external: true
-    driver: bridge
   encacap-re-network:
     external: true
     driver: bridge
