@@ -8,7 +8,7 @@ import { BaseListQueryDto } from './base.dto';
 export class BaseService {
   setPagination<T = unknown>(
     queryBuilder: SelectQueryBuilder<T>,
-    query: FindOptionsWhere<BaseListQueryDto>,
+    query: FindOptionsWhere<Omit<BaseListQueryDto, 'expands'>>,
   ): SelectQueryBuilder<T> {
     const { limit, offset } = parseBaseListQuery(query);
     queryBuilder.skip(offset);
@@ -35,7 +35,7 @@ export class BaseService {
 
   setSort<T = unknown>(
     queryBuilder: SelectQueryBuilder<T>,
-    query: FindOptionsWhere<BaseListQueryDto>,
+    query: FindOptionsWhere<Omit<BaseListQueryDto, 'expands'>>,
     tableAlias: string,
     defaultOrderBy = 'updatedAt',
   ): SelectQueryBuilder<T> {
@@ -94,7 +94,7 @@ export class BaseService {
 
   async setAlgoliaSearch<T = unknown>(
     queryBuilder: SelectQueryBuilder<T>,
-    query: FindOptionsWhere<BaseListQueryDto>,
+    query: FindOptionsWhere<Omit<BaseListQueryDto, 'expands'>>,
     searchSynonyms: IAlgoliaSearchFunction,
     ...columns: string[]
   ) {
@@ -111,7 +111,7 @@ export class BaseService {
   generateGetAllResponse<T = unknown>(
     items: T[],
     totalItems: number,
-    query: FindOptionsWhere<BaseListQueryDto> = {},
+    query: FindOptionsWhere<Omit<BaseListQueryDto, 'expands'>> = {},
   ) {
     const { page = 1, limit = 0 } = query;
     const totalPages = Math.ceil(totalItems / Number(limit));
@@ -129,28 +129,21 @@ export class BaseService {
 
   async getManyAndCount<T = unknown>(
     queryBuilder: SelectQueryBuilder<T>,
-    query?: FindOptionsWhere<BaseListQueryDto>,
+    query?: FindOptionsWhere<BaseListQueryDto> | BaseListQueryDto,
   ) {
     const [items, totalItems] = await queryBuilder.getManyAndCount();
 
     return this.generateGetAllResponse(items, totalItems, query);
   }
 
-  isExpanding(query: FindOptionsWhere<BaseListQueryDto>, key: string) {
-    const { expand } = query;
+  isExpand(query: BaseListQueryDto | FindOptionsWhere<unknown>, key: string) {
+    const expands = get(query, 'expands', null);
 
-    if (!expand) {
+    if (!expands) {
       return false;
     }
 
-    if (typeof expand !== 'string') {
-      return false;
-    }
-
-    return expand
-      .split(',')
-      .map((item) => item.trim())
-      .includes(key);
+    return expands.includes(key);
   }
 
   /**

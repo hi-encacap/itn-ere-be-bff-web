@@ -1,5 +1,7 @@
 import { ImageVariantEntity } from '@modules/image/entities/image-variant.entity';
 import { ImageService } from '@modules/image/services/image.service';
+import { PermissionEntity } from '@modules/permission/entities/permission.entity';
+import { UserPermissionEntity } from '@modules/permission/entities/user-permission.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import _, { omit, pick } from 'lodash';
@@ -103,12 +105,22 @@ export class UserService extends BaseService {
   }
 
   private get queryBuilder() {
-    return this.userRepository
-      .createQueryBuilder('user')
-      .leftJoinAndSelect('user.website', 'website')
-      .leftJoin(UserRoleMappingEntity, 'userRole', 'userRole.userId = user.id')
-      .leftJoinAndMapMany('user.roles', RoleEntity, 'role', 'role.id = userRole.roleId')
-      .leftJoinAndSelect('user.avatar', 'avatar')
-      .leftJoinAndMapMany('avatar.variants', ImageVariantEntity, 'variant', 'variant.isDefault = TRUE');
+    return (
+      this.userRepository
+        .createQueryBuilder('user')
+        .leftJoinAndSelect('user.website', 'website')
+        .leftJoin(UserRoleMappingEntity, 'userRole', 'userRole.userId = user.id')
+        .leftJoinAndMapMany('user.roles', RoleEntity, 'role', 'role.id = userRole.roleId')
+        .leftJoinAndSelect('user.avatar', 'avatar')
+        .leftJoinAndMapMany('avatar.variants', ImageVariantEntity, 'variant', 'variant.isDefault = TRUE')
+        // .leftJoinAndSelect('user.permissions', 'permission');
+        .leftJoin(UserPermissionEntity, 'userPermission', 'userPermission.userId = user.id')
+        .leftJoinAndMapMany(
+          'user.permissions',
+          PermissionEntity,
+          'permission',
+          'permission.code = userPermission.permissionCode',
+        )
+    );
   }
 }

@@ -25,8 +25,6 @@ export class ShopifyService extends BaseService {
   async getProductById(id: string): Promise<unknown> {
     const data = await this.adminHttpService.axiosRef.get(`2023-10/products/${id}.json`);
 
-    console.log(data.data.product);
-
     return this.normalizeObjectKeys(data.data.product);
   }
 }

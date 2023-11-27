@@ -12,5 +12,6 @@ import { WebsiteConfigExistsValidator } from './validators/website-config-exists
   imports: [TypeOrmModule.forFeature([WebsiteConfigEntity]), CloudflareModule, PostModule],
   controllers: [PublicWebsiteConfigController, AdminWebsiteConfigController],
   providers: [WebsiteConfigService, WebsiteConfigExistsValidator],
+  exports: [WebsiteConfigService],
 })
 export class ConfigModule {}

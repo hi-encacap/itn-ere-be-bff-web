@@ -3,7 +3,7 @@ import { IWebsite } from '@encacap-group/common/dist/re';
 import { WebsiteMemCachingInterceptor } from '@interceptors/website-mem-caching.interceptor';
 import { CacheKey, CacheTTL } from '@nestjs/cache-manager';
 import { Controller, Get, Param, Query, UseGuards, UseInterceptors } from '@nestjs/common';
-import { BaseCodeParamDto, BaseQueryDto } from 'src/base/base.dto';
+import { BaseCodeParamDto, BaseListQueryDto } from 'src/base/base.dto';
 import { Website } from 'src/common/decorators/website.decorator';
 import { WebsiteApiKeyGuard } from 'src/common/guards/website-api-key.guard';
 import { CategoryListQueryDto } from '../dtos/category-list-query.dto';
@@ -39,7 +39,7 @@ export class PublicCategoryController {
   @Get(':code')
   getPublicCategoryByCode(
     @Param() param: BaseCodeParamDto,
-    @Query() query: BaseQueryDto,
+    @Query() query: BaseListQueryDto,
     @Website() website: IWebsite,
   ) {
     return this.categoryService.get({

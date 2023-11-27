@@ -3,7 +3,8 @@ import { ImageEntity } from '@modules/image/entities/image.entity';
 import { BaseEntityWithPrimaryGeneratedColumn } from 'src/base/base.entity';
 import { CategoryEntity } from 'src/modules/category/entities/category.entity';
 import { WebsiteEntity } from 'src/modules/website/entities/website.entity';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { PostImageEntity } from './post-image.entity';
 
 @Entity({ name: 'posts' })
 export class PostEntity extends BaseEntityWithPrimaryGeneratedColumn {
@@ -46,4 +47,12 @@ export class PostEntity extends BaseEntityWithPrimaryGeneratedColumn {
   @ManyToOne(() => WebsiteEntity)
   @JoinColumn({ name: 'website_id', referencedColumnName: 'id' })
   website: WebsiteEntity;
+
+  @OneToMany(() => PostImageEntity, (postImage) => postImage.post, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'id', referencedColumnName: 'post_id' })
+  images: PostImageEntity[];
+
+  imageIds: string[];
 }

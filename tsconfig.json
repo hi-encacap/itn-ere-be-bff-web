@@ -1,19 +1,20 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "target": "es2017",
-    "sourceMap": true,
-    "outDir": "./dist",
     "baseUrl": "./",
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": false,
+    "incremental": true,
+    "module": "commonjs",
+    "noFallthroughCasesInSwitch": false,
+    "noImplicitAny": false,
+    "outDir": "./dist",
     "paths": {
-      "@modules/*": ["src/modules/*"],
       "@bases/*": ["src/base/*"],
+      "@configs/*": ["src/configs/*"],
       "@constants/*": ["src/common/constants/*"],
       "@decorators/*": ["src/common/decorators/*"],
       "@filters/*": ["src/common/filters/*"],
@@ -21,17 +22,16 @@
       "@interceptors/*": ["src/common/interceptors/*"],
       "@interfaces/*": ["src/common/interfaces/*"],
       "@middlewares/*": ["src/common/middlewares/*"],
-      "@utils/*": ["src/common/utils/*"],
-      "@configs/*": ["src/configs/*"],
+      "@migrations/*": ["src/migrations/*"],
+      "@modules/*": ["src/modules/*"],
       "@providers/*": ["src/providers/*"],
-      "@migrations/*": ["src/migrations/*"]
+      "@utils/*": ["src/common/utils/*"]
     },
-    "incremental": true,
+    "removeComments": true,
     "skipLibCheck": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
+    "sourceMap": true,
     "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "strictNullChecks": false,
+    "target": "es2017"
   }
 }

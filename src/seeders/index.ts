@@ -3,6 +3,8 @@ import { WebsiteConfigEntity } from '@modules/configs/entities/website-config,en
 import { ContactEntity } from '@modules/contact/entities/contact.entity';
 import { ImageVariantEntity } from '@modules/image/entities/image-variant.entity';
 import { ImageEntity } from '@modules/image/entities/image.entity';
+import { PermissionEntity } from '@modules/permission/entities/permission.entity';
+import { UserPermissionEntity } from '@modules/permission/entities/user-permission.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { seeder } from 'nestjs-seeder';
 import { AppConfigModule } from 'src/configs/app/config.module';
@@ -17,6 +19,7 @@ import { PostgresDatabaseProviderModule } from 'src/providers/postgres/postgres.
 import { CategoryGroupSeeder } from './category-group.seeder';
 import { CloudflareVariantSeeder } from './cloudflare-variant.seeder';
 import { EstateQuarterSeeder } from './estate-quarter.seeder';
+import { PermissionSeeder } from './permission.seeder';
 import { RoleSeeder } from './role.seeder';
 import { UnitPriceSeeder } from './unit-price.seeder';
 import { UserSeeder } from './user.seeder';
@@ -40,9 +43,12 @@ seeder({
       ImageVariantEntity,
       WebsiteConfigEntity,
       CategoryEntity,
+      PermissionEntity,
+      UserPermissionEntity,
     ]),
   ],
 }).run([
+  PermissionSeeder,
   RoleSeeder,
   WebsiteSeeder,
   UserSeeder,
