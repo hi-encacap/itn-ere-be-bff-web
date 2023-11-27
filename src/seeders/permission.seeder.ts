@@ -28,12 +28,12 @@ export class PermissionSeeder implements Seeder {
     return this.permissionRepository.save(item);
   }
 
-  async seed() {
+  seed() {
     const seedTasks = items.map((item) => this.upsertItem(item));
     return Promise.all(seedTasks);
   }
 
-  async drop() {
+  drop() {
     return this.permissionRepository.delete({});
   }
 }
