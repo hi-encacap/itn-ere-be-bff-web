@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import * as path from 'path';
 import { DatabaseConfigModule } from 'src/configs/database/database-config.module';
 import DatabaseConfigService from 'src/configs/database/database-config.service';
 
@@ -18,7 +19,7 @@ import DatabaseConfigService from 'src/configs/database/database-config.service'
           password: databaseConfig.password,
           database: databaseConfig.database,
           autoLoadEntities: true,
-          entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
+          entities: [path.resolve(__dirname, '..', '..', '**', '*.entity{.ts,.js}')],
           synchronize: true,
         };
       },
