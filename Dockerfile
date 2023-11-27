@@ -37,5 +37,5 @@ FROM base as production
 
 ENV NODE_ENV=production
 
-COPY --from=builder /usr/src/app/node_modules ./node_modules
+COPY --from=depedencies /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/dist ./dist
