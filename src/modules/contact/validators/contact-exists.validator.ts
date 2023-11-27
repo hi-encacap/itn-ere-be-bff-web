@@ -14,12 +14,16 @@ export class ContactExistsValidator implements ValidatorConstraintInterface {
   async validate(_, args: ContactExistsValidatorValidationArguments) {
     const { object: body } = args;
 
-    const user = await this.contactService.get({
-      name: body.name,
-      phone: body.phone,
-    });
+    try {
+      const contact = await this.contactService.get({
+        name: body.name,
+        phone: body.phone,
+      });
 
-    return !user;
+      return !contact;
+    } catch (error) {
+      return true;
+    }
   }
 
   defaultMessage() {

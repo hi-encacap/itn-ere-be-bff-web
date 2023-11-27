@@ -1,5 +1,6 @@
 /* eslint max-classes-per-file: ["error", 2] */
 
+import { IPermission } from '@encacap-group/common/dist/account';
 import { IREUser, IWebsite } from '@encacap-group/common/dist/re';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
@@ -10,7 +11,7 @@ import { RoleEntity } from '../entities/role.entity';
 import { EmailExistsValidator } from '../validators/email-exists.validator';
 import { UsernameExistsValidator } from '../validators/username-exists.validator';
 
-export class UserCreateBodyDto implements IREUser {
+export class UserCreateBodyDto implements Partial<IREUser> {
   @IsString()
   @IsNotEmpty()
   @ApiPropertyOptional()
@@ -57,4 +58,8 @@ export class UserCreateBodyDto implements IREUser {
   @Allow()
   @Type(() => RoleEntity)
   roles: RoleEntity[];
+
+  @Allow()
+  @Type(() => String)
+  permissions: IPermission[];
 }

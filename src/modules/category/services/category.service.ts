@@ -1,7 +1,5 @@
-import { BaseQueryDto } from '@bases/base.dto';
 import { BaseService } from '@bases/base.service';
 import { MEM_CACHING_KEY_ENUM } from '@constants/caching.constant';
-import { IREUser } from '@encacap-group/common/dist/re';
 import { AlgoliaCategoryService } from '@modules/algolia/services/algolia-category.service';
 import { ImageService } from '@modules/image/services/image.service';
 import { Injectable } from '@nestjs/common';
@@ -29,32 +27,32 @@ export class CategoryService extends BaseService {
     return this.queryBuilder.where(query).getOneOrFail();
   }
 
-  async get(query: FindOptionsWhere<CategoryEntity> & BaseQueryDto) {
+  async get(query: FindOptionsWhere<CategoryEntity>) {
     const queryBuilder = this.queryBuilder;
 
-    if (this.isExpanding(query, 'categoryGroup')) {
+    if (this.isExpand(query, 'categoryGroup')) {
       queryBuilder.leftJoinAndSelect('category.categoryGroup', 'categoryGroup');
     }
 
-    if (this.isExpanding(query, 'website')) {
+    if (this.isExpand(query, 'website')) {
       queryBuilder.leftJoinAndSelect('category.website', 'website');
     }
 
-    if (this.isExpanding(query, 'avatar')) {
+    if (this.isExpand(query, 'avatar')) {
       queryBuilder.leftJoinAndSelect('category.avatar', 'avatar');
     }
 
     const record = await queryBuilder.where(omit(query, 'expand')).getOne();
 
-    if (record && this.isExpanding(query, 'parent')) {
+    if (record && this.isExpand(query, 'parent')) {
       await this.mapParentToCategory(record);
     }
 
-    if (record && this.isExpanding(query, 'children')) {
+    if (record && this.isExpand(query, 'children')) {
       await this.mapChildrenToCategory(record, query);
     }
 
-    if (this.isExpanding(query, 'avatar')) {
+    if (this.isExpand(query, 'avatar')) {
       await this.imageService.mapVariantToImage(record, 'avatar');
     }
 
@@ -63,7 +61,7 @@ export class CategoryService extends BaseService {
 
   async getAll(query: CategoryListQueryDto) {
     const queryBuilder = this.queryBuilder;
-    const { parentCode, parentId, left, right, excludedCodes } = query;
+    const { parentCode, parentId, left, right, excludedCodes, categoryGroupCodes } = query;
 
     if (parentCode) {
       const { left, right } = await this.getOrFail({ code: parentCode });
@@ -94,15 +92,14 @@ export class CategoryService extends BaseService {
       queryBuilder.andWhere('category.right < :right', { right });
     }
 
-    if (this.isExpanding(query, 'categoryGroup')) {
+    if (this.isExpand(query, 'categoryGroup')) {
       queryBuilder.leftJoinAndSelect('category.categoryGroup', 'categoryGroup');
+      this.setInFilter(queryBuilder, categoryGroupCodes, 'categoryGroup.code');
     }
 
-    if (this.isExpanding(query, 'website')) {
-      queryBuilder.leftJoinAndSelect('category.website', 'website');
-    }
+    this.setFilter(queryBuilder, query.websiteId, 'website.id');
 
-    if (this.isExpanding(query, 'avatar')) {
+    if (this.isExpand(query, 'avatar')) {
       queryBuilder.leftJoinAndSelect('category.avatar', 'avatar');
     }
 
@@ -117,42 +114,36 @@ export class CategoryService extends BaseService {
 
     const [data, total] = await queryBuilder.getManyAndCount();
 
-    if (this.isExpanding(query, 'avatar')) {
+    if (this.isExpand(query, 'avatar')) {
       await this.imageService.mapVariantToImage(data, 'avatar');
     }
 
-    if (this.isExpanding(query, 'parent')) {
+    if (this.isExpand(query, 'parent')) {
       await Promise.all(data.map(this.mapParentToCategory.bind(this)));
     }
 
-    if (this.isExpanding(query, 'children')) {
+    if (this.isExpand(query, 'children')) {
       await Promise.all(data.map(this.mapChildrenToCategory.bind(this)));
     }
 
     return this.generateGetAllResponse(data, total, query);
   }
 
-  async create(body: CategoryCreateBodyDto, user?: IREUser) {
+  async create(body: CategoryCreateBodyDto) {
     const { parentId } = body;
     let category = null;
 
     if (!parentId) {
-      category = await this.createRoot({
-        ...body,
-        websiteId: user.websiteId,
-      });
+      category = await this.createRoot(body);
     } else {
-      category = await this.createChild({
-        ...body,
-        websiteId: user.websiteId,
-      });
+      category = await this.createChild(body);
     }
 
     this.algoliaCategoryService.save({
       objectID: category.id,
       name: category.name,
     });
-    await this.clearCache(user.websiteId);
+    await this.clearCache(body.websiteId);
 
     return category;
   }
@@ -195,7 +186,10 @@ export class CategoryService extends BaseService {
    * @param {CategoryEntity} category
    * @returns {Promise<CategoryEntity>}
    */
-  async mapChildrenToCategory(category: CategoryEntity, query: BaseQueryDto): Promise<CategoryEntity> {
+  async mapChildrenToCategory(
+    category: CategoryEntity,
+    query: Record<string, unknown>,
+  ): Promise<CategoryEntity> {
     const { left, right } = category;
 
     const getAllChildrenQuery: CategoryListQueryDto = {
@@ -204,17 +198,17 @@ export class CategoryService extends BaseService {
     };
     const getAllChildrenQueryExpand = [];
 
-    if (this.isExpanding(query, 'children.avatar')) {
+    if (this.isExpand(query, 'children.avatar')) {
       getAllChildrenQueryExpand.push('avatar');
     }
 
-    if (this.isExpanding(query, 'children.parent')) {
+    if (this.isExpand(query, 'children.parent')) {
       getAllChildrenQueryExpand.push('parent');
     }
 
     const { items: allChildren } = await this.getAll({
       ...getAllChildrenQuery,
-      expand: getAllChildrenQueryExpand.join(','),
+      expands: getAllChildrenQueryExpand,
     });
 
     let prevChild = allChildren.find((child) => child.left === left + 1);
@@ -299,7 +293,9 @@ export class CategoryService extends BaseService {
   }
 
   private get queryBuilder() {
-    return this.categoryRepository.createQueryBuilder('category');
+    return this.categoryRepository
+      .createQueryBuilder('category')
+      .leftJoinAndSelect('category.website', 'website');
   }
 
   private clearCache(websiteId?: number) {

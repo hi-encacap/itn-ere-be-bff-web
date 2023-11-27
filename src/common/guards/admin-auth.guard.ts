@@ -9,6 +9,10 @@ export class AdminAuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const user: IREUser = request.user;
 
+    if (!user) {
+      throw new ForbiddenException();
+    }
+
     const isMatchRole = this.matchRoles(user.roles);
 
     if (!isMatchRole) {
