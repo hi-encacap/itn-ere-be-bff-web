@@ -57,15 +57,19 @@ services:
       target: production
     image: encacap-re-api
     ports:
-      - 3000:3000
+      - 3011:3000
     command: pnpm start:prod
     env_file:
       - ./.env.production
+    environment:
+      - DB_REDIS_HOST=redis
     extra_hosts:
       - host.docker.internal:host-gateway
     # create an external network to allow the api communicate from other compose files.
     networks:
       - encacap-re-network
+    depends_on:
+      - redis
 
 networks:
   encacap-re-network:
