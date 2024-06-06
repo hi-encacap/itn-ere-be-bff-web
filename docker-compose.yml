@@ -35,7 +35,7 @@ services:
     image: encacap-re-api-dev
     ports:
       - 3000:3000
-    command: bun run start:dev
+    command: pnpm start:dev
     volumes:
       - ./src:/usr/src/app/src
     env_file:
@@ -58,7 +58,7 @@ services:
     image: encacap-re-api
     ports:
       - 3011:3000
-    command: bun run start:prod
+    command: pnpm start:prod
     env_file:
       - ./.env.production
     environment:

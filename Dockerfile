@@ -6,14 +6,14 @@ ENV PATH="$PNPM_HOME:$PATH"
 WORKDIR /usr/src/app
 
 RUN corepack enable
+EXPOSE 3011
 
 ## Depedencies
 FROM base as depedencies
 
 COPY package.json ./
-COPY pnpm-lock.yaml ./
 
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 
 ## Builder
 FROM depedencies as builder
