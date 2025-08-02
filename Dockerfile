@@ -1,42 +1,35 @@
 FROM node:20-alpine AS base
 
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-
-WORKDIR /usr/src/app
+WORKDIR /app
 
 RUN corepack enable
-EXPOSE 3011
+EXPOSE 20100
 
 ## Depedencies
 FROM base as depedencies
 
 COPY package.json ./
 
-RUN pnpm install
+RUN yarn install
 
 ## Builder
 FROM depedencies as builder
 
-COPY --from=depedencies /usr/src/app/node_modules ./node_modules
+COPY --from=depedencies /app/node_modules ./node_modules
 COPY src ./src
 COPY .env.* .eslintrc.js .prettierrc nest-cli.json tsconfig.* ./
 
-RUN pnpm build
+RUN yarn run build
 
-## Development
-FROM base as development
+FROM depedencies as development
 
 ENV NODE_ENV=development
 
-COPY --from=depedencies /usr/src/app/node_modules ./node_modules
 COPY . .
 
-## Production
-FROM base as production
+FROM builder as production
 
 ENV NODE_ENV=production
 
-COPY --from=depedencies /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/package.json ./package.json

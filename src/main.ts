@@ -42,7 +42,6 @@ const bootstrap = async () => {
   );
   app.useGlobalInterceptors(new ResponseInterceptor());
 
-  // Versioning
   app.enableVersioning({
     defaultVersion: '1',
     type: VersioningType.URI,

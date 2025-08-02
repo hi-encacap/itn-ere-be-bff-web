@@ -4,5 +4,16 @@
     "source.organizeImports": "explicit"
   },
   "cSpell.words": ["IJWT", "shopifies"],
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 20010,
+      "driver": "PostgreSQL",
+      "name": "itn-ere-dev-a",
+      "username": "itn-ere-internal",
+      "database": "itn-ere-dev-a"
+    }
+  ]
 }

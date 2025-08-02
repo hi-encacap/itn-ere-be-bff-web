@@ -1,77 +1,55 @@
-version: '3.9'
-name: encacap-re-api
+name: itn-ere
 
 services:
-  postgres:
-    container_name: encacap-re-api-postgres
+  itn-ere-postgresql:
+    container_name: itn-ere-postgresql
     image: postgres:13.2-alpine
-    ports:
-      - 5432:5432
     env_file:
       - .env.development
     volumes:
-      - ./.docker/.postgres:/var/lib/postgresql/data
+      - itn-ere-postgresql-data:/var/lib/postgresql/data
     networks:
-      - encacap-re-network
+      - itn-ere-network
+    ports:
+      - 20010:5432
 
-  redis:
-    container_name: encacap-re-api-redis
+  itn-ere-redis:
+    container_name: itn-ere-redis
     image: redis:7.2-rc1-alpine
     env_file:
       - .env.development
-    ports:
-      - 6379:6379
     networks:
-      - encacap-re-network
+      - itn-ere-network
     volumes:
-      - ./.docker/.redis:/data
+      - itn-ere-redis-data:/data
 
-  api-dev:
-    container_name: encacap-re-api-dev
+  itn-ere-bff-web-dev-a:
+    container_name: itn-ere-bff-web-dev-a
+    image: encacap/itn-ere-bff-web:dev-a
     build:
-      context: ./
-      dockerfile: ./Dockerfile
+      context: .
       target: development
-    image: encacap-re-api-dev
     ports:
-      - 3000:3000
-    command: pnpm start:dev
+      - 20100:20100
+    command: yarn run start:dev
+    env_file:
+      - ./.env.development
+    environment:
+      - DB_REDIS_HOST=itn-ere-redis
+      - DB_POSTGRES_HOST=itn-ere-postgresql
+    networks:
+      - itn-ere-network
+    depends_on:
+      - itn-ere-redis
+      - itn-ere-postgresql
     volumes:
-      - ./src:/usr/src/app/src
-    env_file:
-      - .env.development
-    environment:
-      - DB_POSTGRES_HOST=postgres
-      - DB_REDIS_HOST=redis
-    networks:
-      - encacap-re-network
-    depends_on:
-      - postgres
-      - redis
-
-  api-prod:
-    container_name: encacap-re-api
-    image: encacap/re-api:stable
-    ports:
-      - 3011:3011
-    command: pnpm start:prod
-    env_file:
-      - ./.env.production
-    environment:
-      - DB_REDIS_HOST=redis
-    extra_hosts:
-      - host.docker.internal:host-gateway
-    # create an external network to allow the api communicate from other compose files.
-    networks:
-      - encacap-re-network
-    depends_on:
-      - redis
+      - .:/app
 
 networks:
-  encacap-re-network:
+  itn-ere-network:
     external: true
     driver: bridge
 
 volumes:
-  postgres:
-  redis:
+  itn-ere-postgresql-data:
+  itn-ere-redis-data:
