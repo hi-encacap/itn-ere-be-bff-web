@@ -22,10 +22,12 @@ services:
       - itn-ere-network
     volumes:
       - itn-ere-redis-data:/data
+    ports:
+      - 20020:6379
 
   itn-ere-bff-web-dev-a:
     container_name: itn-ere-bff-web-dev-a
-    image: encacap/itn-ere-bff-web:dev-a
+    image: hiencacap/itn-ere-bff-web:dev-a
     build:
       context: .
       target: development
@@ -34,6 +36,30 @@ services:
     command: yarn run start:dev
     env_file:
       - ./.env.development
+    environment:
+      - DB_REDIS_HOST=itn-ere-redis
+      - DB_POSTGRES_HOST=itn-ere-postgresql
+    networks:
+      - itn-ere-network
+    depends_on:
+      - itn-ere-redis
+      - itn-ere-postgresql
+    volumes:
+      - .:/app
+
+  itn-ere-bff-web-prod-a:
+    container_name: itn-ere-bff-web-prod-a
+    image: hiencacap/itn-ere-bff-web:prod-a
+    build:
+      context: .
+      target: production
+      platforms:
+        - linux/amd64
+    ports:
+      - 20100:20100
+    command: yarn run start:prod
+    env_file:
+      - ./.env.production
     environment:
       - DB_REDIS_HOST=itn-ere-redis
       - DB_POSTGRES_HOST=itn-ere-postgresql

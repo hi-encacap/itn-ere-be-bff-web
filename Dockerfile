@@ -5,31 +5,30 @@ WORKDIR /app
 RUN corepack enable
 EXPOSE 20100
 
-## Depedencies
-FROM base as depedencies
+FROM base AS dependencies
 
 COPY package.json ./
 
 RUN yarn install
 
 ## Builder
-FROM depedencies as builder
+FROM dependencies AS builder
 
-COPY --from=depedencies /app/node_modules ./node_modules
 COPY src ./src
 COPY .env.* .eslintrc.js .prettierrc nest-cli.json tsconfig.* ./
 
 RUN yarn run build
 
-FROM depedencies as development
+FROM dependencies AS development
 
 ENV NODE_ENV=development
 
 COPY . .
 
-FROM builder as production
+FROM base AS production
 
 ENV NODE_ENV=production
 
-COPY --from=builder /usr/src/app/dist ./dist
-COPY --from=builder /usr/src/app/package.json ./package.json
+COPY --from=builder /app/dist ./dist
+COPY package.json ./
+COPY .env.production ./
