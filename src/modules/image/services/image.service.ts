@@ -22,8 +22,6 @@ export class ImageService {
     @InjectRepository(ImageEntity)
     private readonly imageRepository: Repository<ImageEntity>,
     private readonly httpService: HttpService,
-    // @InjectQueue('cloudflare-image')
-    // private readonly cloudflareImageQueue: Queue,
     private readonly cloudflareConfigService: CloudflareConfigService,
     private readonly imageVariantService: ImageVariantService,
     private readonly appConfigService: AppConfigService,
@@ -32,15 +30,19 @@ export class ImageService {
   }
 
   async uploadSingle(file: Express.Multer.File, user: UserEntity) {
-    const record = await this.imageRepository.save({
-      id: randomStringPrefix(),
-      status: IMAGE_STATUS_ENUM.PROCESSING,
-      size: file.size,
-      extension: file.mimetype,
-      websiteId: user.websiteId,
-    });
-
-    return this.uploadToCloudflare(record.id, file.mimetype, file.buffer);
+    try {
+      const record = await this.imageRepository.save({
+        id: randomStringPrefix(),
+        status: IMAGE_STATUS_ENUM.PROCESSING,
+        size: file.size,
+        extension: file.mimetype,
+        websiteId: user.websiteId,
+      });
+      return this.uploadToCloudflare(record.id, file.mimetype, file.buffer);
+    } catch (error) {
+      this.logger.error(error.toString());
+      throw new UnprocessableEntityException(IMAGE_ERROR_CODE.IMAGE_FAILED_TO_PROCESS);
+    }
   }
 
   uploadMultiple(files: Express.Multer.File[], user: UserEntity) {
@@ -67,25 +69,17 @@ export class ImageService {
       await this.httpService.axiosRef.post('', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-      const record = await this.imageRepository.save({
-        id: imageId,
-        status: IMAGE_STATUS_ENUM.READY,
-      });
+      const record = await this.imageRepository.save({ id: imageId, status: IMAGE_STATUS_ENUM.READY });
       return this.mapVariantToImage(record, null);
     } catch (error) {
       this.logger.error(error);
-      await this.imageRepository.save({
-        id: imageId,
-        status: IMAGE_STATUS_ENUM.PROCESSING_ERROR,
-      });
+      await this.imageRepository.save({ id: imageId, status: IMAGE_STATUS_ENUM.PROCESSING_ERROR });
       throw new UnprocessableEntityException(IMAGE_ERROR_CODE.IMAGE_FAILED_TO_PROCESS);
     }
   }
 
   get(imageId: string) {
-    return this.imageRepository.findOne({
-      where: { id: imageId },
-    });
+    return this.imageRepository.findOne({ where: { id: imageId } });
   }
 
   getAll(query: FindManyOptions<ImageEntity>) {
@@ -136,16 +130,10 @@ export class ImageService {
     }
 
     const newVariants = imageVariants.reduce((acc, variant) => {
-      return {
-        ...acc,
-        [variant.code]: `${this.imageURL}/${id}/${variant.code}`,
-      };
+      return { ...acc, [variant.code]: `${this.imageURL}/${id}/${variant.code}` };
     }, {});
 
-    return {
-      ...image,
-      ...newVariants,
-    };
+    return { ...image, ...newVariants };
   }
 
   private getFileName(id: string, mimetype: string) {
