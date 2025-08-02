@@ -8,8 +8,10 @@ EXPOSE 20100
 FROM base AS dependencies
 
 COPY package.json ./
+COPY yarn.lock ./
+COPY .yarnrc.yml ./
 
-RUN yarn install
+RUN yarn install --immutable
 
 ## Builder
 FROM dependencies AS builder
@@ -25,7 +27,7 @@ ENV NODE_ENV=development
 
 COPY . .
 
-FROM base AS production
+FROM dependencies AS production
 
 ENV NODE_ENV=production
 

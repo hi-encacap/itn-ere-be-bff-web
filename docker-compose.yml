@@ -62,14 +62,14 @@ services:
       - ./.env.production
     environment:
       - DB_REDIS_HOST=itn-ere-redis
+      - DB_REDIS_PORT=6379
       - DB_POSTGRES_HOST=itn-ere-postgresql
+      - DB_POSTGRES_PORT=5432
     networks:
       - itn-ere-network
     depends_on:
       - itn-ere-redis
       - itn-ere-postgresql
-    volumes:
-      - .:/app
 
 networks:
   itn-ere-network:
