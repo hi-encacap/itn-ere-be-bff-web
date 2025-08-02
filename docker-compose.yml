@@ -57,7 +57,7 @@ services:
         - linux/amd64
     ports:
       - 20100:20100
-    command: yarn run start:prod
+    command: node dist/main
     env_file:
       - ./.env.production
     environment:

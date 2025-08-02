@@ -32,5 +32,4 @@ FROM dependencies AS production
 ENV NODE_ENV=production
 
 COPY --from=builder /app/dist ./dist
-COPY package.json ./
 COPY .env.production ./
