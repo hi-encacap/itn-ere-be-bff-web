@@ -5,6 +5,7 @@ WORKDIR /app
 RUN corepack enable
 EXPOSE 20100
 
+
 FROM base AS dependencies
 
 COPY package.json ./
@@ -13,7 +14,7 @@ COPY .yarnrc.yml ./
 
 RUN yarn install --immutable
 
-## Builder
+
 FROM dependencies AS builder
 
 COPY src ./src
@@ -21,15 +22,17 @@ COPY .env.* .eslintrc.js .prettierrc nest-cli.json tsconfig.* ./
 
 RUN yarn run build
 
+
 FROM dependencies AS development
 
 ENV NODE_ENV=development
 
 COPY . .
 
+
 FROM dependencies AS production
 
 ENV NODE_ENV=production
 
-COPY --from=builder /app/dist ./dist
+COPY --from=builder /app ./
 COPY .env.production ./

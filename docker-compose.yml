@@ -25,9 +25,9 @@ services:
     ports:
       - 20020:6379
 
-  itn-ere-bff-web-dev-a:
-    container_name: itn-ere-bff-web-dev-a
-    image: hiencacap/itn-ere-bff-web:dev-a
+  itn-ere-be-bff-web-dev-a:
+    container_name: itn-ere-be-bff-web-dev-a
+    image: hiencacap/itn-ere-be-bff-web:dev-a
     build:
       context: .
       target: development
@@ -47,9 +47,9 @@ services:
     volumes:
       - .:/app
 
-  itn-ere-bff-web-prod-a:
-    container_name: itn-ere-bff-web-prod-a
-    image: hiencacap/itn-ere-bff-web:prod-a
+  itn-ere-be-bff-web-prod-a:
+    container_name: itn-ere-be-bff-web-prod-a
+    image: hiencacap/itn-ere-be-bff-web:prod-a
     build:
       context: .
       target: production
